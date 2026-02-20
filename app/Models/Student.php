@@ -102,6 +102,16 @@ class Student extends Model
     }
 
     /**
+     * Get all sports events the student participates in
+     */
+    public function events()
+    {
+        return $this->belongsToMany(SportsEvent::class, 'event_participants', 'student_id', 'sports_event_id')
+            ->withPivot('participation_status', 'rank', 'notes')
+            ->withTimestamps();
+    }
+
+    /**
      * Get all invoices
      */
     public function invoices()

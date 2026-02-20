@@ -8,13 +8,14 @@
 
 @section('content')
     <div class="container-fluid">
-        @if($stats['pending_fees'] > 0)
+        @if ($stats['pending_fees'] > 0)
             <div class="alert alert-danger shadow-sm border-0 d-flex align-items-center mb-4">
                 <i class="bi bi-exclamation-octagon fs-4 me-3"></i>
                 <div>
                     <h6 class="mb-0 fw-bold">Pending Payment Due</h6>
                     <p class="mb-0 small">You have an outstanding balance of
-                        <strong>₹{{ number_format($stats['pending_fees'], 2) }}</strong>. Please clear your dues to avoid late
+                        <strong>₹{{ number_format($stats['pending_fees'], 2) }}</strong>. Please clear your dues to avoid
+                        late
                         fees.
                     </p>
                 </div>
@@ -117,12 +118,13 @@
                                                     class="btn btn-sm btn-light border">Full Schedule</a>
                                             </div>
                                             <div class="card-body p-4">
-                                                @if($student->batch)
+                                                @if ($student->batch)
                                                     <div class="p-4 rounded-4 position-relative overflow-hidden mb-4"
                                                         style="background: rgba(79, 70, 229, 0.03);">
                                                         <div class="row align-items-center position-relative z-1">
                                                             <div class="col-md-7">
-                                                                <h4 class="fw-bold mb-1">{{ $student->batch->class->name }}</h4>
+                                                                <h4 class="fw-bold mb-1">{{ $student->batch->class->name }}
+                                                                </h4>
                                                                 <p class="text-muted small mb-3">Advanced Course •
                                                                     {{ ucfirst($student->batch->class->type) }}</p>
                                                                 <div class="d-flex gap-3">
@@ -169,7 +171,8 @@
                                                             @forelse($recentAttendance as $record)
                                                                 <tr>
                                                                     <td class="small fw-medium">
-                                                                        {{ $record->attendance_date->format('d M, Y') }}</td>
+                                                                        {{ $record->attendance_date->format('d M, Y') }}
+                                                                    </td>
                                                                     <td class="text-center">
                                                                         @php $sClass = $record->status == 'present' ? 'success' : ($record->status == 'absent' ? 'danger' : 'warning'); @endphp
                                                                         <span
@@ -180,7 +183,8 @@
                                                                 </tr>
                                                             @empty
                                                                 <tr>
-                                                                    <td colspan="3" class="text-center py-4 text-muted small">No
+                                                                    <td colspan="3"
+                                                                        class="text-center py-4 text-muted small">No
                                                                         recent attendance found.</td>
                                                                 </tr>
                                                             @endforelse
@@ -205,34 +209,37 @@
                                                             <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3"><i
                                                                     class="bi bi-person-badge text-primary fs-5"></i></div>
                                                             <div class="grow">
-                                        <h6 class="mb-0 fw-bold small">My Profile</h6>
-                                        <small class="text-muted">Personal & Academic info</small>
-                                    </div>
-                                    <i class="bi bi-chevron-right text-muted"></i>
-                                </div>
-                            </a>
-                            <a href="{{ route('student.fees.index') }}" class="btn btn-light bg-white border text-start px-3 py-3 rounded-4 shadow-sm hover-lift">
-                                <div class="d-flex align-items-center w-100">
-                                    <div class="bg-success bg-opacity-10 p-2 rounded-3 me-3"><i class="bi bi-cash-stack text-success fs-5"></i></div>
-                                    <div class="grow">
-                                        <h6 class="mb-0 fw-bold small">Fees & Payments</h6>
-                                        <small class="text-muted">Dues and receipts</small>
-                                    </div>
-                                    <i class="bi bi-chevron-right text-muted"></i>
-                                </div>
-                            </a>
-                            <a href="{{ route('student.resources') }}"
+                                                                <h6 class="mb-0 fw-bold small">My Profile</h6>
+                                                                <small class="text-muted">Personal & Academic info</small>
+                                                            </div>
+                                                            <i class="bi bi-chevron-right text-muted"></i>
+                                                        </div>
+                                                    </a>
+                                                    <a href="{{ route('student.fees.index') }}"
+                                                        class="btn btn-light bg-white border text-start px-3 py-3 rounded-4 shadow-sm hover-lift">
+                                                        <div class="d-flex align-items-center w-100">
+                                                            <div class="bg-success bg-opacity-10 p-2 rounded-3 me-3"><i
+                                                                    class="bi bi-cash-stack text-success fs-5"></i></div>
+                                                            <div class="grow">
+                                                                <h6 class="mb-0 fw-bold small">Fees & Payments</h6>
+                                                                <small class="text-muted">Dues and receipts</small>
+                                                            </div>
+                                                            <i class="bi bi-chevron-right text-muted"></i>
+                                                        </div>
+                                                    </a>
+                                                    <a href="{{ route('student.resources') }}"
                                                         class="btn btn-light bg-white border text-start px-3 py-3 rounded-4 shadow-sm hover-lift">
                                                         <div class="d-flex align-items-center w-100">
                                                             <div class="bg-info bg-opacity-10 p-2 rounded-3 me-3"><i
-                                                                    class="bi bi-journal-bookmark text-info fs-5"></i></div>
+                                                                    class="bi bi-journal-bookmark text-info fs-5"></i>
+                                                            </div>
                                                             <div class="grow">
-                                        <h6 class="mb-0 fw-bold small">Resources</h6>
-                                        <small class="text-muted">Download study materials</small>
-                                    </div>
-                                    <i class="bi bi-chevron-right text-muted"></i>
-                                </div>
-                            </a>
+                                                                <h6 class="mb-0 fw-bold small">Resources</h6>
+                                                                <small class="text-muted">Download study materials</small>
+                                                            </div>
+                                                            <i class="bi bi-chevron-right text-muted"></i>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -243,16 +250,18 @@
                                                 <h6 class="text-white-50 fw-bold mb-4 small text-uppercase"
                                                     style="letter-spacing: 0.1em;">Next Sports Event</h6>
                                                 @php $nextEvent = $student->events()->upcoming()->first(); @endphp
-                                                @if($nextEvent)
+                                                @if ($nextEvent)
                                                     <h4 class="fw-bold mb-0">{{ $nextEvent->title }}</h4>
                                                     <p class="small opacity-75 mb-4">
-                                                        {{ $nextEvent->event_date->format('M d, Y') }} • {{ $nextEvent->venue }}
+                                                        {{ $nextEvent->event_date->format('M d, Y') }} •
+                                                        {{ $nextEvent->venue }}
                                                     </p>
                                                     <a href="{{ route('student.events.index') }}"
                                                         class="btn btn-primary bg-white text-dark rounded-pill px-4 small w-100">View
                                                         All Events</a>
                                                 @else
-                                                    <p class="mb-0 small opacity-50">No upcoming events scheduled at the moment.
+                                                    <p class="mb-0 small opacity-50">No upcoming events scheduled at the
+                                                        moment.
                                                     </p>
                                                 @endif
                                             </div>
@@ -283,58 +292,71 @@
                                                 <tbody>
                                                     @php $runningBalance = 0; @endphp
                                                     @forelse($ledger as $entry)
-                                                                                                        @php 
-                                                                                                                                            $runningBalance += ($entry['dr'] - $entry['cr']);
-                                                                                                            $isNeg = $runningBalance > 0;
-                                                                                                        @endphp
-                                                                                        <tr>
-                                                                                                            <td>                {{ $entry['date']->format('d M, Y') }}</td>
-                                                                                                            <td>
-                                                                                                                <div class="fw-semibold">{{ $entry['description'] }}</div>
-
-                                                                                                                                                                    <small class="text-muted">{{ $entry['type'] }}</small>
-
-                                                                                                                                                                </t
-                                                        d                                                       >
-
-
-                                                                                                                                                                   <td class="text-end text-danger fw-medium">{{ $entry['dr'] > 0 ? '₹' . number_format($entry['dr'], 2) : '-' }}</td>
-                                                                                                                <td class="text-end text-success fw-medium">{{ $entry['cr'] > 0 ? '₹' . number_format($entry['cr'], 2) : '-' }}</td>
-
-                                                                                                            <td class="text-end fw-bold {{ $isNeg ? 'text-danger' : 'text-success' }}">₹{{ number_format(abs($runningBalance), 2) }} {{ $isNeg ? 'DR' : 'CR' }}</td>
-                                                                                                            </tr>
+                                                        @php
+                                                            $dr = $entry['dr'] ?? 0;
+                                                            $cr = $entry['cr'] ?? 0;
+                                                            $runningBalance += $dr - $cr;
+                                                            $isNeg = $runningBalance > 0;
+                                                            $entryDate = $entry['date'] ?? null;
+                                                            $desc = $entry['description'] ?? 'N/A';
+                                                            $type = $entry['type'] ?? 'N/A';
+                                                        @endphp
+                                                        <tr>
+                                                            <td>{{ $entryDate ? $entryDate->format('d M, Y') : '—' }}</td>
+                                                            <td>
+                                                                <div class="fw-semibold">{{ $desc }}</div>
+                                                                <small class="text-muted">{{ $type }}</small>
+                                                            </td>
+                                                            <td class="text-end text-danger fw-medium">
+                                                                {{ $dr > 0 ? '₹' . number_format($dr, 2) : '-' }}</td>
+                                                            <td class="text-end text-success fw-medium">
+                                                                {{ $cr > 0 ? '₹' . number_format($cr, 2) : '-' }}</td>
+                                                            <td
+                                                                class="text-end fw-bold {{ $isNeg ? 'text-danger' : 'text-success' }}">
+                                                                ₹{{ number_format(abs($runningBalance), 2) }}
+                                                                {{ $isNeg ? 'DR' : 'CR' }}</td>
+                                                        </tr>
                                                     @empty
-                                                        <tr><td colspan="5" class="text-center py-5 text-muted">No transactions recorded yet.</td></tr>
+                                                        <tr>
+                                                            <td colspan="5" class="text-center py-5 text-muted">No
+                                                                transactions recorded yet.</td>
+                                                        </tr>
                                                     @endforelse
                                                 </tbody>
                                             </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                </div>
-            </div>
-                        </div>
-@endsection
-                
-
-                   
-                
-                       @push('styles')
-                                        <style>
+                    </div>
+                @endsection
 
 
 
 
-                                                       .pulse { 
-                                                   animation: pulse-red 
-                                                   2s infinite; }
+                @push('styles')
+                    <style>
+                        .pulse {
+                            animation: pulse-red 2s infinite;
+                        }
 
 
-                            @keyframes
-                                                    pulse-red {
+                        @keyframes pulse-red {
 
 
-                                                                       0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); }
-                                                70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
-                                                100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+                            0% {
+                                transform: scale(0.95);
+                                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
                             }
-                        </style>
-                    @endpush
+
+                            70% {
+                                transform: scale(1);
+                                box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+                            }
+
+                            100% {
+                                transform: scale(0.95);
+                                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+                            }
+                        }
+                    </style>
+                @endpush

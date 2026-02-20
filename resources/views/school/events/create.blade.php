@@ -7,6 +7,10 @@
 @endsection
 
 @section('content')
+    @php
+        $teachers = $teachers ?? collect();
+        $students = $students ?? collect();
+    @endphp
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom">
@@ -34,7 +38,8 @@
 
                             <div class="row g-4 mb-4">
                                 <div class="col-md-7">
-                                    <label for="title" class="form-label tiny fw-bold text-muted text-uppercase mb-2">Event
+                                    <label for="title"
+                                        class="form-label tiny fw-bold text-muted text-uppercase mb-2">Event
                                         Nomenclature <span class="text-danger">*</span></label>
                                     <div class="input-group bg-light rounded-pill px-3 py-1 border shadow-sm">
                                         <span class="input-group-text bg-transparent border-0"><i
@@ -60,8 +65,9 @@
                                             class="form-select bg-transparent border-0 shadow-none fw-bold @error('coach_id') is-invalid @enderror"
                                             id="coach_id" name="coach_id" required>
                                             <option value="">Select Faculty</option>
-                                            @foreach($teachers as $teacher)
-                                                <option value="{{ $teacher->id }}" {{ old('coach_id') == $teacher->id ? 'selected' : '' }}>
+                                            @foreach ($teachers as $teacher)
+                                                <option value="{{ $teacher->id }}"
+                                                    {{ old('coach_id') == $teacher->id ? 'selected' : '' }}>
                                                     {{ $teacher->user->name }}
                                                 </option>
                                             @endforeach
@@ -151,12 +157,16 @@
                                         <select
                                             class="form-select bg-transparent border-0 shadow-none fw-bold @error('status') is-invalid @enderror"
                                             id="status" name="status" required>
-                                            <option value="upcoming" {{ old('status', 'upcoming') === 'upcoming' ? 'selected' : '' }}>Upcoming</option>
+                                            <option value="upcoming"
+                                                {{ old('status', 'upcoming') === 'upcoming' ? 'selected' : '' }}>Upcoming
+                                            </option>
                                             <option value="ongoing" {{ old('status') === 'ongoing' ? 'selected' : '' }}>
                                                 Operational</option>
-                                            <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>
+                                            <option value="completed"
+                                                {{ old('status') === 'completed' ? 'selected' : '' }}>
                                                 Archived</option>
-                                            <option value="cancelled" {{ old('status') === 'cancelled' ? 'selected' : '' }}>
+                                            <option value="cancelled"
+                                                {{ old('status') === 'cancelled' ? 'selected' : '' }}>
                                                 Void</option>
                                         </select>
                                     </div>
@@ -170,8 +180,7 @@
                                 <label for="description"
                                     class="form-label tiny fw-bold text-muted text-uppercase mb-2">Strategic
                                     Description</label>
-                                <textarea
-                                    class="form-control rounded-4 shadow-none border small p-3 @error('description') is-invalid @enderror"
+                                <textarea class="form-control rounded-4 shadow-none border small p-3 @error('description') is-invalid @enderror"
                                     id="description" name="description" rows="4"
                                     placeholder="Briefly define the event's objectives and coordination details...">{{ old('description') }}</textarea>
                                 @error('description')
@@ -180,7 +189,8 @@
                             </div>
 
                             <div class="d-flex gap-3 pt-3 border-top">
-                                <button type="submit" class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm grow">
+                                <button type="submit"
+                                    class="btn btn-primary rounded-pill px-5 py-2 fw-bold shadow-sm grow">
                                     <i class="bi bi-plus-circle me-2"></i> Commit Event to Calendar
                                 </button>
                                 <a href="{{ route('school.events.index') }}"

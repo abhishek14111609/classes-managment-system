@@ -12,8 +12,7 @@ class DashboardController extends Controller
     public function __construct(
         private StudentService $studentService,
         private AttendanceService $attendanceService
-    ) {
-    }
+    ) {}
 
     public function index()
     {
@@ -32,6 +31,7 @@ class DashboardController extends Controller
 
         return view('student.dashboard', compact(
             'student',
+            'stats',
             'balance',
             'paidFees',
             'attendanceRate',
