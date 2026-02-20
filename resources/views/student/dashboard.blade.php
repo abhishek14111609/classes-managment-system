@@ -293,13 +293,14 @@
                                                     @php $runningBalance = 0; @endphp
                                                     @forelse($ledger as $entry)
                                                         @php
-                                                            $dr = $entry['dr'] ?? 0;
-                                                            $cr = $entry['cr'] ?? 0;
+                                                            // Support both array and object ledger entries safely
+                                                            $dr = data_get($entry, 'dr', 0);
+                                                            $cr = data_get($entry, 'cr', 0);
                                                             $runningBalance += $dr - $cr;
                                                             $isNeg = $runningBalance > 0;
-                                                            $entryDate = $entry['date'] ?? null;
-                                                            $desc = $entry['description'] ?? 'N/A';
-                                                            $type = $entry['type'] ?? 'N/A';
+                                                            $entryDate = data_get($entry, 'date');
+                                                            $desc = data_get($entry, 'description', 'N/A');
+                                                            $type = data_get($entry, 'type', 'N/A');
                                                         @endphp
                                                         <tr>
                                                             <td>{{ $entryDate ? $entryDate->format('d M, Y') : '—' }}</td>

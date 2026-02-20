@@ -46,7 +46,7 @@
                             <strong><span
                                     class="badge {{ $typeBadge }}">{{ ucwords(str_replace('_', ' ', $fee->fee_type)) }}</span></strong>
                         </div>
-                        @if($durationLabel)
+                        @if ($durationLabel)
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">Duration:</span>
                                 <strong>{{ $durationLabel }}</strong>
@@ -54,17 +54,18 @@
                         @endif
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Due Date:</span>
-                            <strong>{{ $fee->due_date->format('M d, Y') }}</strong>
+                            <strong>{{ $fee->due_date ? $fee->due_date->format('M d, Y') : 'N/A' }}</strong>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Status:</span>
                             @php
-                                $statusClass = [
-                                    'paid' => 'success',
-                                    'partial' => 'warning',
-                                    'pending' => 'info',
-                                    'overdue' => 'danger'
-                                ][$fee->status] ?? 'secondary';
+                                $statusClass =
+                                    [
+                                        'paid' => 'success',
+                                        'partial' => 'warning',
+                                        'pending' => 'info',
+                                        'overdue' => 'danger',
+                                    ][$fee->status] ?? 'secondary';
                             @endphp
                             <span class="badge bg-{{ $statusClass }}">
                                 {{ ucfirst($fee->status) }}
@@ -101,7 +102,7 @@
                     </div>
                 </div>
 
-                @if($fee->remarks)
+                @if ($fee->remarks)
                     <div class="card shadow-sm border-0">
                         <div class="card-header bg-white">
                             <h5 class="mb-0">Admin Remarks</h5>
@@ -132,14 +133,16 @@
                                 <tbody>
                                     @forelse($fee->payments as $payment)
                                         <tr>
-                                            <td>{{ $payment->payment_date->format('M d, Y') }}</td>
+                                            <td>{{ $payment->payment_date ? $payment->payment_date->format('M d, Y') : 'N/A' }}
+                                            </td>
                                             <td><code>{{ $payment->receipt_number }}</code></td>
                                             <td>{{ ucfirst($payment->payment_method) }}</td>
                                             <td class="fw-bold text-success">₹{{ number_format($payment->amount, 2) }}</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center py-4 text-muted">No payments recorded for this
+                                            <td colspan="4" class="text-center py-4 text-muted">No payments recorded for
+                                                this
                                                 fee.</td>
                                         </tr>
                                     @endforelse
@@ -158,7 +161,8 @@
                             <div class="d-flex justify-content-between align-items-center p-3 border rounded mb-2">
                                 <div>
                                     <h6 class="mb-0">{{ $invoice->invoice_number }}</h6>
-                                    <small class="text-muted">Issued on: {{ $invoice->created_at->format('M d, Y') }}</small>
+                                    <small class="text-muted">Issued on:
+                                        {{ $invoice->created_at ? $invoice->created_at->format('M d, Y') : 'N/A' }}</small>
                                 </div>
                                 <a href="{{ route('school.invoices.download', $invoice->id) }}"
                                     class="btn btn-sm btn-outline-success">
