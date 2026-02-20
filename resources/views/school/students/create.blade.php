@@ -1,0 +1,163 @@
+@extends('layouts.app')
+
+@section('title', 'Add New Student')
+
+@section('sidebar')
+    @include('school.sidebar')
+@endsection
+
+@section('content')
+    <div class="container-fluid">
+        <h2 class="mb-4">Add New Student</h2>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ route('school.students.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <h5 class="mb-3">Personal Information</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Student Name *</label>
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                value="{{ old('name') }}" required>
+                            @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email *</label>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                value="{{ old('email') }}" required>
+                            @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Username *</label>
+                            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                                value="{{ old('username') }}" required>
+                            @error('username')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                                value="{{ old('phone') }}">
+                            @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Password *</label>
+                            <input type="password" name="password"
+                                class="form-control @error('password') is-invalid @enderror" required>
+                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Confirm Password *</label>
+                            <input type="password" name="password_confirmation" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h5 class="mb-3">Academic Information</h5>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Roll Number</label>
+                            <input type="text" name="roll_number"
+                                class="form-control @error('roll_number') is-invalid @enderror"
+                                value="{{ old('roll_number') }}">
+                            @error('roll_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Batch</label>
+                            <select name="batch_id" class="form-select @error('batch_id') is-invalid @enderror">
+                                <option value="">Select Batch</option>
+                                @foreach($batches as $batch)
+                                    <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
+                                        {{ $batch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('batch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Admission Date *</label>
+                            <input type="date" name="admission_date"
+                                class="form-control @error('admission_date') is-invalid @enderror"
+                                value="{{ old('admission_date', date('Y-m-d')) }}" required>
+                            @error('admission_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Birth Date</label>
+                            <input type="date" name="birth_date"
+                                class="form-control @error('birth_date') is-invalid @enderror"
+                                value="{{ old('birth_date') }}">
+                            @error('birth_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Previous School</label>
+                            <input type="text" name="previous_school"
+                                class="form-control @error('previous_school') is-invalid @enderror"
+                                value="{{ old('previous_school') }}">
+                            @error('previous_school')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h5 class="mb-3">Parent Information</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Parent Name</label>
+                            <input type="text" name="parent_name"
+                                class="form-control @error('parent_name') is-invalid @enderror"
+                                value="{{ old('parent_name') }}">
+                            @error('parent_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Parent Phone</label>
+                            <input type="text" name="parent_phone"
+                                class="form-control @error('parent_phone') is-invalid @enderror"
+                                value="{{ old('parent_phone') }}">
+                            @error('parent_phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea name="address" class="form-control @error('address') is-invalid @enderror"
+                            rows="3">{{ old('address') }}</textarea>
+                        @error('address')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Student Photo</label>
+                        <input type="file" name="photo" class="form-control @error('photo') is-invalid @enderror"
+                            accept="image/*">
+                        @error('photo')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Create Student</button>
+                        <a href="{{ route('school.students.index') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+@endsection
