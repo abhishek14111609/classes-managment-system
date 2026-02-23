@@ -12,7 +12,8 @@ class DashboardController extends Controller
     public function __construct(
         private StudentService $studentService,
         private AttendanceService $attendanceService
-    ) {}
+    ) {
+    }
 
     public function index()
     {
