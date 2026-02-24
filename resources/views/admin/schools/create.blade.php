@@ -67,15 +67,15 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label small fw-bold text-uppercase text-muted">Initial Operational Status</label>
+                                    <label class="form-label small fw-bold text-uppercase text-muted">Type of Institute</label>
                                     <div class="input-group">
-                                        <span class="input-group-text bg-light border-0"><i class="bi bi-activity text-primary"></i></span>
-                                        <select name="status" class="form-select bg-light border-0 @error('status') is-invalid @enderror" required>
-                                            <option value="active" {{ old('status') === 'active' ? 'selected' : '' }}>Institutional Active</option>
-                                            <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Pending Review</option>
+                                        <span class="input-group-text bg-light border-0"><i class="bi bi-building text-primary"></i></span>
+                                        <select name="institute_type" class="form-select bg-light border-0 @error('institute_type') is-invalid @enderror" required>
+                                            <option value="academic" {{ old('institute_type') === 'academic' ? 'selected' : '' }}>Academic</option>
+                                            <option value="sport" {{ old('institute_type') === 'sport' ? 'selected' : '' }}>Sport</option>
                                         </select>
                                     </div>
-                                    @error('status')<div class="invalid-feedback d-block mt-1">{{ $message }}</div>@enderror
+                                    @error('institute_type')<div class="invalid-feedback d-block mt-1">{{ $message }}</div>@enderror
                                 </div>
 
                                 <div class="col-12">

@@ -30,6 +30,7 @@ class UpdateSchoolRequest extends FormRequest
             'address' => ['nullable', 'string'],
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'status' => ['required', 'in:active,inactive'],
+            'institute_type' => ['required', 'in:academic,sport'],
         ];
     }
 }

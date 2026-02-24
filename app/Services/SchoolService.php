@@ -41,6 +41,7 @@ class SchoolService
                 'address' => $data['address'] ?? null,
                 'logo' => $logoPath,
                 'status' => $data['status'] ?? 'active',
+                'institute_type' => $data['institute_type'] ?? 'academic',
                 'subscription_expires_at' => $endDate,
             ]);
 
@@ -69,15 +70,6 @@ class SchoolService
             ]);
 
             $adminUser->assignRole('school_admin');
-
-            // Auto-create a default class for the school
-            \App\Models\Classes::create([
-                'school_id' => $school->id,
-                'name' => 'General Academic',
-                'type' => 'academic',
-                'description' => 'Automatically created default academic class',
-                'is_active' => true,
-            ]);
 
             // Log activity
             ActivityLog::logActivity('created', 'school', "Created school: {$school->name}");

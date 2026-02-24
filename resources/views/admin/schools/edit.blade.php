@@ -79,6 +79,18 @@
                                     @error('status')<div class="invalid-feedback d-block mt-1">{{ $message }}</div>@enderror
                                 </div>
 
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-uppercase text-muted">Type of Institute</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0"><i class="bi bi-building text-primary"></i></span>
+                                        <select name="institute_type" class="form-select bg-light border-0 @error('institute_type') is-invalid @enderror" required>
+                                            <option value="academic" {{ old('institute_type', $school->institute_type) === 'academic' ? 'selected' : '' }}>Academic</option>
+                                            <option value="sport" {{ old('institute_type', $school->institute_type) === 'sport' ? 'selected' : '' }}>Sport</option>
+                                        </select>
+                                    </div>
+                                    @error('institute_type')<div class="invalid-feedback d-block mt-1">{{ $message }}</div>@enderror
+                                </div>
+
                                 <div class="col-12">
                                     <label class="form-label small fw-bold text-uppercase text-muted">Headquarters Address</label>
                                     <div class="input-group">

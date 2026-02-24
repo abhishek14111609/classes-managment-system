@@ -136,7 +136,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-4">
+                                    <label class="tiny text-muted d-block mb-1">Type of Institute</label>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-building text-primary me-2"></i>
+                                        <span class="fw-bold">{{ ucfirst($school->institute_type) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="p-3 bg-light rounded-4">
                                     <label class="tiny text-muted d-block mb-1">Physical Headquarters</label>
                                     <div class="d-flex align-items-center">

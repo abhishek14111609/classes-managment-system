@@ -70,7 +70,7 @@
                                         </div>
                                         <div>
                                             <h6 class="mb-0 fw-bold text-dark">{{ $school->name }}</h6>
-                                            <small class="text-muted">ID: #{{ $school->id }}</small>
+                                            <small class="text-muted">ID: #{{ $school->id }} &bull; {{ ucfirst($school->institute_type) }}</small>
                                         </div>
                                     </div>
                                 </td>

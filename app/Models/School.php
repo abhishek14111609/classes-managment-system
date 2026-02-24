@@ -30,6 +30,7 @@ class School extends Model
         'address',
         'logo',
         'status',
+        'institute_type',
         'subscription_expires_at',
     ];
 
