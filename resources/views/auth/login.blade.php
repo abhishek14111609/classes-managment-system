@@ -34,25 +34,25 @@
                             <div class="bg-white bg-opacity-10 p-2 rounded-circle">
                                 <i class="bi bi-shield-check text-black"></i>
                             </div>
-                            <span class="small fw-medium">Secure</span>
+                            <span class="small fw-medium text-black">Secure</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <div class="bg-white bg-opacity-10 p-2 rounded-circle">
                                 <i class="bi bi-lightning-charge text-black"></i>
                             </div>
-                            <span class="small fw-medium">Fast</span>
+                            <span class="small fw-medium text-black">Fast</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <div class="bg-white bg-opacity-10 p-2 rounded-circle">
                                 <i class="bi bi-phone text-black"></i>
                             </div>
-                            <span class="small fw-medium">Mobile Ready</span>
+                            <span class="small fw-medium text-black">Mobile Ready</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-5">
-                    <small class="text-black-50">&copy; {{ date('Y') }} Classes Management System.</small>
+                    <small class="text-b text-black-50">&copy; {{ date('Y') }} Classes Management System.</small>
                 </div>
             </div>
         </div>
