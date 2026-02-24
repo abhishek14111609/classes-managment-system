@@ -32,19 +32,19 @@
                     <div class="d-flex gap-4">
                         <div class="d-flex align-items-center gap-2">
                             <div class="bg-white bg-opacity-10 p-2 rounded-circle">
-                                <i class="bi bi-shield-check text-white"></i>
+                                <i class="bi bi-shield-check text-black"></i>
                             </div>
                             <span class="small fw-medium">Secure</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <div class="bg-white bg-opacity-10 p-2 rounded-circle">
-                                <i class="bi bi-lightning-charge text-white"></i>
+                                <i class="bi bi-lightning-charge text-black"></i>
                             </div>
                             <span class="small fw-medium">Fast</span>
                         </div>
                         <div class="d-flex align-items-center gap-2">
                             <div class="bg-white bg-opacity-10 p-2 rounded-circle">
-                                <i class="bi bi-phone text-white"></i>
+                                <i class="bi bi-phone text-black"></i>
                             </div>
                             <span class="small fw-medium">Mobile Ready</span>
                         </div>
