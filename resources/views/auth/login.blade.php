@@ -17,7 +17,7 @@
         <div class="login-left">
             <div class="login-left-content">
                 <div class="d-flex align-items-center gap-3 mb-5">
-                    <i class="bi bi-mortarboard-fill fs-2"></i>
+                    <i class="bi bi-mortarboard-fill fs-2 text-black"></i>
                     <h3 class="font-heading m-0 text-black">Webvibe</h3>
                 </div>
 
