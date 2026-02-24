@@ -18,13 +18,13 @@
             <div class="login-left-content">
                 <div class="d-flex align-items-center gap-3 mb-5">
                     <i class="bi bi-mortarboard-fill fs-2"></i>
-                    <h3 class="font-heading m-0 text-gradient">Webvibe</h3>
+                    <h3 class="font-heading m-0 text-black">Webvibe</h3>
                 </div>
 
                 <div class="my-auto">
-                    <h1 class="display-3 fw-bold mb-4 text-gradient">Manage your institute with <span
-                            class="text-gradient">elegance.</span></h1>
-                    <p class="h5 fw-light text-white-50 lh-lg mb-5">
+                    <h1 class="display-3 fw-bold mb-4 text-black">Manage your institute with <span
+                            class="text-black">elegance.</span></h1>
+                    <p class="h5 fw-light text-black-50 lh-lg mb-5">
                         Streamline attendance, fees, and student tracking in one unified, beautiful platform tailored
                         for modern education.
                     </p>
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="mt-5">
-                    <small class="text-white-50">&copy; {{ date('Y') }} Classes Management System.</small>
+                    <small class="text-black-50">&copy; {{ date('Y') }} Classes Management System.</small>
                 </div>
             </div>
         </div>
