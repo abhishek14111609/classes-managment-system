@@ -82,7 +82,20 @@
                             @error('roll_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Course / Program</label>
+                            <select name="course_id" class="form-select @error('course_id') is-invalid @enderror">
+                                <option value="">Select Course</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
+                                        {{ $course->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('course_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-3 mb-3">
                             <label class="form-label">Batch</label>
                             <select name="batch_id" class="form-select @error('batch_id') is-invalid @enderror">
                                 <option value="">Select Batch</option>
@@ -95,7 +108,22 @@
                             @error('batch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label text-primary fw-bold">Assign Fee Plan</label>
+                            <select name="fee_plan_id"
+                                class="form-select bg-primary bg-opacity-10 border-primary @error('fee_plan_id') is-invalid @enderror">
+                                <option value="">No Initial Fee</option>
+                                @foreach($feePlans as $plan)
+                                    <option value="{{ $plan->id }}" {{ old('fee_plan_id') == $plan->id ? 'selected' : '' }}>
+                                        {{ $plan->name }} (Rs. {{ number_format($plan->amount, 2) }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="form-text small">Automatically generates an invoice.</div>
+                            @error('fee_plan_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-3 mb-3">
                             <label
                                 class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Joining Date' : 'Admission Date' }}
                                 *</label>

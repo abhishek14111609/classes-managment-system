@@ -96,14 +96,31 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="course_id" class="form-label">Course / Program</label>
+                            <select class="form-select @error('course_id') is-invalid @enderror" id="course_id" name="course_id">
+                                <option value="">Select Course</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}" {{ old('course_id', $student->course_id) == $course->id ? 'selected' : '' }}>
+                                        {{ $course->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('course_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label for="batch_id" class="form-label">Batch <span class="text-danger">*</span></label>
                             <select class="form-select @error('batch_id') is-invalid @enderror" id="batch_id" name="batch_id" required>
                                 <option value="">Select Batch</option>
                                 @foreach($batches as $batch)
                                     <option value="{{ $batch->id }}" {{ old('batch_id', $student->batch_id) == $batch->id ? 'selected' : '' }}>
-                                        {{ $batch->name }} - {{ $batch->class->name }}
+                                        {{ $batch->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -113,7 +130,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="mb-3">
                             <label for="admission_date" class="form-label">Admission Date <span class="text-danger">*</span></label>
                             <input type="date" class="form-control @error('admission_date') is-invalid @enderror"

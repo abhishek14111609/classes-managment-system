@@ -30,6 +30,7 @@ class UpdateStudentRequest extends FormRequest
             'username' => ['required', 'string', 'max:100', 'unique:users,username,' . $userId],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'course_id' => ['nullable', 'exists:courses,id'],
             'batch_id' => ['nullable', 'exists:batches,id'],
             'roll_number' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['nullable', 'date', 'before:today'],

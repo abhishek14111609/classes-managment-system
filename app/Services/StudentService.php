@@ -49,6 +49,7 @@ class StudentService
             $student = Student::create([
                 'school_id' => auth()->user()->school_id,
                 'user_id' => $user->id,
+                'course_id' => $data['course_id'] ?? null,
                 'batch_id' => $data['batch_id'] ?? null,
                 'roll_number' => $rollNumber,
                 'birth_date' => $data['birth_date'] ?? null,
@@ -60,6 +61,24 @@ class StudentService
                 'admission_date' => $data['admission_date'],
                 'is_active' => true,
             ]);
+
+            // Generate initial fee if plan selected
+            if (!empty($data['fee_plan_id'])) {
+                $feePlan = \App\Models\FeePlan::find($data['fee_plan_id']);
+                if ($feePlan) {
+                    \App\Models\Fee::create([
+                        'school_id' => auth()->user()->school_id,
+                        'student_id' => $student->id,
+                        'fee_plan_id' => $feePlan->id,
+                        'fee_type' => $feePlan->fee_type ?? 'one_time',
+                        'total_amount' => $feePlan->amount,
+                        'paid_amount' => 0,
+                        'due_date' => now()->addDays(7), // Give them a week to pay
+                        'status' => 'pending',
+                        'remarks' => 'Auto-generated from admission enrollment.',
+                    ]);
+                }
+            }
 
             ActivityLog::logActivity('created', 'student', "Created student: {$user->name}");
 

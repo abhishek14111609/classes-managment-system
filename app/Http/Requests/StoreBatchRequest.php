@@ -28,6 +28,7 @@ class StoreBatchRequest extends FormRequest
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'capacity' => ['required', 'integer', 'min:1'],
+            'sport_level' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],
             'teacher_ids' => ['nullable', 'array'],
             'teacher_ids.*' => ['exists:teachers,id'],

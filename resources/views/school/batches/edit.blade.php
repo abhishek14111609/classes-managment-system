@@ -83,13 +83,31 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="capacity" class="form-label">Capacity <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control @error('capacity') is-invalid @enderror"
                                     id="capacity" name="capacity" value="{{ old('capacity', $batch->capacity) }}" min="1"
                                     required>
                                 @error('capacity')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="sport_level" class="form-label">Sport Level</label>
+                                <select class="form-select @error('sport_level') is-invalid @enderror" id="sport_level"
+                                    name="sport_level">
+                                    <option value="">Select Level (Optional)</option>
+                                    @foreach($levels as $level)
+                                        <option value="{{ $level->name }}" {{ old('sport_level', $batch->sport_level) == $level->name ? 'selected' : '' }}>
+                                            {{ $level->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('sport_level')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

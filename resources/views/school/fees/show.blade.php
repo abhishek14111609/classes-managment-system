@@ -41,6 +41,19 @@
             <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center" role="alert">
                 <i class="bi bi-check-circle-fill fs-5 me-2"></i>
                 <div class="small fw-bold">{{ session('success') }}</div>
+
+                @if(session('open_invoice_id'))
+                    <a href="{{ route('school.invoices.stream', session('open_invoice_id')) }}" target="_blank"
+                        class="btn btn-sm btn-dark rounded-pill fw-bold ms-3 shadow-sm px-3" id="autoOpenInvoiceBtn">
+                        <i class="bi bi-printer me-1"></i> Print Receipt
+                    </a>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            window.open(document.getElementById('autoOpenInvoiceBtn').href, '_blank');
+                        });
+                    </script>
+                @endif
+
                 <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
             </div>
         @endif

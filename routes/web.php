@@ -111,6 +111,9 @@ Route::middleware(['auth', 'role:school_admin', 'check.subscription'])->prefix('
     // Sports Events
     Route::resource('events', School\SportsEventController::class);
 
+    // Levels / Sport Levels
+    Route::resource('levels', School\LevelController::class);
+
     // Expense Management
     Route::resource('expenses', School\ExpenseController::class);
 
@@ -187,6 +190,7 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
 
     // Attendance
     Route::get('attendance', [Student\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('attendance', [Student\AttendanceController::class, 'store'])->name('attendance.store');
 
     // Fees
     Route::get('fees', [Student\FeeController::class, 'index'])->name('fees.index');

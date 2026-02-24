@@ -111,6 +111,13 @@
         </li>
 
         <li class="nav-item">
+                <a href="{{ route('school.reports.pending-fees') }}"
+                        class="nav-link {{ request()->routeIs('school.reports.pending-fees') ? 'active' : '' }}">
+                        <i class="bi bi-exclamation-triangle-fill text-warning"></i> <span>Pending Fees</span>
+                </a>
+        </li>
+
+        <li class="nav-item">
                 <a href="{{ route('school.expenses.index') }}"
                         class="nav-link {{ request()->routeIs('school.expenses.*') ? 'active' : '' }}">
                         <i class="bi bi-arrow-down-circle-fill"></i>
@@ -120,6 +127,13 @@
 
         <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
                 style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Operations</li>
+
+        <li class="nav-item">
+                <a href="{{ route('school.levels.index') }}"
+                        class="nav-link {{ request()->routeIs('school.levels.*') ? 'active' : '' }}">
+                        <i class="bi bi-bar-chart-steps"></i> <span>Levels & Categories</span>
+                </a>
+        </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.events.index') }}"

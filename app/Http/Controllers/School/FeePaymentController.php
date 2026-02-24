@@ -22,10 +22,14 @@ class FeePaymentController extends Controller
     public function store(StoreFeePaymentRequest $request)
     {
         try {
-            $this->feeService->recordPayment($request->validated());
+            $payment = $this->feeService->recordPayment($request->validated());
+
+            // Get the newly generated invoice linked to this payment
+            $invoice = \App\Models\Invoice::where('fee_payment_id', $payment->id)->first();
 
             return redirect()->route('school.fees.show', $request->fee_id)
-                ->with('success', 'Payment recorded successfully.');
+                ->with('success', 'Payment recorded successfully.')
+                ->with('open_invoice_id', $invoice ? $invoice->id : null);
         } catch (\Exception $e) {
             return back()->with('error', 'Error recording payment: ' . $e->getMessage());
         }

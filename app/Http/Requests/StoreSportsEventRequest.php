@@ -35,6 +35,7 @@ class StoreSportsEventRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'event_date' => ['required', 'date', 'after:now'],
             'location' => ['nullable', 'string', 'max:255'],
+            'sport_level' => ['nullable', 'string', 'max:255'],
             'coach_id' => ['nullable', 'exists:teachers,id'],
             'status' => ['required', 'in:upcoming,ongoing,completed,cancelled'],
             'participants' => ['nullable', 'array'],

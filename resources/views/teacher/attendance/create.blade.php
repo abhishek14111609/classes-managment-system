@@ -95,15 +95,25 @@
                                         $existingAttendance = isset($attendanceRecords) ?
                                             $attendanceRecords->where('student_id', $student->id)->first() : null;
                                     @endphp
-                                    <tr>
+                                    <tr class="{{ $existingAttendance && $existingAttendance->verification_status === 'pending' ? 'bg-warning bg-opacity-10' : '' }}">
                                         <td class="ps-4 border-0">
                                             <div class="d-flex align-items-center">
                                                 <div class="bg-primary bg-opacity-10 p-2 rounded-circle me-3 text-primary d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
                                                     <span class="fw-bold small">{{ strtoupper(substr($student->user->name, 0, 1)) }}</span>
                                                 </div>
                                                 <div>
-                                                    <div class="fw-bold text-dark">{{ $student->user->name }}</div>
+                                                    <div class="fw-bold text-dark w-100 d-flex gap-2 align-items-center">
+                                                        {{ $student->user->name }}
+                                                        @if($existingAttendance && $existingAttendance->photo_path)
+                                                            <a href="{{ Storage::url($existingAttendance->photo_path) }}" target="_blank" class="badge bg-info text-decoration-none" title="View Uploaded Photo">
+                                                                <i class="bi bi-camera me-1"></i> View Photo
+                                                            </a>
+                                                        @endif
+                                                    </div>
                                                     <small class="text-muted tiny">Student ID: #{{ $student->id }}</small>
+                                                    @if($existingAttendance && $existingAttendance->verification_status === 'pending')
+                                                        <br><small class="text-warning fw-bold"><i class="bi bi-exclamation-triangle me-1"></i> Needs Approval</small>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>
@@ -114,20 +124,20 @@
                                                 <input type="radio" class="btn-check"
                                                        name="attendances[{{ $student->id }}][status]"
                                                        value="present" id="present{{ $student->id }}"
-                                                       {{ ($existingAttendance && $existingAttendance->status === 'present') || (!$existingAttendance) ? 'checked' : '' }}>
-                                                <label class="btn btn-attendance btn-present rounded-pill" for="present{{ $student->id }}">P</label>
+                                                       {{ ($existingAttendance && $existingAttendance->status === 'present') || (!$existingAttendance) || ($existingAttendance && $existingAttendance->verification_status === 'pending') ? 'checked' : '' }}>
+                                                <label class="btn btn-attendance btn-present rounded-pill" for="present{{ $student->id }}" title="Present/Approve">P</label>
 
                                                 <input type="radio" class="btn-check"
                                                        name="attendances[{{ $student->id }}][status]"
                                                        value="absent" id="absent{{ $student->id }}"
                                                        {{ $existingAttendance && $existingAttendance->status === 'absent' ? 'checked' : '' }}>
-                                                <label class="btn btn-attendance btn-absent rounded-pill" for="absent{{ $student->id }}">A</label>
+                                                <label class="btn btn-attendance btn-absent rounded-pill" for="absent{{ $student->id }}" title="Absent/Reject">A</label>
 
                                                 <input type="radio" class="btn-check"
                                                        name="attendances[{{ $student->id }}][status]"
                                                        value="late" id="late{{ $student->id }}"
                                                        {{ $existingAttendance && $existingAttendance->status === 'late' ? 'checked' : '' }}>
-                                                <label class="btn btn-attendance btn-late rounded-pill" for="late{{ $student->id }}">L</label>
+                                                <label class="btn btn-attendance btn-late rounded-pill" for="late{{ $student->id }}" title="Late">L</label>
                                             </div>
                                         </td>
                                         <td class="pe-4 border-0">

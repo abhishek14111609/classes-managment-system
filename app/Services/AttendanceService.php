@@ -21,6 +21,12 @@ class AttendanceService
             $attendanceDate = $data['attendance_date'];
 
             foreach ($data['attendances'] as $attendanceData) {
+
+                $verificationStatus = 'approved';
+                if ($attendanceData['status'] === 'absent') {
+                    $verificationStatus = 'rejected';
+                }
+
                 Attendance::updateOrCreate(
                     [
                         'student_id' => $attendanceData['student_id'],
@@ -32,6 +38,7 @@ class AttendanceService
                         'status' => $attendanceData['status'],
                         'remarks' => $attendanceData['remarks'] ?? null,
                         'marked_by' => auth()->id(),
+                        'verification_status' => $verificationStatus,
                     ]
                 );
             }

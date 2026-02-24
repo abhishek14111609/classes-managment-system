@@ -33,6 +33,9 @@ class Attendance extends Model
         'status',
         'remarks',
         'marked_by',
+        'photo_path',
+        'photo_submitted_at',
+        'verification_status',
     ];
 
     protected $casts = [

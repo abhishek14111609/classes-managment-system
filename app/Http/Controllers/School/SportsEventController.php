@@ -24,8 +24,9 @@ class SportsEventController extends Controller
     {
         $teachers = Teacher::with('user')->active()->get();
         $students = Student::with('user')->active()->get();
+        $levels = \App\Models\Level::where('is_active', true)->get();
 
-        return view('school.events.create', compact('teachers', 'students'));
+        return view('school.events.create', compact('teachers', 'students', 'levels'));
     }
 
     public function store(StoreSportsEventRequest $request)
@@ -60,9 +61,10 @@ class SportsEventController extends Controller
     {
         $teachers = Teacher::with('user')->active()->get();
         $students = Student::with('user')->active()->get();
+        $levels = \App\Models\Level::where('is_active', true)->get();
         $event->load('participants');
 
-        return view('school.events.edit', compact('event', 'teachers', 'students'));
+        return view('school.events.edit', compact('event', 'teachers', 'students', 'levels'));
     }
 
     public function update(StoreSportsEventRequest $request, SportsEvent $event)

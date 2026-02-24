@@ -31,8 +31,9 @@ class BatchController extends Controller
         $classes = Classes::active()->get();
         $teachers = Teacher::with('user')->active()->get();
         $subjects = \App\Models\Subject::active()->get();
+        $levels = \App\Models\Level::where('is_active', true)->get();
 
-        return view('school.batches.create', compact('classes', 'teachers', 'subjects'));
+        return view('school.batches.create', compact('classes', 'teachers', 'subjects', 'levels'));
     }
 
     public function store(StoreBatchRequest $request)
@@ -54,8 +55,9 @@ class BatchController extends Controller
         $classes = Classes::active()->get();
         $teachers = Teacher::with('user')->active()->get();
         $subjects = \App\Models\Subject::active()->get();
+        $levels = \App\Models\Level::where('is_active', true)->get();
 
-        return view('school.batches.edit', compact('batch', 'classes', 'teachers', 'subjects'));
+        return view('school.batches.edit', compact('batch', 'classes', 'teachers', 'subjects', 'levels'));
     }
 
     public function update(StoreBatchRequest $request, Batch $batch)

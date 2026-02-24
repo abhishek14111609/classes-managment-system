@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('fees:calculate-late')->daily();
+Schedule::command('attendance:mark-absent')->everyFifteenMinutes();

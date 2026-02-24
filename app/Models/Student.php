@@ -35,6 +35,7 @@ class Student extends Model
     protected $fillable = [
         'school_id',
         'user_id',
+        'course_id',
         'batch_id',
         'roll_number',
         'birth_date',

@@ -44,8 +44,10 @@ class StudentController extends Controller
     public function create()
     {
         $batches = Batch::active()->get();
+        $courses = \App\Models\Course::active()->get();
+        $feePlans = \App\Models\FeePlan::where('is_active', true)->get();
 
-        return view('school.students.create', compact('batches'));
+        return view('school.students.create', compact('batches', 'courses', 'feePlans'));
     }
 
     public function store(StoreStudentRequest $request)
@@ -71,8 +73,9 @@ class StudentController extends Controller
     public function edit(Student $student)
     {
         $batches = Batch::active()->get();
+        $courses = \App\Models\Course::active()->get();
 
-        return view('school.students.edit', compact('student', 'batches'));
+        return view('school.students.edit', compact('student', 'batches', 'courses'));
     }
 
     public function update(UpdateStudentRequest $request, Student $student)

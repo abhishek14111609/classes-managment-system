@@ -34,6 +34,7 @@ class Batch extends Model
         'start_time',
         'end_time',
         'capacity',
+        'sport_level',
         'is_active',
     ];
 

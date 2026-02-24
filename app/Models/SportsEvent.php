@@ -33,6 +33,7 @@ class SportsEvent extends Model
         'description',
         'event_date',
         'location',
+        'sport_level',
         'status',
     ];
 

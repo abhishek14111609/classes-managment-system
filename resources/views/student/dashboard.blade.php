@@ -101,7 +101,7 @@
                                             <h3 class="fs-4">{{ $student->batch->name ?? 'Unassigned' }}</h3>
                                             <div class="mt-3 pt-3 border-top border-white border-opacity-10">
                                                 <small class="text-white-50">Instructor:
-                                                    {{ $student->batch->teachers->first()->user->name ?? 'N/A' }}</small>
+                                                    {{ ($student->batch && $student->batch->teachers->count() > 0) ? $student->batch->teachers->first()->user->name : 'N/A' }}</small>
                                             </div>
                                         </div>
                                     </div>
