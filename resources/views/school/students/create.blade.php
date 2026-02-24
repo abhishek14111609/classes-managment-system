@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Add New Student')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Add New Athlete' : 'Add New Student')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -8,7 +8,8 @@
 
 @section('content')
     <div class="container-fluid">
-        <h2 class="mb-4">Add New Student</h2>
+        <h2 class="mb-4">{{ auth()->user()->school->institute_type === 'sport' ? 'Add New Athlete' : 'Add New Student' }}
+        </h2>
 
         <div class="card">
             <div class="card-body">
@@ -19,7 +20,9 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Student Name *</label>
+                            <label
+                                class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Athlete Name' : 'Student Name' }}
+                                *</label>
                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                 value="{{ old('name') }}" required>
                             @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -65,14 +68,17 @@
 
                     <hr class="my-4">
 
-                    <h5 class="mb-3">Academic Information</h5>
+                    <h5 class="mb-3">
+                        {{ auth()->user()->school->institute_type === 'sport' ? 'Registration Information' : 'Academic Information' }}
+                    </h5>
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Roll Number</label>
+                            <label
+                                class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Registration ID / Jersey Number' : 'Roll Number' }}</label>
                             <input type="text" name="roll_number"
                                 class="form-control @error('roll_number') is-invalid @enderror"
-                                value="{{ old('roll_number') }}">
+                                value="{{ old('roll_number') }}" placeholder="Auto-generated">
                             @error('roll_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
@@ -90,7 +96,9 @@
                         </div>
 
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Admission Date *</label>
+                            <label
+                                class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Joining Date' : 'Admission Date' }}
+                                *</label>
                             <input type="date" name="admission_date"
                                 class="form-control @error('admission_date') is-invalid @enderror"
                                 value="{{ old('admission_date', date('Y-m-d')) }}" required>
@@ -108,7 +116,8 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Previous School</label>
+                            <label for="previous_school"
+                                class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Current School/Institute' : 'Previous School' }}</label>
                             <input type="text" name="previous_school"
                                 class="form-control @error('previous_school') is-invalid @enderror"
                                 value="{{ old('previous_school') }}">
@@ -146,14 +155,16 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Student Photo</label>
+                        <label
+                            class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Athlete Photo' : 'Student Photo' }}</label>
                         <input type="file" name="photo" class="form-control @error('photo') is-invalid @enderror"
                             accept="image/*">
                         @error('photo')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-primary">Create Student</button>
+                        <button type="submit"
+                            class="btn btn-primary">{{ auth()->user()->school->institute_type === 'sport' ? 'Register Athlete' : 'Create Student' }}</button>
                         <a href="{{ route('school.students.index') }}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </form>

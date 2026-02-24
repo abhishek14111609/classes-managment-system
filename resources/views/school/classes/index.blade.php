@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Levels & Classes')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Institutional Levels & Teams' : 'Institutional Levels & Classes')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,13 +11,16 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Class Management</h3>
-                <p class="text-muted small mb-0">Define organizational levels and track student distribution across classes.
+                <h3 class="fw-bold mb-1 text-gradient">
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'Team Management' : 'Class Management' }}</h3>
+                <p class="text-muted small mb-0">Define organizational levels and track student distribution across
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'teams.' : 'classes.' }}
                 </p>
             </div>
             <a href="{{ route('school.classes.create') }}"
                 class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center">
-                <i class="bi bi-plus-lg me-2"></i> Register New Class
+                <i class="bi bi-plus-lg me-2"></i> Register New
+                {{ auth()->user()->school->institute_type === 'sport' ? 'Team' : 'Class' }}
             </a>
         </div>
 
@@ -35,7 +38,9 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr class="small text-muted text-uppercase fw-bold">
-                                <th class="ps-4 py-3 border-0">Class Name</th>
+                                <th class="ps-4 py-3 border-0">
+                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Team Name' : 'Class Name' }}
+                                </th>
                                 <th class="py-3 border-0">Category</th>
                                 <th class="py-3 border-0 text-center">Active Batches</th>
                                 <th class="py-3 border-0 text-center">Student Capacity</th>
@@ -91,7 +96,7 @@
                                             </a>
                                             <button type="button" class="btn btn-sm btn-white border-0"
                                                 onclick="if(confirm('Archive this class? associated data remains linked.')) document.getElementById('delete-form-{{ $class->id }}').submit();"
-                                                title="Delete Class">
+                                                title="Delete {{ auth()->user()->school->institute_type === 'sport' ? 'Team' : 'Class' }}">
                                                 <i class="bi bi-trash3 text-danger"></i>
                                             </button>
                                         </div>
@@ -107,9 +112,12 @@
                                     <td colspan="6" class="text-center py-5">
                                         <div class="opacity-25 mb-3"><i class="bi bi-collection-x" style="font-size: 4rem;"></i>
                                         </div>
-                                        <h5 class="text-muted">No institutional classes registered yet.</h5>
+                                        <h5 class="text-muted">No institutional
+                                            {{ auth()->user()->school->institute_type === 'sport' ? 'teams' : 'classes' }}
+                                            registered yet.</h5>
                                         <a href="{{ route('school.classes.create') }}"
-                                            class="btn btn-sm btn-primary rounded-pill px-4 mt-2">Initialize First Class</a>
+                                            class="btn btn-sm btn-primary rounded-pill px-4 mt-2">Initialize First
+                                            {{ auth()->user()->school->institute_type === 'sport' ? 'Team' : 'Class' }}</a>
                                     </td>
                                 </tr>
                             @endforelse

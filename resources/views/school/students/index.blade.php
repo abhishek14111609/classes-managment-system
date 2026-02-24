@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Student Registry')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Institutional Athlete Registry' : 'Institutional Student Registry')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,8 +11,11 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Students Registry</h3>
-                <p class="text-muted small mb-0">Total of {{ number_format($students->total()) }} students registered in the
+                <h3 class="fw-bold mb-1 text-gradient">
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'Athletes Registry' : 'Students Registry' }}
+                </h3>
+                <p class="text-muted small mb-0">Total of {{ number_format($students->total()) }}
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'athletes' : 'students' }} registered in the
                     institution.</p>
             </div>
             <div class="d-flex gap-3">
@@ -22,7 +25,8 @@
                 </a>
                 <a href="{{ route('school.students.create') }}"
                     class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center">
-                    <i class="bi bi-person-plus-fill me-2"></i> Add Student
+                    <i class="bi bi-person-plus-fill me-2"></i> Add
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'Athlete' : 'Student' }}
                 </a>
             </div>
         </div>
@@ -115,7 +119,9 @@
                                     </td>
                                     <td class="border-0">
                                         <div class="small fw-bold text-dark">{{ $student->user->email }}</div>
-                                        <small class="text-muted tiny">SEC: Default Student Access</small>
+                                        <small class="text-muted tiny">SEC: Default
+                                            {{ auth()->user()->school->institute_type === 'sport' ? 'Athlete' : 'Student' }}
+                                            Access</small>
                                     </td>
                                     <td class="border-0">
                                         @if($student->batch)
@@ -150,7 +156,7 @@
                                                 <i class="bi bi-pencil-square text-warning"></i>
                                             </a>
                                             <button type="button" class="btn btn-sm btn-white border-0"
-                                                onclick="if(confirm('Revoke student access and archive record?')) document.getElementById('delete-form-{{ $student->id }}').submit();"
+                                                onclick="if(confirm('Revoke {{ auth()->user()->school->institute_type === 'sport' ? 'athlete' : 'student' }} access and archive record?')) document.getElementById('delete-form-{{ $student->id }}').submit();"
                                                 title="Revoke Access">
                                                 <i class="bi bi-trash3 text-danger"></i>
                                             </button>
@@ -168,7 +174,9 @@
                                     <td colspan="6" class="text-center py-5">
                                         <div class="opacity-25 mb-3"><i class="bi bi-people-fill" style="font-size: 5rem;"></i>
                                         </div>
-                                        <h5 class="text-muted">No student matching records found.</h5>
+                                        <h5 class="text-muted">No
+                                            {{ auth()->user()->school->institute_type === 'sport' ? 'athlete' : 'student' }}
+                                            matching records found.</h5>
                                         <a href="{{ route('school.students.create') }}"
                                             class="btn btn-sm btn-primary rounded-pill px-4 mt-2">Add Initial Batch</a>
                                     </td>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Syllabus & Modules')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Training Activities & Exercises' : 'Institutional Syllabus & Modules')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,13 +11,13 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Syllabus & Subjects</h3>
+                <h3 class="fw-bold mb-1 text-gradient">{{ auth()->user()->school->institute_type === 'sport' ? 'Activities & Exercises' : 'Syllabus & Subjects' }}</h3>
                 <p class="text-muted small mb-0">Total of {{ number_format($subjects->total()) }} modules currently active
-                    in the academic framework.</p>
+                    in the {{ auth()->user()->school->institute_type === 'sport' ? 'training framework.' : 'academic framework.' }}</p>
             </div>
             <a href="{{ route('school.subjects.create') }}"
                 class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center">
-                <i class="bi bi-journal-plus me-2"></i> Construct New Module
+                <i class="bi bi-journal-plus me-2"></i> {{ auth()->user()->school->institute_type === 'sport' ? 'Add New Activity' : 'Construct New Module' }}
             </a>
         </div>
 
@@ -87,7 +87,7 @@
                                             </a>
                                             <button type="button" class="btn btn-sm btn-white border-0"
                                                 onclick="if(confirm('Archive this academic module? Associated data remains accessible.')) document.getElementById('delete-form-{{ $subject->id }}').submit();"
-                                                title="Decommission Subject">
+                                                title="{{ auth()->user()->school->institute_type === 'sport' ? 'Archive Activity' : 'Decommission Subject' }}">
                                                 <i class="bi bi-trash3 text-danger"></i>
                                             </button>
                                         </div>
@@ -104,9 +104,9 @@
                                     <td colspan="6" class="text-center py-5">
                                         <div class="opacity-25 mb-3"><i class="bi bi-journal-medical"
                                                 style="font-size: 5rem;"></i></div>
-                                        <h5 class="text-muted">No academic modules configured yet.</h5>
+                                        <h5 class="text-muted">No {{ auth()->user()->school->institute_type === 'sport' ? 'training activities' : 'academic modules' }} configured yet.</h5>
                                         <a href="{{ route('school.subjects.create') }}"
-                                            class="btn btn-sm btn-primary rounded-pill px-4 mt-2">Create First Subject</a>
+                                            class="btn btn-sm btn-primary rounded-pill px-4 mt-2">{{ auth()->user()->school->institute_type === 'sport' ? 'Add First Activity' : 'Create First Subject' }}</a>
                                     </td>
                                 </tr>
                             @endforelse

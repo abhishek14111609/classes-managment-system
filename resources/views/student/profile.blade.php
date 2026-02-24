@@ -141,7 +141,7 @@
                                     <p class="fw-bold text-dark mb-0">{{ $student->admission_date ? $student->admission_date->format('M d, Y') : 'N/A' }}</p>
                                 </div>
                                 <div>
-                                    <label class="text-muted tiny fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">PREVIOUS ACADEMIC RECORD</label>
+                                    <label class="text-muted tiny fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">{{ $student->school->institute_type === 'sport' ? 'CURRENT SCHOOL / INSTITUTE' : 'PREVIOUS ACADEMIC RECORD' }}</label>
                                     <p class="fw-bold text-dark mb-0 text-truncate">{{ $student->previous_school ?? 'Fresh Enrollment' }}</p>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Create Teacher')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Add New Coach' : 'Create Teacher')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -9,7 +9,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Add New Teacher</h2>
+        <h2>{{ auth()->user()->school->institute_type === 'sport' ? 'Add New Coach/Staff' : 'Add New Teacher' }}</h2>
         <a href="{{ route('school.teachers.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back
         </a>
@@ -78,13 +78,13 @@
 
                 <hr class="my-4">
 
-                <h5 class="mb-3">Professional Information</h5>
+                <h5 class="mb-3">{{ auth()->user()->school->institute_type === 'sport' ? 'Coaching/Staff Information' : 'Professional Information' }}</h5>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
-                            <label for="employee_id" class="form-label">Employee ID</label>
+                            <label for="employee_id" class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Staff/Coach ID' : 'Employee ID' }}</label>
                             <input type="text" class="form-control @error('employee_id') is-invalid @enderror"
-                                   id="employee_id" name="employee_id" value="{{ old('employee_id') }}">
+                                   id="employee_id" name="employee_id" value="{{ old('employee_id') }}" placeholder="Auto-generated">
                             @error('employee_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -138,17 +138,20 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="batches" class="form-label">Assign Batches</label>
-                    <select class="form-select @error('batches') is-invalid @enderror" id="batches" name="batches[]" multiple size="5">
+                    <label class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Assign Sessions' : 'Assign Batches' }}</label>
+                    <div class="border rounded p-3 bg-light" style="max-height: 200px; overflow-y: auto;">
                         @foreach($batches as $batch)
-                            <option value="{{ $batch->id }}" {{ in_array($batch->id, old('batches', [])) ? 'selected' : '' }}>
-                                {{ $batch->name }} ({{ $batch->class->name }})
-                            </option>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input @error('batches') is-invalid @enderror" type="checkbox" name="batches[]" value="{{ $batch->id }}" id="batch_{{ $batch->id }}" {{ in_array($batch->id, old('batches', [])) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="batch_{{ $batch->id }}">
+                                    {{ $batch->name }} <span class="text-muted small">({{ $batch->class->name }})</span>
+                                </label>
+                            </div>
                         @endforeach
-                    </select>
-                    <small class="text-muted">Hold Ctrl/Cmd to select multiple batches</small>
+                    </div>
+                    <small class="text-muted">Select one or more {{ auth()->user()->school->institute_type === 'sport' ? 'sessions' : 'batches' }} by checking the boxes</small>
                     @error('batches')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -173,7 +176,7 @@
 
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-check-circle"></i> Create Teacher
+                        <i class="bi bi-check-circle"></i> {{ auth()->user()->school->institute_type === 'sport' ? 'Create Coach' : 'Create Teacher' }}
                     </button>
                     <a href="{{ route('school.teachers.index') }}" class="btn btn-secondary">Cancel</a>
                 </div>

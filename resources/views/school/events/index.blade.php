@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Athletic Calendar')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Institutional Athletic Calendar' : 'Institutional Event Calendar')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,8 +11,8 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Events & Calendar</h3>
-                <p class="text-muted small mb-0">Manage sports meets, institutional events, and athletic coordination.</p>
+                <h3 class="fw-bold mb-1 text-gradient">{{ auth()->user()->school->institute_type === 'sport' ? 'Events & Calendar' : 'Events & Calendar' }}</h3>
+                <p class="text-muted small mb-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Manage sports meets, tournaments, and athletic coordination.' : 'Manage institutional events, assemblies, and coordination.' }}</p>
             </div>
             <a href="{{ route('school.events.create') }}"
                 class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center fw-bold">
@@ -37,7 +37,7 @@
                         <form action="{{ route('school.events.index') }}" method="GET">
                             <select name="status" class="form-select rounded-pill px-3 shadow-none border small fw-bold"
                                 onchange="this.form.submit()">
-                                <option value="">All Academic & Sports Events</option>
+                                <option value="">{{ auth()->user()->school->institute_type === 'sport' ? 'All Athletic Events' : 'All Institutional Events' }}</option>
                                 <option value="upcoming" {{ request('status') === 'upcoming' ? 'selected' : '' }}>Upcoming
                                     Schedule</option>
                                 <option value="ongoing" {{ request('status') === 'ongoing' ? 'selected' : '' }}>Currently
@@ -76,7 +76,7 @@
                                 <th class="ps-4 py-3 border-0">Event Identity</th>
                                 <th class="py-3 border-0">Temporal Logic</th>
                                 <th class="py-3 border-0">Institutional Location</th>
-                                <th class="py-3 border-0 text-center">Faculty In-charge</th>
+                                <th class="py-3 border-0 text-center">{{ auth()->user()->school->institute_type === 'sport' ? 'Coach In-charge' : 'Faculty In-charge' }}</th>
                                 <th class="py-3 border-0 text-center">Lifecycle</th>
                                 <th class="pe-4 py-3 border-0 text-end">Action Control</th>
                             </tr>
@@ -110,7 +110,7 @@
                                     </td>
                                     <td class="border-0 text-center">
                                         <div class="small fw-bold text-dark">{{ $event->coach->user->name }}</div>
-                                        <small class="text-muted tiny">Lead Coordinator</small>
+                                        <small class="text-muted tiny">{{ auth()->user()->school->institute_type === 'sport' ? 'Lead Coach' : 'Lead Coordinator' }}</small>
                                     </td>
                                     <td class="border-0 text-center">
                                         @php

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Batch')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Edit Training Session' : 'Edit Batch')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -9,7 +9,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Edit Batch</h2>
+            <h2>{{ auth()->user()->school->institute_type === 'sport' ? 'Edit Session' : 'Edit Batch' }}</h2>
             <a href="{{ route('school.batches.index') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Back
             </a>
@@ -24,7 +24,9 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="name" class="form-label">Batch Name <span class="text-danger">*</span></label>
+                                <label for="name"
+                                    class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Session Name' : 'Batch Name' }}
+                                    <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
                                     name="name" value="{{ old('name', $batch->name) }}" required>
                                 @error('name')
@@ -35,13 +37,17 @@
 
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="class_id" class="form-label">Class <span class="text-danger">*</span></label>
+                                <label for="class_id"
+                                    class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Team' : 'Class' }}
+                                    <span class="text-danger">*</span></label>
                                 <select class="form-select @error('class_id') is-invalid @enderror" id="class_id"
                                     name="class_id" required>
-                                    <option value="">Select Class</option>
+                                    <option value="">
+                                        {{ auth()->user()->school->institute_type === 'sport' ? 'Select Team' : 'Select Class' }}
+                                    </option>
                                     @foreach($classes as $class)
                                         <option value="{{ $class->id }}" {{ old('class_id', $batch->class_id) == $class->id ? 'selected' : '' }}>
-                                            {{ $class->name }} ({{ ucfirst($class->type) }})
+                                            {{ $class->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -91,24 +97,32 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="teacher_ids" class="form-label">Assign Teachers</label>
-                        <select class="form-select @error('teacher_ids') is-invalid @enderror" id="teacher_ids"
-                            name="teacher_ids[]" multiple size="5">
+                        <label
+                            class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Assign Coaches' : 'Assign Teachers' }}</label>
+                        <div class="border rounded p-3 bg-light" style="max-height: 200px; overflow-y: auto;">
                             @foreach($teachers as $teacher)
-                                <option value="{{ $teacher->id }}" {{ in_array($teacher->id, old('teacher_ids', $batch->teachers->pluck('id')->toArray())) ? 'selected' : '' }}>
-                                    {{ $teacher->user->name }} ({{ $teacher->employee_id }})
-                                </option>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input @error('teacher_ids') is-invalid @enderror" type="checkbox"
+                                        name="teacher_ids[]" value="{{ $teacher->id }}" id="teacher_{{ $teacher->id }}" {{ in_array($teacher->id, old('teacher_ids', $batch->teachers->pluck('id')->toArray())) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="teacher_{{ $teacher->id }}">
+                                        {{ $teacher->user->name }} <span
+                                            class="text-muted small">({{ $teacher->employee_id }})</span>
+                                    </label>
+                                </div>
                             @endforeach
-                        </select>
-                        <small class="text-muted">Hold Ctrl/Cmd to select multiple teachers</small>
+                        </div>
+                        <small class="text-muted">Select one or more
+                            {{ auth()->user()->school->institute_type === 'sport' ? 'coaches' : 'teachers' }} by checking
+                            the boxes</small>
                         @error('teacher_ids')
-                            <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-check-circle"></i> Update Batch
+                            <i class="bi bi-check-circle"></i>
+                            {{ auth()->user()->school->institute_type === 'sport' ? 'Update Session' : 'Update Batch' }}
                         </button>
                         <a href="{{ route('school.batches.index') }}" class="btn btn-secondary">Cancel</a>
                     </div>

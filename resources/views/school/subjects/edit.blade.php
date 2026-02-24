@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Subject')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Edit Activity / Exercise' : 'Edit Subject')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -9,7 +9,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Edit Subject</h2>
+        <h2>{{ auth()->user()->school->institute_type === 'sport' ? 'Edit Activity / Exercise' : 'Edit Subject' }}</h2>
         <a href="{{ route('school.subjects.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back
         </a>
@@ -29,7 +29,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="name" class="form-label fw-semibold">Subject Name <span class="text-danger">*</span></label>
+                        <label for="name" class="form-label fw-semibold">{{ auth()->user()->school->institute_type === 'sport' ? 'Activity Name' : 'Subject Name' }} <span class="text-danger">*</span></label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror"
                                id="name" name="name"
                                value="{{ old('name', $subject->name) }}" required>
@@ -37,10 +37,10 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label for="class_id" class="form-label fw-semibold">Class / Level <span class="text-danger">*</span></label>
+                        <label for="class_id" class="form-label fw-semibold">{{ auth()->user()->school->institute_type === 'sport' ? 'Team / Level' : 'Class / Level' }} <span class="text-danger">*</span></label>
                         <select class="form-select @error('class_id') is-invalid @enderror"
                                 id="class_id" name="class_id" required>
-                            <option value="">— Select Class —</option>
+                            <option value="">— {{ auth()->user()->school->institute_type === 'sport' ? 'Select Team / Level' : 'Select Class' }} —</option>
                             @foreach($classes as $class)
                                 <option value="{{ $class->id }}"
                                     {{ old('class_id', $subject->class_id) == $class->id ? 'selected' : '' }}>
@@ -52,15 +52,7 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="type" class="form-label fw-semibold">Type <span class="text-danger">*</span></label>
-                    <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
-                        <option value="">— Select Type —</option>
-                        <option value="academic" {{ old('type', $subject->type) === 'academic' ? 'selected' : '' }}>📚 Academic</option>
-                        <option value="sports"   {{ old('type', $subject->type) === 'sports'   ? 'selected' : '' }}>⚽ Sports</option>
-                    </select>
-                    @error('type')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                </div>
+                <input type="hidden" name="type" value="{{ auth()->user()->school->institute_type === 'sport' ? 'sports' : 'academic' }}">
 
                 <div class="mb-3">
                     <label for="description" class="form-label fw-semibold">Description</label>
@@ -71,7 +63,7 @@
 
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-check-circle"></i> Update Subject
+                        <i class="bi bi-check-circle"></i> {{ auth()->user()->school->institute_type === 'sport' ? 'Update Activity' : 'Update Subject' }}
                     </button>
                     <a href="{{ route('school.subjects.index') }}" class="btn btn-secondary">Cancel</a>
                 </div>

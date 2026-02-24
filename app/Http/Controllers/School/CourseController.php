@@ -49,6 +49,14 @@ class CourseController extends Controller
 
         $validated['school_id'] = $schoolId;
 
+        if (empty($validated['code'])) {
+            $schoolName = auth()->user()->school->name ?? 'INS';
+            $schoolPrefix = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $schoolName), 0, 3));
+            $instituteType = auth()->user()->school->institute_type ?? 'academic';
+            $prefix = $schoolPrefix . ($instituteType === 'sport' ? '-PRO-' : '-CRS-');
+            $validated['code'] = $prefix . strtoupper(\Illuminate\Support\Str::random(5));
+        }
+
         Course::create($validated);
 
         return redirect()->route('school.courses.index')

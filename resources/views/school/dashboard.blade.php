@@ -36,7 +36,7 @@
                             <div>
                                 <h2 class="fw-bold mb-1">{{ number_format($stats['total_students']) }}</h2>
                                 <p class="text-muted small fw-bold text-uppercase mb-0" style="letter-spacing: 1px;">
-                                    Students</p>
+                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Athletes' : 'Students' }}</p>
                             </div>
                             <div class="bg-primary bg-opacity-10 p-3 rounded-4 text-primary">
                                 <i class="bi bi-people-fill fs-3"></i>
@@ -54,7 +54,7 @@
                             <div>
                                 <h2 class="fw-bold mb-1">{{ number_format($stats['total_teachers']) }}</h2>
                                 <p class="text-muted small fw-bold text-uppercase mb-0" style="letter-spacing: 1px;">
-                                    Faculties</p>
+                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Coaches' : 'Faculties' }}</p>
                             </div>
                             <div class="bg-success bg-opacity-10 p-3 rounded-4 text-success">
                                 <i class="bi bi-person-badge-fill fs-3"></i>
@@ -213,7 +213,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="small text-muted">Active Classes</span>
+                            <span class="small text-muted">{{ auth()->user()->school->institute_type === 'sport' ? 'Active Teams' : 'Active Classes' }}</span>
                             <span class="small fw-bold">{{ $stats['total_classes'] }}</span>
                         </div>
                         <div class="progress rounded-pill mb-1" style="height: 8px;">

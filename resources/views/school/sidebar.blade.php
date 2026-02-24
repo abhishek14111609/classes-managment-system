@@ -4,8 +4,11 @@
                         <i class="bi bi-buildings-fill text-primary fs-4"></i>
                 </div>
                 <div>
-                        <h6 class="fw-bold mb-0 text-white">School Admin</h6>
-                        <small class="text-white-50 tiny">Institutional Control</small>
+                        <h6 class="fw-bold mb-0 text-white">
+                                {{ auth()->user()->school->institute_type === 'sport' ? 'Sports Academy Admin' : 'School Admin' }}
+                        </h6>
+                        <small
+                                class="text-white-50 tiny">{{ auth()->user()->school->institute_type === 'sport' ? 'Command Center' : 'Institutional Control' }}</small>
                 </div>
         </div>
 </div>
@@ -22,26 +25,31 @@
         </li>
 
         <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
-                style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Academic Core</li>
+                style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">
+                {{ auth()->user()->school->institute_type === 'sport' ? 'Training & Sports Core' : 'Academic Core' }}
+        </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.courses.index') }}"
                         class="nav-link {{ request()->routeIs('school.courses.*') ? 'active' : '' }}">
-                        <i class="bi bi-book-half"></i> <span>Programs & Courses</span>
+                        <i class="bi bi-book-half"></i>
+                        <span>{{ auth()->user()->school->institute_type === 'sport' ? 'Programs & Disciplines' : 'Programs & Courses' }}</span>
                 </a>
         </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.classes.index') }}"
                         class="nav-link {{ request()->routeIs('school.classes.*') ? 'active' : '' }}">
-                        <i class="bi bi-journal-bookmark-fill"></i> <span>Levels & Classes</span>
+                        <i class="bi bi-journal-bookmark-fill"></i>
+                        <span>{{ auth()->user()->school->institute_type === 'sport' ? 'Levels & Teams' : 'Levels & Classes' }}</span>
                 </a>
         </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.subjects.index') }}"
                         class="nav-link {{ request()->routeIs('school.subjects.*') ? 'active' : '' }}">
-                        <i class="bi bi-journal-text"></i> <span>Syllabus & Subjects</span>
+                        <i class="bi bi-journal-text"></i>
+                        <span>{{ auth()->user()->school->institute_type === 'sport' ? 'Activities & Exercises' : 'Syllabus & Subjects' }}</span>
                 </a>
         </li>
 
@@ -58,14 +66,16 @@
         <li class="nav-item">
                 <a href="{{ route('school.students.index') }}"
                         class="nav-link {{ request()->routeIs('school.students.*') ? 'active' : '' }}">
-                        <i class="bi bi-people-fill"></i> <span>Students Registry</span>
+                        <i class="bi bi-people-fill"></i>
+                        <span>{{ auth()->user()->school->institute_type === 'sport' ? 'Athletes Registry' : 'Students Registry' }}</span>
                 </a>
         </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.teachers.index') }}"
                         class="nav-link {{ request()->routeIs('school.teachers.*') ? 'active' : '' }}">
-                        <i class="bi bi-person-badge-fill"></i> <span>Faculty & Staff</span>
+                        <i class="bi bi-person-badge-fill"></i>
+                        <span>{{ auth()->user()->school->institute_type === 'sport' ? 'Coaches & Staff' : 'Faculty & Staff' }}</span>
                 </a>
         </li>
 
@@ -103,7 +113,8 @@
         <li class="nav-item">
                 <a href="{{ route('school.expenses.index') }}"
                         class="nav-link {{ request()->routeIs('school.expenses.*') ? 'active' : '' }}">
-                        <i class="bi bi-arrow-down-circle-fill"></i> <span>School Expenses</span>
+                        <i class="bi bi-arrow-down-circle-fill"></i>
+                        <span>{{ auth()->user()->school->institute_type === 'sport' ? 'Academy Expenses' : 'School Expenses' }}</span>
                 </a>
         </li>
 

@@ -35,12 +35,22 @@ class StudentService
 
             $user->assignRole('student');
 
+            // Generate Roll Number if empty
+            $instituteType = auth()->user()->school->institute_type ?? 'academic';
+            $schoolName = auth()->user()->school->name ?? 'INS';
+            $schoolPrefix = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $schoolName), 0, 3));
+            $rollNumber = $data['roll_number'] ?? null;
+            if (empty($rollNumber)) {
+                $prefix = $schoolPrefix . ($instituteType === 'sport' ? '-ATH-' : '-STU-');
+                $rollNumber = $prefix . date('y') . strtoupper(\Illuminate\Support\Str::random(4));
+            }
+
             // Create student record
             $student = Student::create([
                 'school_id' => auth()->user()->school_id,
                 'user_id' => $user->id,
                 'batch_id' => $data['batch_id'] ?? null,
-                'roll_number' => $data['roll_number'] ?? null,
+                'roll_number' => $rollNumber,
                 'birth_date' => $data['birth_date'] ?? null,
                 'previous_school' => $data['previous_school'] ?? null,
                 'address' => $data['address'] ?? null,

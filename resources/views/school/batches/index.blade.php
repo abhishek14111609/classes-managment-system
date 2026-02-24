@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Batch Scheduling')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Institutional Training Allocation' : 'Institutional Batch Scheduling')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,13 +11,13 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Batch Management</h3>
-                <p class="text-muted small mb-0">Optimize institutional scheduling and monitor student enrollment density.
+                <h3 class="fw-bold mb-1 text-gradient">{{ auth()->user()->school->institute_type === 'sport' ? 'Training Sessions' : 'Batch Management' }}</h3>
+                <p class="text-muted small mb-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Optimize institutional scheduling and monitor athlete allocations.' : 'Optimize institutional scheduling and monitor student enrollment density.' }}
                 </p>
             </div>
             <a href="{{ route('school.batches.create') }}"
                 class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center">
-                <i class="bi bi-clock-history me-2"></i> Create Dynamic Batch
+                <i class="bi bi-clock-history me-2"></i> {{ auth()->user()->school->institute_type === 'sport' ? 'Create Dynamic Session' : 'Create Dynamic Batch' }}
             </a>
         </div>
 
@@ -56,11 +56,11 @@
                     <table class="table table-hover align-middle mb-0 text-nowrap">
                         <thead class="bg-light">
                             <tr class="small text-muted text-uppercase fw-bold">
-                                <th class="ps-4 py-3 border-0">Batch Reference</th>
-                                <th class="py-3 border-0">Class Level</th>
+                                <th class="ps-4 py-3 border-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Session Reference' : 'Batch Reference' }}</th>
+                                <th class="py-3 border-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Team Level' : 'Class Level' }}</th>
                                 <th class="py-3 border-0">Operational Window</th>
-                                <th class="py-3 border-0 text-center">Enrollment Status</th>
-                                <th class="py-3 border-0 text-center">Faculties</th>
+                                <th class="py-3 border-0 text-center">{{ auth()->user()->school->institute_type === 'sport' ? 'Allocation Status' : 'Enrollment Status' }}</th>
+                                <th class="py-3 border-0 text-center">{{ auth()->user()->school->institute_type === 'sport' ? 'Coaches' : 'Faculties' }}</th>
                                 <th class="pe-4 py-3 border-0 text-end">Administration</th>
                             </tr>
                         </thead>
@@ -74,7 +74,7 @@
                                             </div>
                                             <div>
                                                 <div class="fw-bold text-dark">{{ $batch->name }}</div>
-                                                <small class="text-muted tiny">Code: #BTC-{{ $batch->id }}</small>
+                                                <small class="text-muted tiny">Code: {{ auth()->user()->school->institute_type === 'sport' ? '#SES-' : '#BTC-' }}{{ $batch->id }}</small>
                                             </div>
                                         </div>
                                     </td>
@@ -135,9 +135,9 @@
                                     <td colspan="7" class="text-center py-5">
                                         <div class="opacity-25 mb-3"><i class="bi bi-calendar-x" style="font-size: 4rem;"></i>
                                         </div>
-                                        <h5 class="text-muted">No operating batches found for the selected criteria.</h5>
+                                        <h5 class="text-muted">{{ auth()->user()->school->institute_type === 'sport' ? 'No operating sessions found for the selected criteria.' : 'No operating batches found for the selected criteria.' }}</h5>
                                         <a href="{{ route('school.batches.create') }}"
-                                            class="btn btn-sm btn-primary rounded-pill px-4 mt-2">Create Initial Batch</a>
+                                            class="btn btn-sm btn-primary rounded-pill px-4 mt-2">{{ auth()->user()->school->institute_type === 'sport' ? 'Create Initial Session' : 'Create Initial Batch' }}</a>
                                     </td>
                                 </tr>
                             @endforelse

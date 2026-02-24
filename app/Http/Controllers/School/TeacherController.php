@@ -50,10 +50,19 @@ class TeacherController extends Controller
                 $user = User::create($userData);
                 $user->assignRole('teacher');
 
+                $employeeId = $request->employee_id;
+                if (empty($employeeId)) {
+                    $schoolName = auth()->user()->school->name ?? 'INS';
+                    $schoolPrefix = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $schoolName), 0, 3));
+                    $instituteType = auth()->user()->school->institute_type ?? 'academic';
+                    $employeePrefix = $schoolPrefix . ($instituteType === 'sport' ? '-COA-' : '-EMP-');
+                    $employeeId = $employeePrefix . date('y') . strtoupper(\Illuminate\Support\Str::random(4));
+                }
+
                 $teacher = Teacher::create([
                     'school_id' => auth()->user()->school_id,
                     'user_id' => $user->id,
-                    'employee_id' => $request->employee_id,
+                    'employee_id' => $employeeId,
                     'qualification' => $request->qualification,
                     'specialization' => $request->specialization,
                     'joining_date' => $request->joining_date,

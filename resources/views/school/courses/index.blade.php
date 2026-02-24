@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Academic Programs Catalog')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Sports Programs Catalog' : 'Academic Programs Catalog')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,8 +11,11 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Academic Programs</h3>
-                <p class="text-muted small mb-0">Define and manage the core educational tracks for your institution.</p>
+                <h3 class="fw-bold mb-1 text-gradient">
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'Sports Programs' : 'Academic Programs' }}</h3>
+                <p class="text-muted small mb-0">Define and manage the core
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'training tracks' : 'educational tracks' }} for
+                    your institution.</p>
             </div>
             <a href="{{ route('school.courses.create') }}"
                 class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center">
@@ -54,14 +57,15 @@
 
                             <p class="text-muted small mb-4"
                                 style="height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
-                                {{ $course->description ?? 'No high-level description provided for this academic program.' }}
+                                {{ $course->description ?? 'No high-level description provided for this ' . (auth()->user()->school->institute_type === 'sport' ? 'sports program' : 'academic program') . '.' }}
                             </p>
 
                             <div class="row g-2 mb-4 border-top pt-3">
                                 <div class="col-6">
                                     <div class="p-2 text-center">
                                         <h6 class="fw-bold mb-0">{{ $course->classes_count }}</h6>
-                                        <small class="text-muted tiny text-uppercase">Classes</small>
+                                        <small
+                                            class="text-muted tiny text-uppercase">{{ auth()->user()->school->institute_type === 'sport' ? 'Teams' : 'Classes' }}</small>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -97,8 +101,11 @@
             @empty
                 <div class="col-12 text-center py-5">
                     <div class="opacity-25 mb-3"><i class="bi bi-journal-x" style="font-size: 5rem;"></i></div>
-                    <h4 class="text-muted">No academic programs registered.</h4>
-                    <p class="text-muted small mb-4">Start organizing your curriculum by creating a new course/program track.
+                    <h4 class="text-muted">No {{ auth()->user()->school->institute_type === 'sport' ? 'sports' : 'academic' }}
+                        programs registered.</h4>
+                    <p class="text-muted small mb-4">Start organizing your
+                        {{ auth()->user()->school->institute_type === 'sport' ? 'training regimen' : 'curriculum' }} by creating
+                        a new program track.
                     </p>
                     <a href="{{ route('school.courses.create') }}" class="btn btn-primary rounded-pill px-5 shadow-sm border-0">
                         Get Started Now

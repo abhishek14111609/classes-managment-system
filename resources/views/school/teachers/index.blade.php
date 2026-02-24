@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Faculty Registry')
+@section('title', auth()->user()->school->institute_type === 'sport' ? 'Institutional Coach Registry' : 'Institutional Faculty Registry')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,13 +11,16 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Faculty & Staff</h3>
-                <p class="text-muted small mb-0">Total of {{ number_format($teachers->total()) }} educators powering your
+                <h3 class="fw-bold mb-1 text-gradient">
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'Coaches & Staff' : 'Faculty & Staff' }}</h3>
+                <p class="text-muted small mb-0">Total of {{ number_format($teachers->total()) }}
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'expert coaches' : 'educators' }} powering your
                     institution.</p>
             </div>
             <a href="{{ route('school.teachers.create') }}"
                 class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center">
-                <i class="bi bi-person-plus-fill me-2"></i> Recruit New Faculty
+                <i class="bi bi-person-plus-fill me-2"></i>
+                {{ auth()->user()->school->institute_type === 'sport' ? 'Recruit New Coach' : 'Recruit New Faculty' }}
             </a>
         </div>
 
@@ -40,7 +43,7 @@
                                         class="bi bi-search text-muted"></i></span>
                                 <input type="text" name="search"
                                     class="form-control bg-transparent border-0 shadow-none small fw-bold"
-                                    placeholder="Identify faculty by name, employee ID, or email expertise..."
+                                    placeholder="{{ auth()->user()->school->institute_type === 'sport' ? 'Identify coach by name, employee ID, or email...' : 'Identify faculty by name, employee ID, or email...' }}"
                                     value="{{ request('search') }}" onchange="this.form.submit()">
                             </div>
                         </form>
@@ -63,7 +66,9 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr class="small text-muted text-uppercase fw-bold">
-                                <th class="ps-4 py-3 border-0">Educator Portfolio</th>
+                                <th class="ps-4 py-3 border-0">
+                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Coach Portfolio' : 'Educator Portfolio' }}
+                                </th>
                                 <th class="py-3 border-0">Institutional ID</th>
                                 <th class="py-3 border-0">Digital Contact</th>
                                 <th class="py-3 border-0 text-center">Batch load</th>
@@ -90,7 +95,8 @@
                                             </div>
                                             <div>
                                                 <div class="fw-bold text-dark">{{ $teacher->user->name }}</div>
-                                                <small class="text-muted tiny">Sr. Faculty Member</small>
+                                                <small
+                                                    class="text-muted tiny">{{ auth()->user()->school->institute_type === 'sport' ? 'Sr. Coaching Staff' : 'Sr. Faculty Member' }}</small>
                                             </div>
                                         </div>
                                     </td>
@@ -125,8 +131,8 @@
                                                 <i class="bi bi-pencil-square text-warning"></i>
                                             </a>
                                             <button type="button" class="btn btn-sm btn-white border-0"
-                                                onclick="if(confirm('Restrict faculty access and archive records?')) document.getElementById('delete-form-{{ $teacher->id }}').submit();"
-                                                title="Deactivate Faculty">
+                                                onclick="if(confirm('Restrict {{ auth()->user()->school->institute_type === 'sport' ? 'coach' : 'faculty' }} access and archive records?')) document.getElementById('delete-form-{{ $teacher->id }}').submit();"
+                                                title="{{ auth()->user()->school->institute_type === 'sport' ? 'Deactivate Coach' : 'Deactivate Faculty' }}">
                                                 <i class="bi bi-slash-circle text-danger"></i>
                                             </button>
                                         </div>
@@ -143,7 +149,9 @@
                                     <td colspan="6" class="text-center py-5">
                                         <div class="opacity-25 mb-3"><i class="bi bi-person-video3"
                                                 style="font-size: 5rem;"></i></div>
-                                        <h5 class="text-muted">No faculty matching records identified.</h5>
+                                        <h5 class="text-muted">No
+                                            {{ auth()->user()->school->institute_type === 'sport' ? 'coach' : 'faculty' }}
+                                            matching records identified.</h5>
                                         <a href="{{ route('school.teachers.create') }}"
                                             class="btn btn-sm btn-primary rounded-pill px-4 mt-2">Begin Recruitment</a>
                                     </td>
