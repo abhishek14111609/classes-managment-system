@@ -218,15 +218,3 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
 
 Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
 
-// ⚠️ TEMPORARY MIGRATION ROUTE — FOR SHARED HOSTING ONLY
-// ⚠️ REMOVE THIS ROUTE IMMEDIATELY AFTER RUNNING THE MIGRATION!
-// ⚠️ Leaving this active is a serious security risk.
-Route::get('/run-migration', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        $output = \Illuminate\Support\Facades\Artisan::output();
-        return response('<pre style="font-family:monospace;padding:20px;">✅ Migration executed successfully!<br><br>' . htmlspecialchars($output) . '</pre>');
-    } catch (\Exception $e) {
-        return response('<pre style="font-family:monospace;padding:20px;color:red;">❌ Migration failed:<br><br>' . htmlspecialchars($e->getMessage()) . '</pre>', 500);
-    }
-});
