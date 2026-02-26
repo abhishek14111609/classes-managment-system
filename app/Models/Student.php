@@ -79,6 +79,14 @@ class Student extends Model
     }
 
     /**
+     * Get the course
+     */
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    /**
      * Get all fees
      */
     public function fees()

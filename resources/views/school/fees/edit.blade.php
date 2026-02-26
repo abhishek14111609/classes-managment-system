@@ -37,11 +37,11 @@
                         </small>
                     </div>
                     <span class="ms-auto badge
-                        @if($fee->status === 'paid') bg-success
-                        @elseif($fee->status === 'partial') bg-warning text-dark
-                        @elseif($fee->status === 'overdue') bg-danger
-                        @else bg-secondary @endif
-                        fs-6">{{ ucfirst($fee->status) }}</span>
+                            @if($fee->status === 'paid') bg-success
+                            @elseif($fee->status === 'partial') bg-warning text-dark
+                            @elseif($fee->status === 'overdue') bg-danger
+                            @else bg-secondary @endif
+                            fs-6">{{ ucfirst($fee->status) }}</span>
                 </div>
             </div>
         </div>
@@ -67,8 +67,11 @@
                             <select class="form-select @error('sport_level') is-invalid @enderror" id="sport_level"
                                 name="sport_level">
                                 <option value="">— Not applicable / General fee —</option>
-                                <option value="basic" {{ old('sport_level', $fee->sport_level) === 'basic' ? 'selected' : '' }}>🟢 Basic — Beginner</option>
-                                <option value="advanced" {{ old('sport_level', $fee->sport_level) === 'advanced' ? 'selected' : '' }}>🏆 Advanced — Competitive</option>
+                                @foreach($levels as $level)
+                                    <option value="{{ $level->name }}" {{ old('sport_level', $fee->sport_level) === $level->name ? 'selected' : '' }}>
+                                        {{ $level->name }}
+                                    </option>
+                                @endforeach
                             </select>
                             @error('sport_level')
                                 <div class="invalid-feedback">{{ $message }}</div>

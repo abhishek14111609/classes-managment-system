@@ -1,21 +1,26 @@
 <div class="sidebar-brand-wrapper mb-4">
         <div class="sidebar-brand d-flex align-items-center">
-                <div class="brand-logo bg-white p-2 rounded-3 me-2 shadow-sm">
-                        <i class="bi bi-buildings-fill text-primary fs-4"></i>
+                <div class="brand-logo bg-white p-2 rounded-3 me-2 shadow-sm d-flex align-items-center justify-content-center"
+                        style="width: 40px; height: 40px; overflow: hidden;">
+                        @if(auth()->user()->school && auth()->user()->school->logo)
+                                <img src="{{ asset('storage/' . auth()->user()->school->logo) }}" alt="Logo" class="img-fluid"
+                                        style="max-height: 100%; object-fit: contain;">
+                        @else
+                                <i class="bi bi-buildings-fill text-primary fs-4"></i>
+                        @endif
                 </div>
                 <div>
                         <h6 class="fw-bold mb-0 text-white">
                                 {{ auth()->user()->school->institute_type === 'sport' ? 'Sports Academy Admin' : 'School Admin' }}
                         </h6>
                         <small
-                                class="text-white-50 tiny">{{ auth()->user()->school->institute_type === 'sport' ? 'Command Center' : 'Institutional Control' }}</small>
+                                class="text-white opacity-75 tiny">{{ auth()->user()->school->institute_type === 'sport' ? 'Command Center' : 'Institutional Control' }}</small>
                 </div>
         </div>
 </div>
 
 <ul class="nav flex-column sidebar-nav">
-        <li class="nav-label small text-uppercase opacity-50 mb-2"
-                style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Main Console</li>
+        <li class="nav-label tiny text-white opacity-75 mb-2" style="padding-left: 15px;">Main Console</li>
 
         <li class="nav-item">
                 <a href="{{ route('school.dashboard') }}"
@@ -24,8 +29,7 @@
                 </a>
         </li>
 
-        <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
-                style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">
+        <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">
                 {{ auth()->user()->school->institute_type === 'sport' ? 'Training & Sports Core' : 'Academic Core' }}
         </li>
 
@@ -60,8 +64,7 @@
                 </a>
         </li>
 
-        <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
-                style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Human Resources</li>
+        <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">Human Resources</li>
 
         <li class="nav-item">
                 <a href="{{ route('school.students.index') }}"
@@ -86,8 +89,7 @@
                 </a>
         </li>
 
-        <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
-                style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Financials</li>
+        <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">Financials</li>
 
         <li class="nav-item">
                 <a href="{{ route('school.fee-plans.index') }}"
@@ -125,8 +127,7 @@
                 </a>
         </li>
 
-        <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
-                style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Operations</li>
+        <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">Operations</li>
 
         <li class="nav-item">
                 <a href="{{ route('school.levels.index') }}"
@@ -168,7 +169,7 @@
                 </div>
                 <div>
                         <p class="mb-0 tiny fw-bold text-white">Managed Plan</p>
-                        <p class="mb-0 text-white-50" style="font-size: 0.6rem;">Enterprise Access</p>
+                        <p class="mb-0 text-white opacity-75" style="font-size: 0.6rem;">Enterprise Access</p>
                 </div>
         </div>
 </div>

@@ -17,7 +17,8 @@ class FeePlanController extends Controller
 
     public function create()
     {
-        return view('school.fee-plans.create');
+        $levels = \App\Models\Level::where('is_active', true)->get();
+        return view('school.fee-plans.create', compact('levels'));
     }
 
     public function store(Request $request)
@@ -33,7 +34,7 @@ class FeePlanController extends Controller
             ],
             'fee_type' => 'required|string|in:tuition,sports,transport,exam,library,other',
             'duration' => 'nullable|string|in:monthly,quarterly,half_yearly,annual,one_time',
-            'sport_level' => 'nullable|string|in:basic,advanced',
+            'sport_level' => 'nullable|string|max:255',
             'amount' => 'required|numeric|min:1',
             'late_fee_per_day' => 'nullable|numeric|min:0',
             'description' => 'nullable|string|max:500',
@@ -60,7 +61,8 @@ class FeePlanController extends Controller
 
     public function edit(FeePlan $feePlan)
     {
-        return view('school.fee-plans.edit', compact('feePlan'));
+        $levels = \App\Models\Level::where('is_active', true)->get();
+        return view('school.fee-plans.edit', compact('feePlan', 'levels'));
     }
 
     public function update(Request $request, FeePlan $feePlan)
@@ -76,7 +78,7 @@ class FeePlanController extends Controller
             ],
             'fee_type' => 'required|string|in:tuition,sports,transport,exam,library,other',
             'duration' => 'nullable|string|in:monthly,quarterly,half_yearly,annual,one_time',
-            'sport_level' => 'nullable|string|in:basic,advanced',
+            'sport_level' => 'nullable|string|max:255',
             'amount' => 'required|numeric|min:1',
             'late_fee_per_day' => 'nullable|numeric|min:0',
             'description' => 'nullable|string|max:500',

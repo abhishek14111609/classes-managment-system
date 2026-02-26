@@ -1,18 +1,23 @@
 <div class="sidebar-brand-wrapper mb-4">
     <div class="sidebar-brand d-flex align-items-center">
-        <div class="brand-logo bg-white p-2 rounded-3 me-2 shadow-sm">
-            <i class="bi bi-mortarboard-fill text-primary fs-4"></i>
+        <div class="brand-logo bg-white p-2 rounded-3 me-2 shadow-sm d-flex align-items-center justify-content-center"
+            style="width: 40px; height: 40px; overflow: hidden;">
+            @if(auth()->user()->school && auth()->user()->school->logo)
+                <img src="{{ asset('storage/' . auth()->user()->school->logo) }}" alt="Logo" class="img-fluid"
+                    style="max-height: 100%; object-fit: contain;">
+            @else
+                <i class="bi bi-mortarboard-fill text-primary fs-4"></i>
+            @endif
         </div>
         <div>
             <h6 class="fw-bold mb-0">Teacher Portal</h6>
-            <small class="text-white-50 tiny">Professional Access</small>
+            <small class="text-white opacity-75 tiny">Professional Access</small>
         </div>
     </div>
 </div>
 
 <ul class="nav flex-column sidebar-nav">
-    <li class="nav-label small text-uppercase opacity-50 mb-2"
-        style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Main Console</li>
+    <li class="nav-label tiny text-white opacity-75 mb-2" style="padding-left: 15px;">Main Console</li>
 
     <li class="nav-item">
         <a href="{{ route('teacher.dashboard') }}"
@@ -21,8 +26,7 @@
         </a>
     </li>
 
-    <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
-        style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Academic Management</li>
+    <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">Academic Management</li>
 
     <li class="nav-item">
         <a href="{{ route('teacher.attendance.index') }}"
@@ -52,8 +56,7 @@
         </a>
     </li>
 
-    <li class="nav-label small text-uppercase opacity-50 mt-4 mb-2"
-        style="font-size: 0.65rem; letter-spacing: 1px; padding-left: 15px;">Personal</li>
+    <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">Personal</li>
 
     <li class="nav-item">
         <a href="{{ route('teacher.profile') }}"
@@ -87,7 +90,7 @@
         </div>
         <div>
             <p class="mb-0 tiny fw-bold text-white">Need Support?</p>
-            <p class="mb-0 text-white-50" style="font-size: 0.6rem;">Contact Administrator</p>
+            <p class="mb-0 text-white opacity-75" style="font-size: 0.6rem;">Contact Administrator</p>
         </div>
     </div>
 </div>

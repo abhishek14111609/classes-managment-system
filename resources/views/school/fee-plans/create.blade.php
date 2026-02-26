@@ -64,8 +64,11 @@
                             <label for="sport_level" class="form-label fw-semibold">Sport Level</label>
                             <select class="form-select" id="sport_level" name="sport_level">
                                 <option value="">— Not Applicable —</option>
-                                <option value="basic"    {{ old('sport_level') === 'basic'    ? 'selected' : '' }}>Basic</option>
-                                <option value="advanced" {{ old('sport_level') === 'advanced' ? 'selected' : '' }}>Advanced</option>
+                                @foreach($levels as $level)
+                                    <option value="{{ $level->name }}" {{ old('sport_level') === $level->name ? 'selected' : '' }}>
+                                        {{ $level->name }}
+                                    </option>
+                                @endforeach
                             </select>
                             <div class="form-text">Select the level for sports fees.</div>
                         </div>

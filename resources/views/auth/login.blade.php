@@ -97,7 +97,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <label for="password"
                                 class="form-label fw-semibold small text-uppercase text-muted">Password</label>
-                            <a href="#" class="small text-primary text-decoration-none fw-medium">Forgot password?</a>
+                            <!-- Password Recovery removed via Admin Directive -->
                         </div>
                         <input type="password" class="form-control form-control-lg bg-light border-0" id="password"
                             name="password" placeholder="••••••••" required>

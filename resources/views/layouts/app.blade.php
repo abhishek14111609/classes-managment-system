@@ -54,7 +54,12 @@
         @if(!View::hasSection('custom_sidebar_header'))
             <div class="sidebar-header">
                 <h4>
-                    <i class="bi bi-mortarboard-fill text-primary"></i>
+                    @if(auth()->check() && auth()->user()->school && auth()->user()->school->logo)
+                        <img src="{{ asset('storage/' . auth()->user()->school->logo) }}" alt="Logo"
+                            class="img-fluid rounded me-2" style="max-height: 28px; width: auto;">
+                    @else
+                        <i class="bi bi-mortarboard-fill text-primary"></i>
+                    @endif
                     @auth
                         @php
                             $branding = config('app.name', 'Management System');
@@ -80,13 +85,19 @@
         @auth
             <div class="px-4 py-3 border-bottom border-secondary border-opacity-10">
                 <div class="d-flex align-items-center">
-                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold me-3"
-                        style="width: 40px; height: 40px;">
-                        {{ substr(auth()->user()->name, 0, 1) }}
-                    </div>
-                    <div>
-                        <h6 class="text-white mb-0" style="font-size: 0.9rem;">{{ auth()->user()->name }}</h6>
-                        <small class="text-muted" style="font-size: 0.75rem;">{{ auth()->user()->email }}</small>
+                    @if(auth()->user()->avatar)
+                        <img src="{{ asset('storage/' . auth()->user()->avatar) }}" class="rounded-circle me-3"
+                            style="width: 40px; height: 40px; object-fit: cover;">
+                    @else
+                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold me-3"
+                            style="width: 40px; height: 40px;">
+                            {{ substr(auth()->user()->name, 0, 1) }}
+                        </div>
+                    @endif
+                    <div class="overflow-hidden">
+                        <h6 class="text-white mb-0 text-truncate" style="font-size: 0.9rem;">{{ auth()->user()->name }}</h6>
+                        <small class="text-white opacity-75 text-truncate d-block"
+                            style="font-size: 0.75rem;">{{ auth()->user()->email }}</small>
                     </div>
                 </div>
             </div>

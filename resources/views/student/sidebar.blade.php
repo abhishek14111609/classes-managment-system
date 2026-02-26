@@ -36,7 +36,7 @@
 </li>
 
 <li class="mt-4 pt-3 border-top border-secondary border-opacity-10">
-    <div class="px-3 mb-2 small text-muted text-uppercase fw-bold" style="letter-spacing: 0.1em; font-size: 0.7rem;">
+    <div class="px-3 mb-2 tiny text-white opacity-75 fw-bold">
         Account</div>
 </li>
 <li>
@@ -48,13 +48,17 @@
     <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-sidebar').submit();">
         <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
     </a>
+    <form id="logout-form-sidebar" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
 </li>
 
 <li class="mt-auto pt-5">
     <div class="card bg-primary bg-opacity-10 border-0 rounded-4 mx-2">
         <div class="card-body p-3">
             <h6 class="text-primary fw-bold mb-1 small">Need Help?</h6>
-            <p class="text-muted small mb-0" style="font-size: 0.75rem;">Contact your school admin for any issues.</p>
+            <p class="text-secondary small mb-0" style="font-size: 0.75rem;">Contact your school admin for any issues.
+            </p>
         </div>
     </div>
 </li>

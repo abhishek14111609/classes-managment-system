@@ -21,9 +21,13 @@ class AttendanceService
             $attendanceDate = $data['attendance_date'];
 
             foreach ($data['attendances'] as $attendanceData) {
+                // Check if this is a photo verification (existing pending record)
+                $existing = Attendance::where('student_id', $attendanceData['student_id'])
+                    ->whereDate('attendance_date', $attendanceDate)
+                    ->first();
 
                 $verificationStatus = 'approved';
-                if ($attendanceData['status'] === 'absent') {
+                if ($existing && $existing->verification_status === 'pending' && $attendanceData['status'] === 'absent') {
                     $verificationStatus = 'rejected';
                 }
 

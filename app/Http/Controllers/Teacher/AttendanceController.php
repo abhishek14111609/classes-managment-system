@@ -17,7 +17,7 @@ class AttendanceController extends Controller
     public function index()
     {
         $teacher = auth()->user()->teacher;
-        $batches = $teacher->batches()->with('students.user')->get();
+        $batches = $teacher->batches()->select('batches.*')->with('students.user')->get();
 
         return view('teacher.attendance.index', compact('batches'));
     }
@@ -25,7 +25,7 @@ class AttendanceController extends Controller
     public function create(Request $request)
     {
         $teacher = auth()->user()->teacher;
-        $batches = $teacher->batches()->get();
+        $batches = $teacher->batches()->select('batches.*')->get();
         $batchId = $request->input('batch_id');
         $attendanceDate = $request->input('attendance_date', date('Y-m-d'));
 

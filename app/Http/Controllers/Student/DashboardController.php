@@ -18,17 +18,47 @@ class DashboardController extends Controller
     public function index()
     {
         $student = auth()->user()->student;
+        $student->load([
+            'batch' => function ($q) {
+                $q->with(['class', 'teachers.user'])->withCount('students');
+            },
+            'course'
+        ]);
+
         $stats = $this->studentService->getStudentStats($student);
+
         $recentAttendance = $student->attendances()
+            ->with('batch')
             ->latest('attendance_date')
             ->take(5)
             ->get();
+
         $ledger = $this->studentService->getStudentLedger($student);
+
+        // Fetch Upcoming Sessions (Today's batch schedule)
+        $batch = $student->batch;
+        $upcomingSessions = [];
+        if ($batch) {
+            $upcomingSessions[] = $batch;
+        }
+
+        // Fetch Upcoming Events
+        $upcomingEvents = \App\Models\SportsEvent::where('event_date', '>=', now())
+            ->whereHas('participants', function ($q) use ($student) {
+                $q->where('student_id', $student->id);
+            })
+            ->with(['coach.user'])
+            ->orderBy('event_date', 'asc')
+            ->take(3)
+            ->get();
 
         $balance = $stats['pending_fees'];
         $paidFees = $stats['paid_fees'];
         $attendanceRate = $stats['attendance_percentage'];
         $presentDays = $student->attendances()->where('status', 'present')->count();
+
+        // Calculate Athlete Score (Gamification)
+        $athleteScore = round(($attendanceRate + min(100, $stats['events_participated'] * 10)) / 2);
 
         return view('student.dashboard', compact(
             'student',
@@ -38,7 +68,10 @@ class DashboardController extends Controller
             'attendanceRate',
             'presentDays',
             'recentAttendance',
-            'ledger'
+            'ledger',
+            'upcomingSessions',
+            'upcomingEvents',
+            'athleteScore'
         ));
     }
 }

@@ -99,6 +99,14 @@ class Fee extends Model
     }
 
     /**
+     * Get remaining amount attribute
+     */
+    public function getRemainingAmountAttribute()
+    {
+        return $this->total_amount + $this->late_fee - $this->discount - $this->paid_amount;
+    }
+
+    /**
      * Update fee status based on payment
      */
     public function updateStatus()

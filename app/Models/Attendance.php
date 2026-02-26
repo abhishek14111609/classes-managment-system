@@ -40,6 +40,7 @@ class Attendance extends Model
 
     protected $casts = [
         'attendance_date' => 'date',
+        'photo_submitted_at' => 'datetime',
     ];
 
     /**

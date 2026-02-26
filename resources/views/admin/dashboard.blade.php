@@ -20,9 +20,9 @@
                 <span class="badge bg-white border px-3 py-2 text-muted shadow-sm d-flex align-items-center gap-2">
                     <i class="bi bi-calendar3"></i> {{ date('F j, Y') }}
                 </span>
-                <button class="btn btn-primary shadow-sm">
+                <a href="{{ route('admin.dashboard.export') }}" class="btn btn-primary shadow-sm" target="_blank">
                     <i class="bi bi-download"></i> Export Report
-                </button>
+                </a>
             </div>
         </div>
 
@@ -36,10 +36,10 @@
                                 style="background-color: rgba(255, 255, 255, 0.2); width: 48px; height: 48px;">
                                 <i class="bi bi-building fs-4 text-white"></i>
                             </div>
-                            <span class="badge bg-white bg-opacity-20 text-black border-0 fw-normal">Total</span>
+                            <span class="badge bg-white bg-opacity-20 text-white border-0 fw-bold">Total</span>
                         </div>
-                        <h3 class="mb-1 display-6 fw-bold">{{ $stats['total_schools'] }}</h3>
-                        <p class="text-white text-opacity-75 small mb-0">Registered Schools</p>
+                        <h3 class="mb-1 display-6 fw-bold text-white">{{ $stats['total_schools'] }}</h3>
+                        <p class="text-white opacity-75 small mb-0 fw-medium">Registered Schools</p>
                     </div>
                 </div>
             </div>
@@ -52,10 +52,10 @@
                                 style="background-color: rgba(255, 255, 255, 0.2); width: 48px; height: 48px;">
                                 <i class="bi bi-check-circle fs-4 text-white"></i>
                             </div>
-                            <span class="badge bg-white bg-opacity-20 text-black border-0 fw-normal">Active</span>
+                            <span class="badge bg-white bg-opacity-20 text-white border-0 fw-bold">Active</span>
                         </div>
-                        <h3 class="mb-1 display-6 fw-bold">{{ $stats['active_schools'] }}</h3>
-                        <p class="text-white text-opacity-75 small mb-0">Currently Operating</p>
+                        <h3 class="mb-1 display-6 fw-bold text-white">{{ $stats['active_schools'] }}</h3>
+                        <p class="text-white opacity-75 small mb-0 fw-medium">Currently Operating</p>
                     </div>
                 </div>
             </div>
@@ -68,10 +68,10 @@
                                 style="background-color: rgba(255, 255, 255, 0.2); width: 48px; height: 48px;">
                                 <i class="bi bi-exclamation-triangle fs-4 text-white"></i>
                             </div>
-                            <span class="badge bg-white bg-opacity-20 text-black border-0 fw-normal">Action Needed</span>
+                            <span class="badge bg-white bg-opacity-20 text-white border-0 fw-bold">Action Needed</span>
                         </div>
-                        <h3 class="mb-1 display-6 fw-bold">{{ $stats['expired_schools'] }}</h3>
-                        <p class="text-white text-opacity-75 small mb-0">Expired Subscriptions</p>
+                        <h3 class="mb-1 display-6 fw-bold text-white">{{ $stats['expired_schools'] }}</h3>
+                        <p class="text-white opacity-75 small mb-0 fw-medium">Expired Subscriptions</p>
                     </div>
                 </div>
             </div>
@@ -84,10 +84,10 @@
                                 style="background-color: rgba(255, 255, 255, 0.2); width: 48px; height: 48px;">
                                 <i class="bi bi-wallet2 fs-4 text-white"></i>
                             </div>
-                            <span class="badge bg-white bg-opacity-20 text-black border-0 fw-normal">Revenue</span>
+                            <span class="badge bg-white bg-opacity-20 text-white border-0 fw-bold">Revenue</span>
                         </div>
-                        <h3 class="mb-1 display-6 fw-bold">₹{{ number_format($stats['total_revenue'], 2) }}</h3>
-                        <p class="text-white text-opacity-75 small mb-0">Total Earnings</p>
+                        <h3 class="mb-1 display-6 fw-bold text-white">₹{{ number_format($stats['total_revenue'], 2) }}</h3>
+                        <p class="text-white opacity-75 small mb-0 fw-medium">Total Earnings</p>
                     </div>
                 </div>
             </div>

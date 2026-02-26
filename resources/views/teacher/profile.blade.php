@@ -121,7 +121,7 @@
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h5 class="fw-bold mb-0">Teaching Schedule Summary</h5>
-                            <a href="#" class="btn btn-sm btn-link text-decoration-none">Full Timetable</a>
+                            <!-- Full Timetable Link Removed -->
                         </div>
                         <div class="table-responsive">
                             <table class="table align-middle table-hover">

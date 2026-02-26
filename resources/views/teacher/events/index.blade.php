@@ -70,8 +70,10 @@
                                     </span>
                                 </td>
                                 <td class="border-0 pe-4 text-end">
-                                    <button class="btn btn-sm btn-light border rounded-circle" title="View Details"><i
-                                            class="bi bi-eye"></i></button>
+                                    <a href="{{ route('teacher.events.show', $event) }}"
+                                        class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" title="Manage Participants">
+                                        <i class="bi bi-people me-1"></i> Manage
+                                    </a>
                                 </td>
                             </tr>
                         @empty

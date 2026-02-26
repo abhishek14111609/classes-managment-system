@@ -70,7 +70,8 @@ class FeeController extends Controller
     {
         $students = Student::with('user')->active()->get();
 
-        return view('school.fees.edit', compact('fee', 'students'));
+        $levels = \App\Models\Level::where('is_active', true)->get();
+        return view('school.fees.edit', compact('fee', 'students', 'levels'));
     }
 
     public function update(Request $request, Fee $fee)
@@ -79,7 +80,7 @@ class FeeController extends Controller
             'total_amount' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0|lte:total_amount',
             'late_fee' => 'nullable|numeric|min:0',
-            'sport_level' => 'nullable|string|in:basic,advanced',
+            'sport_level' => 'nullable|string|max:255',
             'due_date' => 'required|date',
             'remarks' => 'nullable|string',
         ]);

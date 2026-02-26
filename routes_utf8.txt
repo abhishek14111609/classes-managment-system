@@ -1,0 +1,167 @@
+﻿
+  GET|HEAD        / ............................................................................................. home
+  GET|HEAD        admin/activity-logs .................. admin.activity-logs.index ΓÇ║ Admin\ActivityLogController@index
+  GET|HEAD        admin/dashboard .................................. admin.dashboard ΓÇ║ Admin\DashboardController@index
+  GET|HEAD        admin/dashboard/export ................... admin.dashboard.export ΓÇ║ Admin\DashboardController@export
+  GET|HEAD        admin/plans ......................................... admin.plans.index ΓÇ║ Admin\PlanController@index
+  POST            admin/plans ......................................... admin.plans.store ΓÇ║ Admin\PlanController@store
+  GET|HEAD        admin/plans/create ................................ admin.plans.create ΓÇ║ Admin\PlanController@create
+  GET|HEAD        admin/plans/{plan} .................................... admin.plans.show ΓÇ║ Admin\PlanController@show
+  PUT|PATCH       admin/plans/{plan} ................................ admin.plans.update ΓÇ║ Admin\PlanController@update
+  DELETE          admin/plans/{plan} .............................. admin.plans.destroy ΓÇ║ Admin\PlanController@destroy
+  GET|HEAD        admin/plans/{plan}/edit ............................... admin.plans.edit ΓÇ║ Admin\PlanController@edit
+  GET|HEAD        admin/schools ................................... admin.schools.index ΓÇ║ Admin\SchoolController@index
+  POST            admin/schools ................................... admin.schools.store ΓÇ║ Admin\SchoolController@store
+  GET|HEAD        admin/schools/create .......................... admin.schools.create ΓÇ║ Admin\SchoolController@create
+  GET|HEAD        admin/schools/{school} ............................ admin.schools.show ΓÇ║ Admin\SchoolController@show
+  PUT|PATCH       admin/schools/{school} ........................ admin.schools.update ΓÇ║ Admin\SchoolController@update
+  DELETE          admin/schools/{school} ...................... admin.schools.destroy ΓÇ║ Admin\SchoolController@destroy
+  GET|HEAD        admin/schools/{school}/edit ....................... admin.schools.edit ΓÇ║ Admin\SchoolController@edit
+  POST            admin/schools/{school}/extend-subscription admin.schools.extend-subscription ΓÇ║ Admin\SchoolControllΓÇª
+  POST            admin/schools/{school}/toggle-status admin.schools.toggle-status ΓÇ║ Admin\SchoolController@toggleStaΓÇª
+  GET|HEAD        admin/subscriptions ................. admin.subscriptions.index ΓÇ║ Admin\SubscriptionController@index
+  GET|HEAD        admin/subscriptions/{subscription}/download admin.subscriptions.download ΓÇ║ Admin\SubscriptionControΓÇª
+  GET|HEAD        admin/users ......................................... admin.users.index ΓÇ║ Admin\UserController@index
+  PUT|PATCH       admin/users/{user} ................................ admin.users.update ΓÇ║ Admin\UserController@update
+  GET|HEAD        admin/users/{user}/edit ............................... admin.users.edit ΓÇ║ Admin\UserController@edit
+  POST            admin/users/{user}/toggle-status ..... admin.users.toggle-status ΓÇ║ Admin\UserController@toggleStatus
+  GET|HEAD        login ................................................... login ΓÇ║ Auth\LoginController@showLoginForm
+  POST            login ..................................... generated::heXrWrFWSBzbgtj2 ΓÇ║ Auth\LoginController@login
+  POST            logout ........................................................ logout ΓÇ║ Auth\LoginController@logout
+  GET|HEAD        profile ...................................................... profile.edit ΓÇ║ ProfileController@edit
+  PATCH           profile .................................................. profile.update ΓÇ║ ProfileController@update
+  GET|HEAD        school/attendance ...................... school.attendance.index ΓÇ║ School\AttendanceController@index
+  POST            school/attendance ...................... school.attendance.store ΓÇ║ School\AttendanceController@store
+  GET|HEAD        school/attendance/create ............. school.attendance.create ΓÇ║ School\AttendanceController@create
+  POST            school/batches ................................. school.batches.store ΓÇ║ School\BatchController@store
+  GET|HEAD        school/batches ................................. school.batches.index ΓÇ║ School\BatchController@index
+  GET|HEAD        school/batches/create ........................ school.batches.create ΓÇ║ School\BatchController@create
+  GET|HEAD        school/batches/{batch} ........................... school.batches.show ΓÇ║ School\BatchController@show
+  PUT|PATCH       school/batches/{batch} ....................... school.batches.update ΓÇ║ School\BatchController@update
+  DELETE          school/batches/{batch} ..................... school.batches.destroy ΓÇ║ School\BatchController@destroy
+  GET|HEAD        school/batches/{batch}/edit ...................... school.batches.edit ΓÇ║ School\BatchController@edit
+  GET|HEAD        school/batches/{batch}/students school.batches.students ΓÇ║ School\AttendanceController@getBatchStudeΓÇª
+  GET|HEAD        school/classes ................................. school.classes.index ΓÇ║ School\ClassController@index
+  POST            school/classes ................................. school.classes.store ΓÇ║ School\ClassController@store
+  GET|HEAD        school/classes/create ........................ school.classes.create ΓÇ║ School\ClassController@create
+  GET|HEAD        school/classes/{class} ........................... school.classes.show ΓÇ║ School\ClassController@show
+  PUT|PATCH       school/classes/{class} ....................... school.classes.update ΓÇ║ School\ClassController@update
+  DELETE          school/classes/{class} ..................... school.classes.destroy ΓÇ║ School\ClassController@destroy
+  GET|HEAD        school/classes/{class}/edit ...................... school.classes.edit ΓÇ║ School\ClassController@edit
+  POST            school/classes/{class}/toggle-status school.classes.toggle-status ΓÇ║ School\ClassController@toggleStΓÇª
+  GET|HEAD        school/courses ................................ school.courses.index ΓÇ║ School\CourseController@index
+  POST            school/courses ................................ school.courses.store ΓÇ║ School\CourseController@store
+  GET|HEAD        school/courses/create ....................... school.courses.create ΓÇ║ School\CourseController@create
+  GET|HEAD        school/courses/{course} ......................... school.courses.show ΓÇ║ School\CourseController@show
+  PUT|PATCH       school/courses/{course} ..................... school.courses.update ΓÇ║ School\CourseController@update
+  DELETE          school/courses/{course} ................... school.courses.destroy ΓÇ║ School\CourseController@destroy
+  GET|HEAD        school/courses/{course}/edit .................... school.courses.edit ΓÇ║ School\CourseController@edit
+  GET|HEAD        school/dashboard ............................... school.dashboard ΓÇ║ School\DashboardController@index
+  GET|HEAD        school/events ............................. school.events.index ΓÇ║ School\SportsEventController@index
+  POST            school/events ............................. school.events.store ΓÇ║ School\SportsEventController@store
+  GET|HEAD        school/events/create .................... school.events.create ΓÇ║ School\SportsEventController@create
+  GET|HEAD        school/events/{event} ....................... school.events.show ΓÇ║ School\SportsEventController@show
+  PUT|PATCH       school/events/{event} ................... school.events.update ΓÇ║ School\SportsEventController@update
+  DELETE          school/events/{event} ................. school.events.destroy ΓÇ║ School\SportsEventController@destroy
+  GET|HEAD        school/events/{event}/edit .................. school.events.edit ΓÇ║ School\SportsEventController@edit
+  GET|HEAD        school/expenses ............................. school.expenses.index ΓÇ║ School\ExpenseController@index
+  POST            school/expenses ............................. school.expenses.store ΓÇ║ School\ExpenseController@store
+  GET|HEAD        school/expenses/create .................... school.expenses.create ΓÇ║ School\ExpenseController@create
+  GET|HEAD        school/expenses/{expense} ..................... school.expenses.show ΓÇ║ School\ExpenseController@show
+  PUT|PATCH       school/expenses/{expense} ................. school.expenses.update ΓÇ║ School\ExpenseController@update
+  DELETE          school/expenses/{expense} ............... school.expenses.destroy ΓÇ║ School\ExpenseController@destroy
+  GET|HEAD        school/expenses/{expense}/edit ................ school.expenses.edit ΓÇ║ School\ExpenseController@edit
+  GET|HEAD        school/fee-plans ........................... school.fee-plans.index ΓÇ║ School\FeePlanController@index
+  POST            school/fee-plans ........................... school.fee-plans.store ΓÇ║ School\FeePlanController@store
+  GET|HEAD        school/fee-plans/create .................. school.fee-plans.create ΓÇ║ School\FeePlanController@create
+  GET|HEAD        school/fee-plans/{feePlan}/api ............. school.fee-plans.api ΓÇ║ School\FeePlanController@apiShow
+  GET|HEAD        school/fee-plans/{fee_plan} .................. school.fee-plans.show ΓÇ║ School\FeePlanController@show
+  PUT|PATCH       school/fee-plans/{fee_plan} .............. school.fee-plans.update ΓÇ║ School\FeePlanController@update
+  DELETE          school/fee-plans/{fee_plan} ............ school.fee-plans.destroy ΓÇ║ School\FeePlanController@destroy
+  GET|HEAD        school/fee-plans/{fee_plan}/edit ............. school.fee-plans.edit ΓÇ║ School\FeePlanController@edit
+  GET|HEAD        school/fees ......................................... school.fees.index ΓÇ║ School\FeeController@index
+  POST            school/fees ......................................... school.fees.store ΓÇ║ School\FeeController@store
+  GET|HEAD        school/fees/create ................................ school.fees.create ΓÇ║ School\FeeController@create
+  GET|HEAD        school/fees/{fee} ..................................... school.fees.show ΓÇ║ School\FeeController@show
+  PUT|PATCH       school/fees/{fee} ................................. school.fees.update ΓÇ║ School\FeeController@update
+  DELETE          school/fees/{fee} ............................... school.fees.destroy ΓÇ║ School\FeeController@destroy
+  GET|HEAD        school/fees/{fee}/edit ................................ school.fees.edit ΓÇ║ School\FeeController@edit
+  GET|HEAD        school/invoices ............................. school.invoices.index ΓÇ║ School\InvoiceController@index
+  GET|HEAD        school/invoices/{invoice}/download .... school.invoices.download ΓÇ║ School\InvoiceController@download
+  GET|HEAD        school/invoices/{invoice}/stream .......... school.invoices.stream ΓÇ║ School\InvoiceController@stream
+  GET|HEAD        school/levels ................................... school.levels.index ΓÇ║ School\LevelController@index
+  POST            school/levels ................................... school.levels.store ΓÇ║ School\LevelController@store
+  GET|HEAD        school/levels/create .......................... school.levels.create ΓÇ║ School\LevelController@create
+  GET|HEAD        school/levels/{level} ............................. school.levels.show ΓÇ║ School\LevelController@show
+  PUT|PATCH       school/levels/{level} ......................... school.levels.update ΓÇ║ School\LevelController@update
+  DELETE          school/levels/{level} ....................... school.levels.destroy ΓÇ║ School\LevelController@destroy
+  GET|HEAD        school/levels/{level}/edit ........................ school.levels.edit ΓÇ║ School\LevelController@edit
+  POST            school/payments .......................... school.payments.store ΓÇ║ School\FeePaymentController@store
+  GET|HEAD        school/payments/create/{fee} ........... school.payments.create ΓÇ║ School\FeePaymentController@create
+  DELETE          school/payments/{payment} ............ school.payments.destroy ΓÇ║ School\FeePaymentController@destroy
+  GET|HEAD        school/reports ................................ school.reports.index ΓÇ║ School\ReportController@index
+  GET|HEAD        school/reports/attendance ........... school.reports.attendance ΓÇ║ School\ReportController@attendance
+  GET|HEAD        school/reports/expenses ................. school.reports.expenses ΓÇ║ School\ReportController@expenses
+  GET|HEAD        school/reports/income ....................... school.reports.income ΓÇ║ School\ReportController@income
+  GET|HEAD        school/reports/pending-fees ...... school.reports.pending-fees ΓÇ║ School\ReportController@pendingFees
+  POST            school/students ............................. school.students.store ΓÇ║ School\StudentController@store
+  GET|HEAD        school/students ............................. school.students.index ΓÇ║ School\StudentController@index
+  GET|HEAD        school/students/create .................... school.students.create ΓÇ║ School\StudentController@create
+  GET|HEAD        school/students/export .................... school.students.export ΓÇ║ School\StudentController@export
+  POST            school/students/{id}/restore ............ school.students.restore ΓÇ║ School\StudentController@restore
+  GET|HEAD        school/students/{student} ..................... school.students.show ΓÇ║ School\StudentController@show
+  PUT|PATCH       school/students/{student} ................. school.students.update ΓÇ║ School\StudentController@update
+  DELETE          school/students/{student} ............... school.students.destroy ΓÇ║ School\StudentController@destroy
+  GET|HEAD        school/students/{student}/edit ................ school.students.edit ΓÇ║ School\StudentController@edit
+  GET|HEAD        school/subjects ............................. school.subjects.index ΓÇ║ School\SubjectController@index
+  POST            school/subjects ............................. school.subjects.store ΓÇ║ School\SubjectController@store
+  GET|HEAD        school/subjects/create .................... school.subjects.create ΓÇ║ School\SubjectController@create
+  GET|HEAD        school/subjects/{subject} ..................... school.subjects.show ΓÇ║ School\SubjectController@show
+  PUT|PATCH       school/subjects/{subject} ................. school.subjects.update ΓÇ║ School\SubjectController@update
+  DELETE          school/subjects/{subject} ............... school.subjects.destroy ΓÇ║ School\SubjectController@destroy
+  GET|HEAD        school/subjects/{subject}/edit ................ school.subjects.edit ΓÇ║ School\SubjectController@edit
+  GET|HEAD        school/teachers ............................. school.teachers.index ΓÇ║ School\TeacherController@index
+  POST            school/teachers ............................. school.teachers.store ΓÇ║ School\TeacherController@store
+  GET|HEAD        school/teachers/create .................... school.teachers.create ΓÇ║ School\TeacherController@create
+  GET|HEAD        school/teachers/{teacher} ..................... school.teachers.show ΓÇ║ School\TeacherController@show
+  PUT|PATCH       school/teachers/{teacher} ................. school.teachers.update ΓÇ║ School\TeacherController@update
+  DELETE          school/teachers/{teacher} ............... school.teachers.destroy ΓÇ║ School\TeacherController@destroy
+  GET|HEAD        school/teachers/{teacher}/edit ................ school.teachers.edit ΓÇ║ School\TeacherController@edit
+  GET|HEAD        storage/{path} ....................................................................... storage.local
+  GET|HEAD        student/attendance ................... student.attendance.index ΓÇ║ Student\AttendanceController@index
+  POST            student/attendance ................... student.attendance.store ΓÇ║ Student\AttendanceController@store
+  GET|HEAD        student/dashboard ............................ student.dashboard ΓÇ║ Student\DashboardController@index
+  GET|HEAD        student/events ................................ student.events.index ΓÇ║ Student\EventController@index
+  GET|HEAD        student/fees ...................................... student.fees.index ΓÇ║ Student\FeeController@index
+  GET|HEAD        student/fees/{fee} .................................. student.fees.show ΓÇ║ Student\FeeController@show
+  GET|HEAD        student/profile .................................................................... student.profile
+  GET|HEAD        student/resources ................................................................ student.resources
+  GET|HEAD        student/settings .................................................................. student.settings
+  GET|HEAD        student/timetable ................................................................ student.timetable
+  GET|HEAD        subscription-expired .......................................................... subscription.expired
+  GET|HEAD        teacher/attendance ................... teacher.attendance.index ΓÇ║ Teacher\AttendanceController@index
+  GET|HEAD        teacher/attendance/mark ............ teacher.attendance.create ΓÇ║ Teacher\AttendanceController@create
+  POST            teacher/attendance/store ............. teacher.attendance.store ΓÇ║ Teacher\AttendanceController@store
+  GET|HEAD        teacher/batches ............................ teacher.batches.index ΓÇ║ Teacher\StudentController@index
+  GET|HEAD        teacher/batches/{batch}/students teacher.batches.students ΓÇ║ Teacher\StudentController@batchStudents
+  GET|HEAD        teacher/dashboard ............................ teacher.dashboard ΓÇ║ Teacher\DashboardController@index
+  GET|HEAD        teacher/events ................................ teacher.events.index ΓÇ║ Teacher\EventController@index
+  GET|HEAD        teacher/events/{event} .......................... teacher.events.show ΓÇ║ Teacher\EventController@show
+  POST            teacher/events/{event}/participants teacher.events.participants.add ΓÇ║ Teacher\EventController@addPaΓÇª
+  DELETE          teacher/events/{event}/participants/{student} teacher.events.participants.remove ΓÇ║ Teacher\EventConΓÇª
+  PATCH           teacher/events/{event}/participants/{student} teacher.events.participants.update ΓÇ║ Teacher\EventConΓÇª
+  GET|HEAD        teacher/materials ....................... teacher.materials.index ΓÇ║ Teacher\MaterialController@index
+  POST            teacher/materials ....................... teacher.materials.store ΓÇ║ Teacher\MaterialController@store
+  GET|HEAD        teacher/materials/create .............. teacher.materials.create ΓÇ║ Teacher\MaterialController@create
+  GET|HEAD        teacher/materials/{material} .............. teacher.materials.show ΓÇ║ Teacher\MaterialController@show
+  PUT|PATCH       teacher/materials/{material} .......... teacher.materials.update ΓÇ║ Teacher\MaterialController@update
+  DELETE          teacher/materials/{material} ........ teacher.materials.destroy ΓÇ║ Teacher\MaterialController@destroy
+  GET|HEAD        teacher/materials/{material}/download teacher.materials.download ΓÇ║ Teacher\MaterialController@downlΓÇª
+  GET|HEAD        teacher/materials/{material}/edit ......... teacher.materials.edit ΓÇ║ Teacher\MaterialController@edit
+  GET|HEAD        teacher/profile .................................................................... teacher.profile
+  GET|HEAD        teacher/settings .................................................................. teacher.settings
+  GET|HEAD        teacher/students/{student} .................. teacher.students.show ΓÇ║ Teacher\StudentController@show
+  GET|HEAD        up ..................................................................... generated::41uUfBHnS6te3GlJ
+
+                                                                                                  Showing [163] routes
+

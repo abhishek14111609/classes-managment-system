@@ -242,7 +242,7 @@
                 <div class="col-lg-5 mb-5 mb-lg-0">
                     <h2 class="display-5 font-heading fw-bold mb-4" style="color: white;">Unified Platform.<br><span
                             class="text-gradient">Three Perspectives.</span></h2>
-                    <p class="lead text-white-50 mb-5">
+                    <p class="lead text-white opacity-75 mb-5">
                         Experience a system that adapts to who you are. Whether you run the school, teach a class, or
                         learn a subject.
                     </p>
@@ -257,7 +257,8 @@
                                 class="p-4 rounded-4 bg-blue bg-opacity-5 border border-white border-opacity-60 h-100 ">
                                 <h4 class="fw-bold text-white mb-2"><i class="bi bi-star-fill text-warning me-2"></i>
                                     Admin</h4>
-                                <p class="text-white-50 small mb-0">Total control over finances, staff, students, and
+                                <p class="text-white opacity-75 small mb-0">Total control over finances, staff,
+                                    students, and
                                     system configurations.</p>
                             </div>
                         </div>
@@ -265,15 +266,17 @@
                             <div class="p-4 rounded-4 bg-blue bg-opacity-5 border border-white border-opacity-50 h-100">
                                 <h4 class="fw-bold text-white mb-2"><i class="bi bi-briefcase-fill text-info me-2"></i>
                                     Teacher</h4>
-                                <p class="text-white-50 small mb-0">Streamlined tools for grading, attendance, and
+                                <p class="text-white opacity-75 small mb-0">Streamlined tools for grading, attendance,
+                                    and
                                     student communication.</p>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="p-4 rounded-4 bg-blue bg-opacity-5 border border-white border-opacity-50 h-100">
+                            <div class="p-4 rounded-4 bg-blue bg-opacity-5 border border-white border-opacity-25 h-100">
                                 <h4 class="fw-bold text-white mb-2"><i
                                         class="bi bi-mortarboard-fill text-success me-2"></i> Student</h4>
-                                <p class="text-white-50 small mb-0">Personalized dashboard for results, schedule, and
+                                <p class="text-white opacity-75 small mb-0">Personalized dashboard for results,
+                                    schedule, and
                                     fee status.</p>
                             </div>
                         </div>
@@ -292,10 +295,10 @@
                 Webvibe
             </a>
             <div class="mb-4">
-                <a href="#" class="text-muted text-decoration-none mx-3">Privacy</a>
-                <a href="#" class="text-muted text-decoration-none mx-3">Terms</a>
-                <a href="#" class="text-muted text-decoration-none mx-3">Support</a>
-                <a href="#" class="text-muted text-decoration-none mx-3">Contact</a>
+                <a href="javascript:void(0)" class="text-muted text-decoration-none mx-3">Privacy</a>
+                <a href="javascript:void(0)" class="text-muted text-decoration-none mx-3">Terms</a>
+                <a href="javascript:void(0)" class="text-muted text-decoration-none mx-3">Support</a>
+                <a href="javascript:void(0)" class="text-muted text-decoration-none mx-3">Contact</a>
             </div>
             <p class="text-muted small mb-0">&copy; {{ date('Y') }} Classes Management System. All rights reserved.</p>
         </div>

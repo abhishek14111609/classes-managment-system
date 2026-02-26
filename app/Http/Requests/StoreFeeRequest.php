@@ -26,7 +26,7 @@ class StoreFeeRequest extends FormRequest
             'student_id' => ['required', 'exists:students,id'],
             'fee_type' => ['required', 'string', 'in:tuition,sports,transport,exam,library,other'],
             'duration' => ['nullable', 'string', 'in:monthly,quarterly,half_yearly,annual,one_time'],
-            'sport_level' => ['nullable', 'string', 'in:basic,advanced'],
+            'sport_level' => ['nullable', 'string', 'max:255'],
             'total_amount' => ['required', 'numeric', 'min:0'],
             'discount' => ['nullable', 'numeric', 'min:0', 'lte:total_amount'],
             'late_fee' => ['nullable', 'numeric', 'min:0'],

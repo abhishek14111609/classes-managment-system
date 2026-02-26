@@ -166,31 +166,33 @@ class SchoolService
      */
     public function getDashboardStats()
     {
-        return [
-            'total_schools' => School::count(),
-            'active_schools' => School::where('status', 'active')->count(),
-            'inactive_schools' => School::where('status', 'inactive')->count(),
-            'expired_schools' => School::where('subscription_expires_at', '<', Carbon::now())->count(),
-            'expiring_soon_count' => School::where('subscription_expires_at', '>', Carbon::now())
-                ->where('subscription_expires_at', '<=', Carbon::now()->addDays(7))
-                ->count(),
-            'plan_count' => Plan::count(),
-            'active_subscriptions' => SchoolSubscription::active()->count(),
-            'total_revenue' => SchoolSubscription::sum('amount_paid'),
-            'monthly_revenue' => SchoolSubscription::whereYear('created_at', Carbon::now()->year)
-                ->whereMonth('created_at', Carbon::now()->month)
-                ->sum('amount_paid'),
-            'users_total' => User::count(),
-            'users_active' => User::where('is_active', true)->count(),
-            'logs_today' => ActivityLog::whereDate('created_at', Carbon::today())->count(),
-            'recent_subscriptions' => SchoolSubscription::with('school', 'plan')->latest()->take(5)->get(),
-            'expiring_soon' => School::where('subscription_expires_at', '>', Carbon::now())
-                ->where('subscription_expires_at', '<=', Carbon::now()->addDays(15))
-                ->latest('subscription_expires_at')
-                ->take(5)
-                ->get(),
-            'latest_logs' => ActivityLog::with(['user.roles', 'school'])->latest()->take(8)->get(),
-            'recent_users' => User::with('roles', 'school')->latest()->take(5)->get(),
-        ];
+        return \Illuminate\Support\Facades\Cache::remember('admin_dashboard_stats', 300, function () {
+            return [
+                'total_schools' => School::count(),
+                'active_schools' => School::where('status', 'active')->count(),
+                'inactive_schools' => School::where('status', 'inactive')->count(),
+                'expired_schools' => School::where('subscription_expires_at', '<', Carbon::now())->count(),
+                'expiring_soon_count' => School::where('subscription_expires_at', '>', Carbon::now())
+                    ->where('subscription_expires_at', '<=', Carbon::now()->addDays(7))
+                    ->count(),
+                'plan_count' => Plan::count(),
+                'active_subscriptions' => SchoolSubscription::active()->count(),
+                'total_revenue' => SchoolSubscription::sum('amount_paid'),
+                'monthly_revenue' => SchoolSubscription::whereYear('created_at', Carbon::now()->year)
+                    ->whereMonth('created_at', Carbon::now()->month)
+                    ->sum('amount_paid'),
+                'users_total' => User::count(),
+                'users_active' => User::where('is_active', true)->count(),
+                'logs_today' => ActivityLog::whereDate('created_at', Carbon::today())->count(),
+                'recent_subscriptions' => SchoolSubscription::with('school', 'plan')->latest()->take(5)->get(),
+                'expiring_soon' => School::where('subscription_expires_at', '>', Carbon::now())
+                    ->where('subscription_expires_at', '<=', Carbon::now()->addDays(15))
+                    ->latest('subscription_expires_at')
+                    ->take(5)
+                    ->get(),
+                'latest_logs' => ActivityLog::with(['user.roles', 'school'])->latest()->take(8)->get(),
+                'recent_users' => User::with('roles', 'school')->latest()->take(5)->get(),
+            ];
+        });
     }
 }

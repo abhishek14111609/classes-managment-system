@@ -25,7 +25,7 @@ Route::get('/', function () {
 
 // Auth Routes
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
 
 // Profile Routes
@@ -42,6 +42,7 @@ Route::get('/subscription-expired', function () {
 // Super Admin Routes
 Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [Admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/export', [Admin\DashboardController::class, 'export'])->name('dashboard.export');
 
     // School Management
     Route::resource('schools', Admin\SchoolController::class);
@@ -139,32 +140,21 @@ Route::middleware(['auth', 'role:teacher', 'check.subscription'])->prefix('teach
     Route::get('attendance/mark', [Teacher\AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('attendance/store', [Teacher\AttendanceController::class, 'store'])->name('attendance.store');
 
-    // Batch & Student Management
-    Route::get('batches', function () {
-        $teacher = auth()->user()->teacher;
-        $batches = $teacher->batches;
-        return view('teacher.batches.index', compact('batches'));
-    })->name('batches.index');
+    Route::get('batches', [Teacher\StudentController::class, 'index'])->name('batches.index');
 
-    Route::get('batches/{batch}/students', function (\App\Models\Batch $batch) {
-        if (!auth()->user()->teacher->batches->contains($batch)) {
-            abort(403);
-        }
-        $students = $batch->students()->with('user')->get();
-        return view('teacher.batches.students', compact('batch', 'students'));
-    })->name('batches.students');
+    Route::get('batches/{batch}/students', [Teacher\StudentController::class, 'batchStudents'])->name('batches.students');
+    Route::get('students/{student}', [Teacher\StudentController::class, 'show'])->name('students.show');
 
-    // Study Materials Management (Placeholder for now)
-    Route::get('materials', function () {
-        return view('teacher.materials.index');
-    })->name('materials.index');
+    // Study Materials Management (Now Fully Functional)
+    Route::resource('materials', Teacher\MaterialController::class);
+    Route::get('materials/{material}/download', [Teacher\MaterialController::class, 'download'])->name('materials.download');
 
-    // Events
-    Route::get('events', function () {
-        $teacher = auth()->user()->teacher;
-        $events = $teacher->coachedEvents()->latest('event_date')->paginate(15);
-        return view('teacher.events.index', compact('events'));
-    })->name('events.index');
+    // Events Management
+    Route::get('events', [Teacher\EventController::class, 'index'])->name('events.index');
+    Route::get('events/{event}', [Teacher\EventController::class, 'show'])->name('events.show');
+    Route::post('events/{event}/participants', [Teacher\EventController::class, 'addParticipants'])->name('events.participants.add');
+    Route::delete('events/{event}/participants/{student}', [Teacher\EventController::class, 'removeParticipant'])->name('events.participants.remove');
+    Route::patch('events/{event}/participants/{student}', [Teacher\EventController::class, 'updateResult'])->name('events.participants.update');
 
     // Profile & Settings
     Route::get('profile', function () {
@@ -201,7 +191,15 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
 
     // Resources & Timetable
     Route::get('resources', function () {
-        return view('student.resources');
+        $student = auth()->user()->student;
+        $materials = \App\Models\Material::where(function ($q) use ($student) {
+            $q->where('batch_id', $student->batch_id)
+                ->orWhereNull('batch_id');
+        })->where('school_id', $student->school_id)
+            ->with('teacher')
+            ->latest()
+            ->get();
+        return view('student.resources', compact('materials'));
     })->name('resources');
 
     Route::get('timetable', function () {
@@ -213,3 +211,5 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
         return view('student.settings');
     })->name('settings');
 });
+
+Route::get('settings', [Admin\SettingsController::class, 'index'])->name('settings.index');

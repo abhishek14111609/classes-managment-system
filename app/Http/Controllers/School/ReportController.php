@@ -53,12 +53,16 @@ class ReportController extends Controller
     public function pendingFees()
     {
         $schoolId = auth()->user()->school_id;
-        $pendingFees = \App\Models\Fee::with('student.user', 'student.batch')
-            ->where('school_id', $schoolId)
-            ->whereIn('status', ['pending', 'partial', 'overdue'])
+
+        $query = \App\Models\Fee::where('school_id', $schoolId)
+            ->whereIn('status', ['pending', 'partial', 'overdue']);
+
+        $totalOutstanding = $query->sum(\DB::raw('total_amount + late_fee - discount - paid_amount'));
+
+        $pendingFees = $query->with('student.user', 'student.batch')
             ->latest()
             ->paginate(15);
 
-        return view('school.reports.pending-fees', compact('pendingFees'));
+        return view('school.reports.pending-fees', compact('pendingFees', 'totalOutstanding'));
     }
 }
