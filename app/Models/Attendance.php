@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $status
  * @property string|null $remarks
  * @property int|null $marked_by
+ * @property string|null $photo_path
+ * @property \Illuminate\Support\Carbon|null $photo_submitted_at
+ * @property string|null $verification_status
+ * @property int|null $reviewed_by
+ * @property \Illuminate\Support\Carbon|null $reviewed_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read School $school
@@ -36,11 +41,14 @@ class Attendance extends Model
         'photo_path',
         'photo_submitted_at',
         'verification_status',
+        'reviewed_by',
+        'reviewed_at',
     ];
 
     protected $casts = [
         'attendance_date' => 'date',
         'photo_submitted_at' => 'datetime',
+        'reviewed_at' => 'datetime',
     ];
 
     /**

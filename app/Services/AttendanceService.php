@@ -22,13 +22,29 @@ class AttendanceService
 
             foreach ($data['attendances'] as $attendanceData) {
                 // Check if this is a photo verification (existing pending record)
-                $existing = Attendance::where('student_id', $attendanceData['student_id'])
+                $existing = Attendance::where('student_id', '=', $attendanceData['student_id'])
                     ->whereDate('attendance_date', $attendanceDate)
                     ->first();
 
                 $verificationStatus = 'approved';
-                if ($existing && $existing->verification_status === 'pending' && $attendanceData['status'] === 'absent') {
+                $shouldReview = $existing && $existing->verification_status === 'pending';
+
+                if ($shouldReview && $attendanceData['status'] === 'absent') {
                     $verificationStatus = 'rejected';
+                }
+
+                $updateData = [
+                    'school_id' => auth()->user()->school_id,
+                    'batch_id' => $batch->id,
+                    'status' => $attendanceData['status'],
+                    'remarks' => $attendanceData['remarks'] ?? null,
+                    'marked_by' => auth()->id(),
+                    'verification_status' => $verificationStatus,
+                ];
+
+                if ($shouldReview) {
+                    $updateData['reviewed_by'] = auth()->id();
+                    $updateData['reviewed_at'] = Carbon::now();
                 }
 
                 Attendance::updateOrCreate(
@@ -36,14 +52,7 @@ class AttendanceService
                         'student_id' => $attendanceData['student_id'],
                         'attendance_date' => $attendanceDate,
                     ],
-                    [
-                        'school_id' => auth()->user()->school_id,
-                        'batch_id' => $batch->id,
-                        'status' => $attendanceData['status'],
-                        'remarks' => $attendanceData['remarks'] ?? null,
-                        'marked_by' => auth()->id(),
-                        'verification_status' => $verificationStatus,
-                    ]
+                    $updateData
                 );
             }
 
@@ -62,7 +71,7 @@ class AttendanceService
         $attendanceData = [];
 
         foreach ($students as $student) {
-            $attendances = Attendance::where('student_id', $student->id)
+            $attendances = Attendance::where('student_id', '=', $student->id)
                 ->whereBetween('attendance_date', [$startDate, $endDate])
                 ->get();
 
@@ -89,7 +98,7 @@ class AttendanceService
      */
     public function getStudentAttendanceReport(Student $student, $startDate = null, $endDate = null)
     {
-        $query = Attendance::where('student_id', $student->id);
+        $query = Attendance::where('student_id', '=', $student->id);
 
         if ($startDate && $endDate) {
             $query->whereBetween('attendance_date', [$startDate, $endDate]);
@@ -123,7 +132,7 @@ class AttendanceService
     {
         $today = Carbon::today();
 
-        return Attendance::where('batch_id', $batch->id)
+        return Attendance::where('batch_id', '=', $batch->id)
             ->whereDate('attendance_date', $today)
             ->with('student.user')
             ->get();

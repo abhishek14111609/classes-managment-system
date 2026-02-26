@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\School;
 use App\Http\Controllers\Teacher;
 use App\Http\Controllers\Student;
+use App\Http\Controllers\Admin\SettingsController;
+use App\Models\Material;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +141,8 @@ Route::middleware(['auth', 'role:teacher', 'check.subscription'])->prefix('teach
     Route::get('attendance', [Teacher\AttendanceController::class, 'index'])->name('attendance.index');
     Route::get('attendance/mark', [Teacher\AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('attendance/store', [Teacher\AttendanceController::class, 'store'])->name('attendance.store');
+    Route::post('attendance/{attendance}/approve-photo', [Teacher\AttendanceController::class, 'approvePhoto'])->name('attendance.approve-photo');
+    Route::post('attendance/{attendance}/reject-photo', [Teacher\AttendanceController::class, 'rejectPhoto'])->name('attendance.reject-photo');
 
     Route::get('batches', [Teacher\StudentController::class, 'index'])->name('batches.index');
 
@@ -192,10 +196,10 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
     // Resources & Timetable
     Route::get('resources', function () {
         $student = auth()->user()->student;
-        $materials = \App\Models\Material::where(function ($q) use ($student) {
-            $q->where('batch_id', $student->batch_id)
+        $materials = Material::where(function ($q) use ($student) {
+            $q->where('batch_id', '=', $student->batch_id)
                 ->orWhereNull('batch_id');
-        })->where('school_id', $student->school_id)
+        })->where('school_id', '=', $student->school_id)
             ->with('teacher')
             ->latest()
             ->get();
@@ -212,4 +216,4 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
     })->name('settings');
 });
 
-Route::get('settings', [Admin\SettingsController::class, 'index'])->name('settings.index');
+Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');

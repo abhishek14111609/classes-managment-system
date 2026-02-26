@@ -14,8 +14,8 @@
                 <div class="card stat-card border-0 shadow-sm grow-on-hover"
                     style="background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);">
                     <div class="card-body p-4 position-relative z-1">
-                        <p class="text-white text-opacity-75 small fw-bold text-uppercase mb-1"
-                            style="letter-spacing: 1px;">Success Rate</p>
+                        <p class="text-white text-opacity-75 small fw-bold text-uppercase mb-1" style="letter-spacing: 1px;">
+                            Success Rate</p>
                         <h2 class="fw-bold text-white mb-0">{{ $summary['percentage'] }}%</h2>
                         <div class="progress mt-3 bg-white bg-opacity-20" style="height: 6px;">
                             <div class="progress-bar bg-white" style="width: {{ $summary['percentage'] }}%"></div>
@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        @if(session('success'))
+        @if (session('success'))
             <div
                 class="alert alert-success border-0 shadow-sm rounded-4 fade-in bg-success bg-opacity-10 text-success mb-4 d-flex align-items-center">
                 <i class="bi bi-check-circle-fill fs-4 me-3"></i>
@@ -113,7 +113,7 @@
                             <p class="text-muted">{{ $uploadMessage }}</p>
                         </div>
 
-                        @if($canUpload)
+                        @if ($canUpload)
                             <div class="d-grid gap-3">
                                 <button type="button" id="start-camera-btn"
                                     class="btn btn-primary btn-lg rounded-pill shadow-lg py-3 fw-bold transition-all grow">
@@ -140,7 +140,8 @@
                                         <i class="bi bi-shield-lock-fill"></i>
                                     </div>
                                     <div class="small text-muted">
-                                        <strong>Biometric Protocol:</strong> This photo will be used to verify your attendance
+                                        <strong>Biometric Protocol:</strong> This photo will be used to verify your
+                                        attendance
                                         against your saved profile. Ensure your face is clearly visible.
                                     </div>
                                 </div>
@@ -193,6 +194,7 @@
                             <tr>
                                 <th class="ps-4 small">DATE / WEEKDAY</th>
                                 <th class="text-center small">STATUS</th>
+                                <th class="text-center small">VERIFICATION</th>
                                 <th class="small">SESSION WINDOW</th>
                                 <th class="small pe-4 text-end">REMARKS</th>
                             </tr>
@@ -201,25 +203,54 @@
                             @forelse($attendances as $attendance)
                                 <tr>
                                     <td class="ps-4">
-                                        <div class="fw-bold text-dark">{{ $attendance->attendance_date->format('d M, Y') }}
+                                        <div class="fw-bold text-dark">
+                                            {{ $attendance->attendance_date->format('d M, Y') }}
                                         </div>
-                                        <div class="tiny text-muted fw-semibold text-uppercase" style="font-size: 0.65rem;">
+                                        <div class="tiny text-muted fw-semibold text-uppercase"
+                                            style="font-size: 0.65rem;">
                                             {{ $attendance->attendance_date->format('l') }}
                                         </div>
                                     </td>
                                     <td class="text-center">
                                         @php
-                                            $statusTheme = [
-                                                'present' => 'success',
-                                                'absent' => 'danger',
-                                                'late' => 'warning',
-                                                'excused' => 'info'
-                                            ][$attendance->status] ?? 'secondary';
+                                            $statusTheme =
+                                                [
+                                                    'present' => 'success',
+                                                    'absent' => 'danger',
+                                                    'late' => 'warning',
+                                                    'excused' => 'info',
+                                                ][$attendance->status] ?? 'secondary';
                                         @endphp
                                         <span
                                             class="badge bg-{{ $statusTheme }}-subtle text-{{ $statusTheme }} border-0 rounded-pill px-4 transition-all">
                                             {{ ucfirst($attendance->status) }}
                                         </span>
+                                    </td>
+                                    <td class="text-center">
+                                        @php
+                                            $verification = $attendance->verification_status;
+                                            $verificationTheme =
+                                                [
+                                                    'pending' => 'warning',
+                                                    'approved' => 'success',
+                                                    'rejected' => 'danger',
+                                                ][$verification] ?? 'secondary';
+                                        @endphp
+                                        @if ($verification)
+                                            <div class="d-flex flex-column align-items-center gap-1">
+                                                <span
+                                                    class="badge bg-{{ $verificationTheme }}-subtle text-{{ $verificationTheme }} border-0 rounded-pill px-3">
+                                                    {{ ucfirst($verification) }}
+                                                </span>
+                                                @if ($attendance->photo_submitted_at)
+                                                    <small class="text-muted tiny">
+                                                        {{ $attendance->photo_submitted_at->format('h:i A') }}
+                                                    </small>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <span class="text-muted small">--</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center small text-muted">
@@ -234,9 +265,9 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-5 text-muted small">
-                                        <img src="https://img.icons8.com/bubbles/100/null/cancel.png" class="mb-3 opacity-50"
-                                            style="width: 80px;">
+                                    <td colspan="5" class="text-center py-5 text-muted small">
+                                        <img src="https://img.icons8.com/bubbles/100/null/cancel.png"
+                                            class="mb-3 opacity-50" style="width: 80px;">
                                         <p class="mb-0">No attendance data found in this range.</p>
                                     </td>
                                 </tr>
@@ -250,19 +281,62 @@
 @endsection
 
 @section('scripts')
-    @if($canUpload)
-        <script>     document.addEventListener('DOMContentLoaded', function () {         const video = document.getElementById('live-camera');         const canvas = document.getElementById('photo-canvas');         const startBtn = document.getElementById('start-camera-btn');         const captureBtn = document.getElementById('capture-photo-btn');         const placeholder = document.getElementById('camera-placeholder');         const hud = document.getElementById('scan-hud');         const form = document.getElementById('attendance-form');         const fileInput = document.getElementById('photo-input');
-                 let stream = null;
-                 startBtn.addEventListener('click', async function () {             try {                 startBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Handshaking...';                 startBtn.disabled = true;
-                         stream = await navigator.mediaDevices.getUserMedia({                     video: { facingMode: 'user' }, // Changed to 'user' for selfie-style attendance                     audio: false                 });
-                         video.srcObject = stream;                 video.classList.remove('d-none');                 placeholder.classList.add('d-none');                 hud.classList.remove('d-none');
-                         startBtn.classList.add('d-none');                 captureBtn.classList.remove('d-none');
-                     } catch (err) {                 console.error("Camera access error:", err);                 alert("Secure access to camera failed. Please ensure permissions are granted.");                 startBtn.innerHTML = '<i class="bi bi-camera-video me-2"></i> Error (Retry)';                 startBtn.disabled = false;             }         });
-                 captureBtn.addEventListener('click', function () {             captureBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Securing Identity...';             captureBtn.disabled = true;
-                     canvas.width = video.videoWidth;             canvas.height = video.videoHeight;             canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                     canvas.toBlob(function (blob) {                 const file = new File([blob], "STU_VERIFY_" + Date.now() + ".jpg", { type: "image/jpeg" });                 const dataTransfer = new DataTransfer();                 dataTransfer.items.add(file);                 fileInput.files = dataTransfer.files;
-                         if (stream) {                     stream.getTracks().forEach(track => track.stop());                 }
-                         form.submit();             }, 'image/jpeg', 0.9);         });     });
+    @if ($canUpload)
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                        const video = document.getElementById('live-camera');
+                        const canvas = document.getElementById('photo-canvas');
+                        const startBtn = document.getElementById('start-camera-btn');
+                        const captureBtn = document.getElementById('capture-photo-btn');
+                        const placeholder = document.getElementById('camera-placeholder');
+                        const hud = document.getElementById('scan-hud');
+                        const form = document.getElementById('attendance-form');
+                        const fileInput = document.getElementById('photo-input');
+                        let stream = null;
+                        startBtn.addEventListener('click', async function() {
+                            try {
+                                startBtn.innerHTML =
+                                    '<span class="spinner-border spinner-border-sm me-2"></span> Handshaking...';
+                                startBtn.disabled = true;
+                                stream = await navigator.mediaDevices.getUserMedia({
+                                        video: {
+                                            facingMode: 'user'
+                                        }, // Changed to 'user' for selfie-style attendance                     audio: false                 });
+                                        video.srcObject = stream;video.classList.remove('d-none');placeholder
+                                        .classList.add('d-none');hud.classList.remove('d-none');
+                                        startBtn.classList.add('d-none');captureBtn.classList.remove('d-none');
+                                    }
+                                    catch (err) {
+                                        console.error("Camera access error:", err);
+                                        alert(
+                                            "Secure access to camera failed. Please ensure permissions are granted.");
+                                        startBtn.innerHTML =
+                                            '<i class="bi bi-camera-video me-2"></i> Error (Retry)';
+                                        startBtn.disabled = false;
+                                    }
+                                });
+                            captureBtn.addEventListener('click', function() {
+                                captureBtn.innerHTML =
+                                    '<span class="spinner-border spinner-border-sm me-2"></span> Securing Identity...';
+                                captureBtn.disabled = true;
+                                canvas.width = video.videoWidth;
+                                canvas.height = video.videoHeight;
+                                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+                                canvas.toBlob(function(blob) {
+                                    const file = new File([blob], "STU_VERIFY_" + Date.now() +
+                                        ".jpg", {
+                                            type: "image/jpeg"
+                                        });
+                                    const dataTransfer = new DataTransfer();
+                                    dataTransfer.items.add(file);
+                                    fileInput.files = dataTransfer.files;
+                                    if (stream) {
+                                        stream.getTracks().forEach(track => track.stop());
+                                    }
+                                    form.submit();
+                                }, 'image/jpeg', 0.9);
+                            });
+                        });
         </script>
     @endif
 
