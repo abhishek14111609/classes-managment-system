@@ -225,7 +225,7 @@
         }
 
         .rupee {
-            font-family: 'DejaVu Sans';
+            font-family: 'FreeSans', 'DejaVu Sans', sans-serif;
         }
     </style>
 </head>
@@ -297,8 +297,7 @@
                         </div>
                     </td>
                     <td style="text-align: right; font-weight: bold; font-size: 14px;">
-                        <span
-                            style="font-family: DejaVu Sans; sans-serif;">&#x20B9;</span>{{ number_format($invoice->amount, 2) }}
+                        <span class="rupee">&#x20B9;</span>{{ number_format($invoice->amount, 2) }}
                     </td>
                 </tr>
             </tbody>
@@ -316,8 +315,7 @@
             <table class="totals-table">
                 <tr class="grand-total">
                     <td class="total-label">AMOUNT PAID</td>
-                    <td class="total-amount"><span
-                            style="font-family: DejaVu Sans; sans-serif;">&#x20B9;</span>{{ number_format($invoice->amount, 2) }}
+                    <td class="total-amount"><span class="rupee">&#x20B9;</span>{{ number_format($invoice->amount, 2) }}
                     </td>
                 </tr>
             </table>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Command Center')
+@section('title', $isSport ? 'Academy Dashboard' : 'School Dashboard')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,8 +11,8 @@
         <!-- Top Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom">
             <div>
-                <h2 class="fw-bold mb-1 text-gradient">Institutional Overview</h2>
-                <p class="text-muted small mb-0">Real-time statistics and administrative control panel.</p>
+                <h2 class="fw-bold mb-1 text-gradient">Dashboard Overview</h2>
+                <p class="text-muted small mb-0">Live stats for your {{ $isSport ? 'sports academy' : 'school' }}.</p>
             </div>
             <div class="d-flex gap-3 align-items-center">
                 @if($stats['days_until_expiry'] !== null && $stats['days_until_expiry'] <= 7)
@@ -36,7 +36,8 @@
                             <div>
                                 <h2 class="fw-bold mb-1">{{ number_format($stats['total_students']) }}</h2>
                                 <p class="text-muted small fw-bold text-uppercase mb-0" style="letter-spacing: 1px;">
-                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Athletes' : 'Students' }}</p>
+                                    {{ $label['students'] }}
+                                </p>
                             </div>
                             <div class="bg-primary bg-opacity-10 p-3 rounded-4 text-primary">
                                 <i class="bi bi-people-fill fs-3"></i>
@@ -54,7 +55,8 @@
                             <div>
                                 <h2 class="fw-bold mb-1">{{ number_format($stats['total_teachers']) }}</h2>
                                 <p class="text-muted small fw-bold text-uppercase mb-0" style="letter-spacing: 1px;">
-                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Coaches' : 'Faculties' }}</p>
+                                    {{ $label['teachers'] }}
+                                </p>
                             </div>
                             <div class="bg-success bg-opacity-10 p-3 rounded-4 text-success">
                                 <i class="bi bi-person-badge-fill fs-3"></i>
@@ -127,7 +129,9 @@
                         </div>
                     </div>
                     <div class="card-body p-4">
-                        <canvas id="feeChart" style="min-height: 350px;"></canvas>
+                        <div style="position: relative; height: 350px; width: 100%;">
+                            <canvas id="feeChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -186,15 +190,18 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
                     <div class="card-body p-4 bg-gradient-primary text-white">
-                        <h6 class="fw-bold text-white-50 text-uppercase tiny mb-3" style="letter-spacing: 1px;">Enrollment
-                            Trend</h6>
+                        <h6 class="fw-bold text-white-50 text-uppercase tiny mb-3" style="letter-spacing: 1px;">
+                            {{ $label['students'] }} Enrolled
+                        </h6>
                         <div class="d-flex align-items-end justify-content-between mb-4">
                             <h3 class="mb-0 fw-bold">{{ $stats['total_students'] }} Active</h3>
-                            <span
-                                class="badge bg-white bg-opacity-20 rounded-pill small">+{{ count($enrollmentTrend['enrollments'] ?? []) }}
-                                This Year</span>
+                            <span class="badge bg-white text-primary rounded-pill small px-2 py-1 shadow-sm">
+                                +{{ array_sum($enrollmentTrend['enrollments'] ?? []) }} This Year
+                            </span>
                         </div>
-                        <canvas id="enrollmentChart" style="height: 120px;"></canvas>
+                        <div style="position: relative; height: 120px; width: 100%;">
+                            <canvas id="enrollmentChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -202,27 +209,29 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
                     <div class="card-body p-4">
-                        <h6 class="fw-bold text-muted text-uppercase tiny mb-4" style="letter-spacing: 1px;">Operational
-                            Capacity</h6>
+                        <h6 class="fw-bold text-muted text-uppercase tiny mb-4" style="letter-spacing: 1px;">Quick Overview
+                        </h6>
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="small text-muted">Active Batches</span>
+                            <span class="small text-muted">Active {{ $label['batches'] }}</span>
                             <span class="small fw-bold">{{ $stats['total_batches'] }}</span>
                         </div>
-                        <div class="progress rounded-pill mb-4" style="height: 8px;">
-                            <div class="progress-bar bg-success" style="width: 75%"></div>
+                        <div class="progress rounded-pill mb-4" style="height: 6px;">
+                            <div class="progress-bar bg-success"
+                                style="width: {{ $stats['total_batches'] > 0 ? '100%' : '0%' }}"></div>
                         </div>
 
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="small text-muted">{{ auth()->user()->school->institute_type === 'sport' ? 'Active Teams' : 'Active Classes' }}</span>
+                            <span class="small text-muted">{{ $label['classes'] }}</span>
                             <span class="small fw-bold">{{ $stats['total_classes'] }}</span>
                         </div>
-                        <div class="progress rounded-pill mb-1" style="height: 8px;">
-                            <div class="progress-bar bg-info" style="width: 60%"></div>
+                        <div class="progress rounded-pill mb-3" style="height: 6px;">
+                            <div class="progress-bar bg-info"
+                                style="width: {{ $stats['total_classes'] > 0 ? '100%' : '0%' }}"></div>
                         </div>
                         <div class="mt-4 pt-2">
                             <a href="{{ route('school.batches.index') }}"
                                 class="btn btn-outline-primary w-100 rounded-pill py-2 small fw-bold">Manage
-                                Infrastructure</a>
+                                {{ $label['batches'] }}</a>
                         </div>
                     </div>
                 </div>
@@ -231,20 +240,20 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
                     <div class="card-body p-4">
-                        <h6 class="fw-bold text-muted text-uppercase tiny mb-4" style="letter-spacing: 1px;">Expended
-                            Capital</h6>
+                        <h6 class="fw-bold text-muted text-uppercase tiny mb-4" style="letter-spacing: 1px;">Monthly
+                            Expenses</h6>
                         <div class="text-center mb-4">
                             <h4 class="fw-bold text-dark mb-1">₹{{ number_format($stats['monthly_expenses'], 0) }}</h4>
-                            <p class="text-muted tiny">Current Month Outflow</p>
+                            <p class="text-muted tiny">This Month</p>
                         </div>
                         <div class="p-3 bg-light rounded-4 mb-4">
                             <div class="d-flex justify-content-between mb-2 pb-2 border-bottom border-white">
-                                <span class="tiny text-muted">Academic Yield:</span>
+                                <span class="tiny text-muted">Fee Collected:</span>
                                 <span
                                     class="tiny fw-bold text-success">₹{{ number_format($stats['monthly_collection'], 0) }}</span>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <span class="tiny text-muted">Gross Margin:</span>
+                                <span class="tiny text-muted">Net Balance:</span>
                                 <span
                                     class="tiny fw-bold text-primary">₹{{ number_format(($stats['monthly_collection'] - $stats['monthly_expenses']), 0) }}</span>
                             </div>

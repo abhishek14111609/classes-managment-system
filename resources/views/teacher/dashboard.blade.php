@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Coach Console')
+@section('title', $isSport ? 'Coach Dashboard' : 'Teacher Dashboard')
 
 @section('sidebar')
     @include('teacher.sidebar')
@@ -18,8 +18,8 @@
                                 <i class="bi bi-grid-fill text-white fs-3"></i>
                             </div>
                             <div>
-                                <h4 class="fw-bold mb-0">Coach Command Center</h4>
-                                <p class="text-white-50 mb-0 small">Operational Summary for {{ now()->format('l, d F Y') }}</p>
+                                <h4 class="fw-bold mb-0">{{ $isSport ? 'Coach' : 'Teacher' }} Dashboard</h4>
+                                <p class="text-white-50 mb-0 small">{{ now()->format('l, d F Y') }}</p>
                             </div>
                         </div>
                         <div class="d-flex gap-2">
@@ -44,7 +44,7 @@
                             <span class="badge bg-white text-primary rounded-pill tiny shadow-sm">Assigned</span>
                         </div>
                         <h2 class="fw-bold text-white mb-1">{{ $totalStudents }}</h2>
-                        <p class="text-white text-opacity-75 small mb-0 fw-medium">Active Athletes</p>
+                        <p class="text-white text-opacity-75 small mb-0 fw-medium">{{ $label['students'] }}</p>
                     </div>
                     <div class="position-absolute end-0 bottom-0 opacity-10 mb-n3 me-n2">
                         <i class="bi bi-people-fill" style="font-size: 100px;"></i>
@@ -78,7 +78,7 @@
                             <span class="badge bg-white text-info rounded-pill tiny shadow-sm">Scheduled</span>
                         </div>
                         <h2 class="fw-bold text-white mb-1">{{ $upcomingEvents->count() }}</h2>
-                        <p class="text-white text-opacity-75 small mb-0 fw-medium">Sports Events</p>
+                        <p class="text-white text-opacity-75 small mb-0 fw-medium">{{ $label['events'] }}</p>
                     </div>
                     <div class="position-absolute end-0 bottom-0 opacity-10 mb-n3 me-n2">
                         <i class="bi bi-trophy-fill" style="font-size: 100px;"></i>
@@ -110,8 +110,8 @@
                 <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
                         <div>
-                            <h5 class="fw-bold mb-0">Daily Deployment Timeline</h5>
-                            <p class="text-muted small">Sequential session breakdown for current deployment</p>
+                            <h5 class="fw-bold mb-0">Today's Sessions</h5>
+                            <p class="text-muted small">Your batches scheduled for today</p>
                         </div>
                         <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-bold">Live Updates</span>
                     </div>
@@ -129,7 +129,7 @@
                                             <div class="row align-items-center">
                                                 <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
                                                     <h6 class="fw-bold mb-0 text-dark">{{ $session->start_time ? $session->start_time->format('H:i') : '--' }}</h6>
-                                                    <small class="text-muted tiny fw-bold text-uppercase">PST TIME</small>
+                                                    <small class="text-muted tiny fw-bold text-uppercase">START TIME</small>
                                                 </div>
                                                 <div class="col-md-7 border-start-md ps-md-4">
                                                     <div class="d-flex align-items-center mb-2">
@@ -138,7 +138,7 @@
                                                     </div>
                                                     <div class="d-flex align-items-center">
                                                         <div class="me-3 small text-muted">
-                                                            <i class="bi bi-people me-1"></i> {{ $session->students_count }} Athletes
+                                                            <i class="bi bi-people me-1"></i> {{ $session->students_count }} {{ $label['students'] }}
                                                         </div>
                                                         <div class="d-flex align-items-center grow" style="max-width: 150px;">
                                                             <div class="progress w-100 rounded-pill" style="height: 6px;">
@@ -160,7 +160,7 @@
                             @empty
                                 <div class="text-center py-5">
                                     <i class="bi bi-calendar-x display-4 text-muted opacity-25"></i>
-                                    <p class="text-muted mt-2">No active sessions for the current operational frame.</p>
+                                    <p class="text-muted mt-2">No sessions scheduled for today.</p>
                                 </div>
                             @endforelse
                         </div>
@@ -170,7 +170,7 @@
                 <!-- Active Batch Insights -->
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h5 class="fw-bold mb-0 text-dark">Strategic Group Metrics</h5>
+                        <h5 class="fw-bold mb-0 text-dark">My {{ $label['batches'] }}</h5>
                     </div>
                     <div class="card-body p-4">
                         <div class="row g-4">
@@ -190,7 +190,7 @@
                                             </div>
                                         </div>
                                         <div class="mb-2 d-flex justify-content-between">
-                                            <span class="text-muted tiny fw-bold text-uppercase">Performance Index</span>
+                                            <span class="text-muted tiny fw-bold text-uppercase">Attendance Rate</span>
                                             <span class="fw-bold {{ $batch->health_score > 70 ? 'text-success' : ($batch->health_score > 40 ? 'text-warning' : 'text-danger') }}">{{ $batch->health_score }}%</span>
                                         </div>
                                         <div class="progress rounded-pill mb-3" style="height: 8px;">
@@ -198,9 +198,9 @@
                                                 style="width: {{ $batch->health_score }}%"></div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div class="small text-muted"><i class="bi bi-person-check me-1"></i> {{ $batch->students_count }} Engaged</div>
+                                            <div class="small text-muted"><i class="bi bi-person-check me-1"></i> {{ $batch->students_count }} {{ $label['students'] }}</div>
                                             <a href="{{ route('teacher.batches.students', $batch) }}" class="small fw-bold text-primary text-decoration-none">
-                                                Analytics <i class="bi bi-arrow-right small ms-1"></i>
+                                                View {{ $label['students'] }} <i class="bi bi-arrow-right small ms-1"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -216,8 +216,8 @@
                 <!-- Upcoming Challenges -->
                 <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
-                        <h5 class="fw-bold mb-0">Upcoming Operations</h5>
-                        <a href="{{ route('teacher.events.index') }}" class="btn btn-link btn-sm text-primary p-0 fw-bold text-decoration-none">Review Desk</a>
+                        <h5 class="fw-bold mb-0">Upcoming {{ $label['events'] }}</h5>
+                        <a href="{{ route('teacher.events.index') }}" class="btn btn-link btn-sm text-primary p-0 fw-bold text-decoration-none">View All</a>
                     </div>
                     <div class="card-body p-4">
                         @forelse($upcomingEvents as $event)
@@ -237,7 +237,7 @@
                         @empty
                             <div class="text-center py-4 bg-light rounded-4 border border-dashed">
                                 <i class="bi bi-journal-x fs-2 text-muted opacity-25"></i>
-                                <p class="text-muted tiny fw-bold text-uppercase mt-2 mb-0">No active dispatches</p>
+                                <p class="text-muted tiny fw-bold text-uppercase mt-2 mb-0">No upcoming events</p>
                             </div>
                         @endforelse
                     </div>

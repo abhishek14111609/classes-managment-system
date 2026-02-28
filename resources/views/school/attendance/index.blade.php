@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Attendance Management')
+@php
+    $isSport = auth()->user()->school && auth()->user()->school->institute_type === 'sport';
+@endphp
+
+@section('title', $isSport ? 'Training Session Attendance' : 'Institutional Attendance Management')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -12,7 +16,13 @@
     <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
         <div>
             <h3 class="fw-bold mb-1 text-gradient">Attendance Logs</h3>
-            <p class="text-muted small mb-0">Record and monitor student presence across institutional batches.</p>
+            <p class="text-muted small mb-0">
+                @if($isSport)
+                    Record and monitor athlete presence across training batches.
+                @else
+                    Record and monitor student presence across institutional batches.
+                @endif
+            </p>
         </div>
         <a href="{{ route('school.dashboard') }}" class="btn btn-light border rounded-pill px-4 shadow-sm fw-bold small">
             <i class="bi bi-arrow-left me-2"></i> Dashboard
@@ -63,7 +73,10 @@
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
             <div class="card-header bg-white py-3 px-4 border-bottom-0">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-bold text-dark">Personnel Registry <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 ms-2">{{ $students->count() }} Students</span></h6>
+                    <h6 class="mb-0 fw-bold text-dark">Personnel Registry <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 ms-2">
+                        {{ $students->count() }}
+                        @if($isSport) Athletes @else Students @endif
+                    </span></h6>
                     <button type="button" class="btn btn-soft-success btn-sm rounded-pill px-3 fw-bold" onclick="markAllPresent()">
                         <i class="bi bi-check-all me-1"></i> Bulk Mark Present
                     </button>
@@ -80,7 +93,9 @@
                             <thead class="bg-light">
                                 <tr class="tiny text-muted text-uppercase fw-bold">
                                     <th class="ps-4 py-3 border-0">Identity</th>
-                                    <th class="py-3 border-0">Student Profile</th>
+                                    <th class="py-3 border-0">
+                                        @if($isSport) Athlete Profile @else Student Profile @endif
+                                    </th>
                                     <th class="py-3 border-0">Status Declaration</th>
                                     <th class="pe-4 py-3 border-0">Institutional Notes</th>
                                 </tr>

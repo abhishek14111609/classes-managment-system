@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Institutional Student Portfolio')
+@php
+    $isSport = auth()->user()->school && auth()->user()->school->institute_type === 'sport';
+@endphp
+
+@section('title', $isSport ? 'Institutional Athlete Portfolio' : 'Institutional Student Portfolio')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -11,8 +15,15 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2 border-bottom">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">Student Portfolio</h3>
-                <p class="text-muted small mb-0">Comprehensive institutional dossier for academic and behavioral tracking.
+                <h3 class="fw-bold mb-1 text-gradient">
+                    @if($isSport) Athlete Portfolio @else Student Portfolio @endif
+                </h3>
+                <p class="text-muted small mb-0">
+                    @if($isSport)
+                        Comprehensive performance dossier for training and event tracking.
+                    @else
+                        Comprehensive institutional dossier for academic and behavioral tracking.
+                    @endif
                 </p>
             </div>
             <div class="d-flex gap-2">

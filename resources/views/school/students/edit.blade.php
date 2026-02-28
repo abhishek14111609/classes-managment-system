@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Student')
+@php
+    $isSport = auth()->user()->school && auth()->user()->school->institute_type === 'sport';
+@endphp
+
+@section('title', $isSport ? 'Edit Athlete' : 'Edit Student')
 
 @section('sidebar')
     @include('school.sidebar')
@@ -9,7 +13,10 @@
 @section('content')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Edit Student</h2>
+        <h2>
+            @if($isSport) Edit Athlete: @else Edit Student: @endif
+            {{ $student->user->name }}
+        </h2>
         <a href="{{ route('school.students.index') }}" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Back
         </a>
@@ -83,7 +90,9 @@
 
                 <hr class="my-4">
 
-                <h5 class="mb-3">Academic Information</h5>
+                <h5 class="mb-3">
+                    @if($isSport) Athlete Information @else Academic Information @endif
+                </h5>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
@@ -188,7 +197,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="photo" class="form-label">Student Photo</label>
+                    <label for="photo" class="form-label">
+                        @if($isSport) Athlete Photo @else Student Photo @endif
+                    </label>
                     @if($student->photo)
                         <div class="mb-2">
                             <img src="{{ Storage::url($student->photo) }}" alt="{{ $student->user->name }}" width="100" class="rounded">
@@ -214,7 +225,8 @@
 
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-check-circle"></i> Update Student
+                        <i class="bi bi-check-circle"></i>
+                        @if($isSport) Update Athlete @else Update Student @endif
                     </button>
                     <a href="{{ route('school.students.index') }}" class="btn btn-secondary">Cancel</a>
                 </div>

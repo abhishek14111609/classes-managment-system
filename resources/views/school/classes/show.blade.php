@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    $isSport = auth()->user()->school && auth()->user()->school->institute_type === 'sport';
+@endphp
+
 @section('title', 'Class Details - ' . $class->name)
 
 @section('sidebar')
@@ -33,7 +37,10 @@
                             <h5 class="mb-0">Batch: {{ $batch->name }} ({{ $batch->start_time?->format('H:i') }} -
                                 {{ $batch->end_time?->format('H:i') }})
                             </h5>
-                            <span class="badge bg-primary">{{ $batch->students->count() }} Students</span>
+                            <span class="badge bg-primary">
+                                {{ $batch->students->count() }}
+                                @if($isSport) Athletes @else Students @endif
+                            </span>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -52,7 +59,9 @@
                                         @foreach($batch->teachers as $teacher)
                                             <tr>
                                                 <td class="ps-4">
-                                                    <span class="badge rounded-pill bg-warning text-dark">Teacher</span>
+                                                    <span class="badge rounded-pill bg-warning text-dark">
+                                                        @if($isSport) Coach @else Teacher @endif
+                                                    </span>
                                                 </td>
                                                 <td>
                                                     <div class="fw-bold">{{ $teacher->user->name }}</div>
@@ -79,7 +88,9 @@
                                         @foreach($batch->students as $student)
                                             <tr>
                                                 <td class="ps-4">
-                                                    <span class="badge rounded-pill bg-info text-dark">Student</span>
+                                                    <span class="badge rounded-pill bg-info text-dark">
+                                                        @if($isSport) Athlete @else Student @endif
+                                                    </span>
                                                 </td>
                                                 <td>
                                                     <div class="fw-bold">{{ $student->user->name }}</div>

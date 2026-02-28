@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use App\View\Composers\InstituteLabelsComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Share $isSport and $label[] with every Blade view.
+        // These switch labels between "sport" and "academic" institute types.
+        View::composer('*', InstituteLabelsComposer::class);
     }
 }

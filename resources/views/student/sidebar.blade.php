@@ -1,3 +1,4 @@
+
 <li>
     <a href="{{ route('student.dashboard') }}" class="{{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
         <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
@@ -10,34 +11,33 @@
 </li>
 <li>
     <a href="{{ route('student.timetable') }}" class="{{ request()->routeIs('student.timetable') ? 'active' : '' }}">
-        <i class="bi bi-clock-history"></i> <span>Timetable</span>
+        <i class="bi bi-clock-history"></i> <span>{{ $label['timetable'] }}</span>
     </a>
 </li>
 <li>
     <a href="{{ route('student.attendance.index') }}"
         class="{{ request()->routeIs('student.attendance.*') ? 'active' : '' }}">
-        <i class="bi bi-calendar-check"></i> <span>Attendance</span>
+        <i class="bi bi-calendar-check"></i> <span>{{ $label['attendance'] }}</span>
     </a>
 </li>
 <li>
     <a href="{{ route('student.fees.index') }}" class="{{ request()->routeIs('student.fees.*') ? 'active' : '' }}">
-        <i class="bi bi-cash-stack"></i> <span>Fees & Payments</span>
+        <i class="bi bi-cash-stack"></i> <span>{{ $label['fees'] }}</span>
     </a>
 </li>
 <li>
     <a href="{{ route('student.events.index') }}" class="{{ request()->routeIs('student.events.*') ? 'active' : '' }}">
-        <i class="bi bi-trophy"></i> <span>Sports & Events</span>
+        <i class="bi bi-trophy"></i> <span>{{ $label['events'] }}</span>
     </a>
 </li>
 <li>
     <a href="{{ route('student.resources') }}" class="{{ request()->routeIs('student.resources') ? 'active' : '' }}">
-        <i class="bi bi-journal-bookmark"></i> <span>Resources</span>
+        <i class="bi bi-journal-bookmark"></i> <span>{{ $label['materials'] }}</span>
     </a>
 </li>
 
 <li class="mt-4 pt-3 border-top border-secondary border-opacity-10">
-    <div class="px-3 mb-2 tiny text-white opacity-75 fw-bold">
-        Account</div>
+    <div class="px-3 mb-2 tiny text-white opacity-75 fw-bold">Account</div>
 </li>
 <li>
     <a href="{{ route('student.settings') }}" class="{{ request()->routeIs('student.settings') ? 'active' : '' }}">
@@ -57,7 +57,8 @@
     <div class="card bg-primary bg-opacity-10 border-0 rounded-4 mx-2">
         <div class="card-body p-3">
             <h6 class="text-primary fw-bold mb-1 small">Need Help?</h6>
-            <p class="text-secondary small mb-0" style="font-size: 0.75rem;">Contact your school admin for any issues.
+            <p class="text-secondary small mb-0" style="font-size: 0.75rem;">
+                Contact your @if($isSport) coach @else school admin @endif for any issues.
             </p>
         </div>
     </div>

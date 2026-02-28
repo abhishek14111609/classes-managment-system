@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Assign Fee to Student')
+@section('title', auth()->user()->school && auth()->user()->school->institute_type === 'sport' ? 'Assign Fee to Athlete' : 'Assign Fee to Student')
 
 @section('sidebar')
     @include('school.sidebar')
 @endsection
 
 @php
+    $isSport = auth()->user()->school && auth()->user()->school->institute_type === 'sport';
     $feeTypeMap = [
         'monthly' => ['label' => 'Monthly', 'color' => 'bg-primary'],
         'quarterly' => ['label' => 'Quarterly', 'color' => 'bg-indigo'],
@@ -25,8 +26,16 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1">Assign Fee to Student</h2>
-                <p class="text-muted mb-0">Select a plan → pick a student → set the due date.</p>
+                <h2 class="fw-bold mb-1">
+                    @if($isSport) Assign Fee to Athlete @else Assign Fee to Student @endif
+                </h2>
+                <p class="text-muted mb-0">
+                    @if($isSport)
+                        Select a plan → pick an athlete → set the due date.
+                    @else
+                        Select a plan → pick a student → set the due date.
+                    @endif
+                </p>
             </div>
             <div class="d-flex gap-2">
                 <a href="{{ route('school.fee-plans.index') }}" class="btn btn-outline-primary">
@@ -154,11 +163,13 @@
 
                             <div class="mb-3">
                                 <label for="student_id" class="form-label fw-semibold">
-                                    Student <span class="text-danger">*</span>
+                                    @if($isSport) Athlete @else Student @endif <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-select @error('student_id') is-invalid @enderror" id="student_id"
                                     name="student_id" required>
-                                    <option value="">— Select Student —</option>
+                                    <option value="">
+                                        @if($isSport) — Select Athlete — @else — Select Student — @endif
+                                    </option>
                                     @foreach($students as $student)
                                         <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
                                             {{ $student->user->name }}
@@ -284,7 +295,8 @@
                             <div class="card border-0 shadow-sm mt-4">
                                 <div class="card-body p-4">
                                     <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold" id="submitBtn">
-                                        <i class="bi bi-check-all me-2"></i> Assign Fee to Student
+                                        <i class="bi bi-check-all me-2"></i>
+                                        @if($isSport) Assign Fee to Athlete @else Assign Fee to Student @endif
                                     </button>
                                     <p class="text-center text-muted small mt-3 mb-0">
                                         <i class="bi bi-shield-lock me-1"></i> Securely processed by School Management System

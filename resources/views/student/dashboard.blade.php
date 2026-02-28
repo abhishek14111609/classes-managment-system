@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Student Dashboard')
+@section('title', $isSport ? 'Athlete Dashboard' : 'Student Dashboard')
 
 @section('sidebar')
     @include('student.sidebar')
@@ -38,7 +38,7 @@
                         <div class="ms-md-auto mt-4 mt-md-0 d-flex flex-column align-items-md-end">
                             <div class="d-flex align-items-center mb-2">
                                 <div class="me-3 text-end">
-                                    <p class="mb-0 tiny text-muted fw-bold" style="letter-spacing: 1px;">Athlete Score</p>
+                                    <p class="mb-0 tiny text-muted fw-bold" style="letter-spacing: 1px;">Score</p>
                                     <h5 class="fw-bold mb-0 text-primary">{{ $athleteScore ?? 0 }}%</h5>
                                 </div>
                                 <div class="position-relative" style="width: 50px; height: 50px;">
@@ -134,8 +134,8 @@
                 <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                         <div>
-                            <h5 class="fw-bold mb-0">Training Schedule</h5>
-                            <p class="text-muted small mb-0">Your upcoming learning roadmap</p>
+                            <h5 class="fw-bold mb-0">{{ $label['timetable'] }}</h5>
+                            <p class="text-muted small mb-0">Your upcoming sessions</p>
                         </div>
                         <a href="{{ route('student.timetable') }}" class="btn btn-sm btn-light rounded-pill px-3 shadow-none">View full timetable</a>
                     </div>
@@ -149,7 +149,8 @@
                                             <span class="text-primary fw-bold small"><i class="bi bi-clock-fill me-1"></i> {{ \Carbon\Carbon::parse($session->start_time)->format('h:i A') }}</span>
                                         </div>
                                         <h4 class="fw-bold text-dark mb-1">{{ $session->class->name }}</h4>
-                                        <p class="text-muted mb-3"><i class="bi bi-person-workspace me-1"></i> Under Coach: <span class="fw-semibold text-dark">{{ $session->teachers->first()->user->name ?? 'Head Instructor' }}</span></p>
+                                        <p class="text-muted mb-3"><i class="bi bi-person-workspace me-1"></i>
+                                            {{ $isSport ? 'Coach' : 'Teacher' }}: <span class="fw-semibold text-dark">{{ $session->teachers->first()->user->name ?? 'Instructor' }}</span></p>
                                         <div class="d-flex gap-2">
                                             <div class="bg-white px-3 py-2 rounded-pill shadow-sm border small fw-bold"><i class="bi bi-geo-alt-fill text-danger me-1"></i> Training Area A</div>
                                             <div class="bg-white px-3 py-2 rounded-pill shadow-sm border small fw-bold"><i class="bi bi-people-fill text-info me-1"></i> {{ $session->students_count ?? '0' }} Peers</div>
@@ -204,7 +205,7 @@
                 <!-- Upcoming Sports Events -->
                 <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                     <div class="card-header bg-white border-0 pt-4 px-4">
-                        <h5 class="fw-bold mb-0">Upcoming Events</h5>
+                        <h5 class="fw-bold mb-0">Upcoming {{ $label['events'] }}</h5>
                     </div>
                     <div class="card-body p-4">
                         @forelse($upcomingEvents as $event)
@@ -216,7 +217,7 @@
                                 <div class="grow">
                                     <h6 class="fw-bold text-dark mb-1">{{ $event->name }}</h6>
                                     <p class="text-muted tiny mb-1"><i class="bi bi-geo-alt me-1"></i> {{ $event->location ?? 'Main Arena' }}</p>
-                                    <small class="text-primary fw-bold tiny"><i class="bi bi-person-fill me-1"></i> Coach {{ $event->coach->user->name }}</small>
+                                    <small class="text-primary fw-bold tiny"><i class="bi bi-person-fill me-1"></i> {{ $label['teacher'] }} {{ $event->coach->user->name ?? 'Head' }}</small>
                                 </div>
                             </div>
                         @empty
@@ -225,7 +226,7 @@
                                 <p class="text-muted small mb-0">Stay tuned for upcoming tournaments!</p>
                             </div>
                         @endforelse
-                        <a href="{{ route('student.events.index') }}" class="btn btn-light bg-white border rounded-pill w-100 fw-bold mt-2 py-2">View All Competitions</a>
+                        <a href="{{ route('student.events.index') }}" class="btn btn-light bg-white border rounded-pill w-100 fw-bold mt-2 py-2">View All</a>
                     </div>
                 </div>
 

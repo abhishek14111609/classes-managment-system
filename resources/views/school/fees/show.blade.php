@@ -79,7 +79,8 @@
                         <div class="d-flex flex-column gap-3">
                             <div class="p-2 rounded-3 bg-light border border-white">
                                 <small class="text-muted tiny d-block">Time Batch</small>
-                                <span class="small fw-bold text-dark">{{ $fee->student->batch->name }}</span>
+                                <span
+                                    class="small fw-bold text-dark">{{ optional($fee->student->batch)->name ?? 'No Batch Assigned' }}</span>
                             </div>
                             <div class="p-2 rounded-3 bg-light border border-white">
                                 <small class="text-muted tiny d-block">Communication Channel</small>

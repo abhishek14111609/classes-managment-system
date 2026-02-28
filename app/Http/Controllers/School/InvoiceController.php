@@ -10,6 +10,25 @@ use Illuminate\Http\Request;
 class InvoiceController extends Controller
 {
     /**
+     * Build a configured Dompdf instance with FreeSans font registered.
+     */
+    private function buildPdf(Invoice $invoice): \Barryvdh\DomPDF\PDF
+    {
+        $pdf = Pdf::loadView('school.invoices.pdf', compact('invoice'));
+
+        // Directly register FreeSans in DomPDF's font lookup table.
+        // setFontFamily() maps the CSS family name -> local TTF path,
+        // no .ufm generation or download needed.
+        $fontPath = public_path('fonts/FreeSans');   // DomPDF appends .ttf/.ufm itself
+
+        $pdf->getDomPDF()
+            ->getFontMetrics()
+            ->setFontFamily('FreeSans', ['normal' => $fontPath]);
+
+        return $pdf;
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -26,12 +45,11 @@ class InvoiceController extends Controller
      */
     public function download(Invoice $invoice)
     {
-        // Ensure the invoice belongs to the school
         if ($invoice->school_id !== auth()->user()->school_id) {
             abort(403);
         }
 
-        $pdf = Pdf::loadView('school.invoices.pdf', compact('invoice'));
+        $pdf = $this->buildPdf($invoice);
 
         return $pdf->download("Invoice-{$invoice->invoice_number}.pdf");
     }
@@ -41,12 +59,11 @@ class InvoiceController extends Controller
      */
     public function stream(Invoice $invoice)
     {
-        // Ensure the invoice belongs to the school
         if ($invoice->school_id !== auth()->user()->school_id) {
             abort(403);
         }
 
-        $pdf = Pdf::loadView('school.invoices.pdf', compact('invoice'));
+        $pdf = $this->buildPdf($invoice);
 
         return $pdf->stream("Invoice-{$invoice->invoice_number}.pdf");
     }

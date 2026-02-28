@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    $isSport = auth()->user()->school && auth()->user()->school->institute_type === 'sport';
+@endphp
+
 @section('title', 'Batch Details')
 
 @section('sidebar')
@@ -66,7 +70,13 @@
             <div class="col-md-8">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <h5 class="mb-0">Assigned Teachers ({{ $batch->teachers->count() }})</h5>
+                        <h5 class="mb-0">
+                                @if($isSport)
+                                        Assigned Coaches ({{ $batch->teachers->count() }})
+                                @else
+                                        Assigned Teachers ({{ $batch->teachers->count() }})
+                                @endif
+                        </h5>
                     </div>
                     <div class="card-body">
                         @if($batch->teachers->count() > 0)
@@ -93,14 +103,22 @@
                                 </table>
                             </div>
                         @else
-                            <p class="text-muted mb-0">No teachers assigned to this batch.</p>
+                            <p class="text-muted mb-0">
+                                @if($isSport) No coaches assigned to this batch. @else No teachers assigned to this batch. @endif
+                            </p>
                         @endif
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0">Enrolled Students ({{ $batch->students->count() }})</h5>
+                        <h5 class="mb-0">
+                                @if($isSport)
+                                        Enrolled Athletes ({{ $batch->students->count() }})
+                                @else
+                                        Enrolled Students ({{ $batch->students->count() }})
+                                @endif
+                        </h5>
                     </div>
                     <div class="card-body">
                         @if($batch->students->count() > 0)
@@ -134,7 +152,9 @@
                                 </table>
                             </div>
                         @else
-                            <p class="text-muted mb-0">No students enrolled in this batch yet.</p>
+                            <p class="text-muted mb-0">
+                                @if($isSport) No athletes enrolled in this batch yet. @else No students enrolled in this batch yet. @endif
+                            </p>
                         @endif
                     </div>
                 </div>
