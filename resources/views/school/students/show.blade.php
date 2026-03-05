@@ -31,6 +31,10 @@
                     class="btn btn-warning rounded-pill px-4 shadow-sm border-0 fw-bold small">
                     <i class="bi bi-pencil-square me-2"></i> Edit Record
                 </a>
+                <a href="{{ route('school.students.statement', $student) }}"
+                    class="btn btn-outline-primary rounded-pill px-4 shadow-sm border fw-bold small">
+                    <i class="bi bi-file-earmark-pdf-fill me-2"></i> Financial Statement
+                </a>
                 <a href="{{ route('school.students.index') }}"
                     class="btn btn-light border rounded-pill px-4 shadow-sm fw-bold small">
                     <i class="bi bi-arrow-left me-2"></i> Registry

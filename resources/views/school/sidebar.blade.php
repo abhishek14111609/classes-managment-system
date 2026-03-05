@@ -99,38 +99,39 @@
         </li>
 
         <li class="nav-item">
-                <a href="{{ route('school.fee-plans.index') }}"
-                        class="nav-link {{ request()->routeIs('school.fee-plans.*') ? 'active' : '' }}">
-                        <i class="bi bi-shield-check"></i> <span>Fee Plans</span>
+                <a href="{{ route('school.payments.collect') }}"
+                        class="nav-link {{ request()->routeIs('school.payments.collect') ? 'active' : '' }}">
+                        <i class="bi bi-cash-stack text-white"></i> <span class="fw-bold">Collect Fees</span>
                 </a>
         </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.fees.index') }}"
                         class="nav-link {{ request()->routeIs('school.fees.*') ? 'active' : '' }}">
-                        <i class="bi bi-wallet2"></i> <span>Fees</span>
+                        <i class="bi bi-wallet2 text-white"></i> <span>Fee Ledger / History</span>
                 </a>
         </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.invoices.index') }}"
                         class="nav-link {{ request()->routeIs('school.invoices.*') ? 'active' : '' }}">
-                        <i class="bi bi-receipt-cutoff"></i> <span>Invoices</span>
-                </a>
-        </li>
-
-        <li class="nav-item">
-                <a href="{{ route('school.reports.pending-fees') }}"
-                        class="nav-link {{ request()->routeIs('school.reports.pending-fees') ? 'active' : '' }}">
-                        <i class="bi bi-exclamation-triangle-fill text-warning"></i> <span>Pending Fees</span>
+                        <i class="bi bi-receipt"></i> <span>Invoice Receipts</span>
                 </a>
         </li>
 
         <li class="nav-item">
                 <a href="{{ route('school.expenses.index') }}"
                         class="nav-link {{ request()->routeIs('school.expenses.*') ? 'active' : '' }}">
-                        <i class="bi bi-arrow-down-circle-fill"></i>
+                        <i class="bi bi-arrow-down-circle"></i>
                         <span>{{ $label['expenses'] }}</span>
+                </a>
+        </li>
+
+        <li class="nav-item">
+                <a href="{{ route('school.fee-plans.index') }}"
+                        class="nav-link {{ request()->routeIs('school.fee-plans.*') ? 'active' : '' }}">
+                        <i class="bi bi-gear-fill text-white"></i> <span class="text-white opacity-75">Add fee
+                                plans</span>
                 </a>
         </li>
 
@@ -159,13 +160,10 @@
         </li>
 
         <li class="nav-item mt-4 pb-4">
-                <a href="#" class="nav-link text-danger opacity-75"
-                        onclick="event.preventDefault(); document.getElementById('logout-form-sidebar').submit();">
+                <a href="{{ route('logout') }}" class="nav-link text-danger opacity-75"
+                        onclick="event.preventDefault(); document.getElementById('global-logout-form').submit();">
                         <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
                 </a>
-                <form id="logout-form-sidebar" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                </form>
         </li>
 </ul>
 

@@ -60,13 +60,10 @@
     </li>
 
     <li class="nav-item mt-4 pb-4">
-        <a href="#" class="nav-link text-danger opacity-75"
-            onclick="event.preventDefault(); document.getElementById('logout-form-sidebar').submit();">
+        <a href="{{ route('logout') }}" class="nav-link text-danger opacity-75"
+            onclick="event.preventDefault(); document.getElementById('global-logout-form').submit();">
             <i class="bi bi-box-arrow-right"></i> <span>Master Logout</span>
         </a>
-        <form id="logout-form-sidebar" action="{{ route('logout') }}" method="POST" class="d-none">
-            @csrf
-        </form>
     </li>
 </ul>
 

@@ -8,46 +8,51 @@
 
 @section('content')
     <div class="container-fluid">
-        <!-- Personalized Welcome Header -->
-        <div class="row g-4 mb-4">
+        <!-- Premium Personalized Header -->
+        <div class="row g-4 mb-5">
             <div class="col-12">
-                <div class="card border-0 shadow-sm rounded-4 bg-white p-2">
-                    <div class="card-body p-4 d-flex align-items-center flex-wrap">
+                <div class="card border-0 shadow-sm rounded-4 bg-dark text-white overflow-hidden p-2">
+                    <div class="card-body p-4 d-flex align-items-center flex-wrap position-relative z-1">
                         <div class="me-4 position-relative">
                             @if(auth()->user()->avatar)
-                                <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar" class="rounded-circle border shadow-sm" style="width: 85px; height: 85px; object-fit: cover;">
+                                <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="Avatar" class="rounded-circle border border-white border-opacity-25 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
                             @else
-                                <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center text-primary fw-bold shadow-sm border" style="width: 85px; height: 85px; font-size: 2rem;">
+                                <div class="rounded-circle bg-primary bg-opacity-20 d-flex align-items-center justify-content-center text-primary fw-bold shadow-sm border border-primary border-opacity-25" style="width: 90px; height: 90px; font-size: 2rem;">
                                     {{ substr(auth()->user()->name, 0, 1) }}
                                 </div>
                             @endif
-                            <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border-white border-2" style="width: 18px; height: 18px;"></div>
+                            <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border-white border-2" style="width: 20px; height: 20px; box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);"></div>
                         </div>
                         <div class="grow">
-                            <h3 class="fw-bold text-dark mb-1">Welcome back, {{ explode(' ', auth()->user()->name)[0] }}! 🚀</h3>
+                            <h2 class="fw-bold mb-1">Welcome back, {{ explode(' ', auth()->user()->name)[0] }}! <span class="animate-wave d-inline-block">🚀</span></h2>
                             <div class="d-flex align-items-center flex-wrap gap-2 mt-2">
-                                <span class="badge bg-primary bg-opacity-10 text-primary border-0 rounded-pill px-3 py-2 small">
-                                    <i class="bi bi-mortarboard-fill me-1"></i> {{ $student->batch->class->name ?? 'Student' }}
+                                @forelse($student->batches as $batch)
+                                    <span class="badge bg-white bg-opacity-10 text-white border border-white border-opacity-25 rounded-pill px-3 py-2 small backdrop-blur">
+                                        <i class="bi bi-patch-check-fill text-primary me-1"></i> {{ $batch->class->name }} ({{ $batch->name }})
+                                    </span>
+                                @empty
+                                    <span class="badge bg-secondary bg-opacity-20 text-white border border-white border-opacity-10 rounded-pill px-3 py-2 small backdrop-blur">
+                                        <i class="bi bi-clock-history me-1"></i> Pending Squad
+                                    </span>
+                                @endforelse
+                                <span class="text-white text-opacity-75 small ms-md-2 d-block d-md-inline-block mt-2 mt-md-0">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ auth()->user()->school->name ?? 'Campus Arena' }}
                                 </span>
-                                <span class="badge bg-info bg-opacity-10 text-info border-0 rounded-pill px-3 py-2 small">
-                                    <i class="bi bi-diagram-3-fill me-1"></i> {{ $student->batch->name ?? 'General' }}
-                                </span>
-                                <span class="text-muted small ms-2"><i class="bi bi-geo-alt-fill me-1"></i> {{ auth()->user()->school->name ?? 'Campus' }}</span>
                             </div>
                         </div>
                         <div class="ms-md-auto mt-4 mt-md-0 d-flex flex-column align-items-md-end">
-                            <div class="d-flex align-items-center mb-2">
+                            <div class="d-flex align-items-center">
                                 <div class="me-3 text-end">
-                                    <p class="mb-0 tiny text-muted fw-bold" style="letter-spacing: 1px;">Score</p>
-                                    <h5 class="fw-bold mb-0 text-primary">{{ $athleteScore ?? 0 }}%</h5>
+                                    <p class="mb-0 tiny text-white text-opacity-50 fw-bold text-uppercase" style="letter-spacing: 1.5px;">Performance</p>
+                                    <h4 class="fw-bold mb-0 text-white">{{ $athleteScore ?? 0 }}%</h4>
                                 </div>
-                                <div class="position-relative" style="width: 50px; height: 50px;">
+                                <div class="position-relative d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                     <svg class="w-100 h-100" viewBox="0 0 36 36">
-                                        <path class="text-light" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"/>
-                                        <path class="text-primary" stroke-dasharray="{{ $athleteScore ?? 0 }}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                                        <circle cx="18" cy="18" r="16" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                                        <circle cx="18" cy="18" r="16" fill="none" stroke="#6366f1" stroke-width="3" stroke-dasharray="{{ $athleteScore ?? 0 }}, 100" stroke-linecap="round"></circle>
                                     </svg>
-                                    <div class="position-absolute top-50 start-50 translate-middle">
-                                        <i class="bi bi-lightning-charge-fill text-primary" style="font-size: 0.8rem;"></i>
+                                    <div class="position-absolute">
+                                        <i class="bi bi-stars text-warning pulse-yellow"></i>
                                     </div>
                                 </div>
                             </div>
@@ -270,7 +275,7 @@
                             <h6 class="fw-bold mb-0">Instant Support</h6>
                         </div>
                         <p class="text-secondary small mb-3">Locked out? Or need a fee extension? Contact your center's administrative desk for prompt resolution.</p>
-                        <a href="mailto:support@school.com" class="text-primary fw-bold small text-decoration-none">Reach administration <i class="bi bi-arrow-right"></i></a>
+                        <a href="mailto:{{ auth()->user()->school->email ?? 'support@webvibeinfotech.in' }}" class="text-primary fw-bold small text-decoration-none">Reach administration <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -345,7 +350,40 @@
             70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
         }
-        
+
+        .pulse-yellow {
+            animation: pulse-yellow 2s infinite;
+            display: inline-block;
+        }
+
+        @keyframes pulse-yellow {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.7; }
+        }
+
+        .animate-wave {
+            animation: wave 2.1s infinite;
+            transform-origin: 75% 70%;
+            display: inline-block;
+        }
+
+        @keyframes wave {
+            0% { transform: rotate( 0.0deg) }
+            10% { transform: rotate(14.0deg) }
+            20% { transform: rotate(-8.0deg) }
+            30% { transform: rotate(14.0deg) }
+            40% { transform: rotate(-4.0deg) }
+            50% { transform: rotate(10.0deg) }
+            60% { transform: rotate( 0.0deg) }
+            100% { transform: rotate( 0.0deg) }
+        }
+
+        .backdrop-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+       
         .fade-in {
             animation: fadeIn 0.8s ease-out forwards;
         }

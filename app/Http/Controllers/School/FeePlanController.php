@@ -11,14 +11,16 @@ class FeePlanController extends Controller
 {
     public function index()
     {
-        $plans = FeePlan::withCount('fees')->latest()->paginate(15);
+        $plans = FeePlan::with(['course', 'batch'])->withCount('fees')->latest()->paginate(15);
         return view('school.fee-plans.index', compact('plans'));
     }
 
     public function create()
     {
         $levels = \App\Models\Level::where('is_active', true)->get();
-        return view('school.fee-plans.create', compact('levels'));
+        $courses = \App\Models\Course::all();
+        $batches = \App\Models\Batch::with('class')->get();
+        return view('school.fee-plans.create', compact('levels', 'courses', 'batches'));
     }
 
     public function store(Request $request)
@@ -32,6 +34,8 @@ class FeePlanController extends Controller
                 'max:255',
                 Rule::unique('fee_plans')->where('school_id', $schoolId),
             ],
+            'course_id' => 'nullable|exists:courses,id',
+            'batch_id' => 'nullable|exists:batches,id',
             'fee_type' => 'required|string|in:tuition,sports,transport,exam,library,other',
             'duration' => 'nullable|string|in:monthly,quarterly,half_yearly,annual,one_time',
             'sport_level' => 'nullable|string|max:255',
@@ -62,7 +66,9 @@ class FeePlanController extends Controller
     public function edit(FeePlan $feePlan)
     {
         $levels = \App\Models\Level::where('is_active', true)->get();
-        return view('school.fee-plans.edit', compact('feePlan', 'levels'));
+        $courses = \App\Models\Course::all();
+        $batches = \App\Models\Batch::with('class')->get();
+        return view('school.fee-plans.edit', compact('feePlan', 'levels', 'courses', 'batches'));
     }
 
     public function update(Request $request, FeePlan $feePlan)
@@ -76,6 +82,8 @@ class FeePlanController extends Controller
                 'max:255',
                 Rule::unique('fee_plans')->where('school_id', $schoolId)->ignore($feePlan->id),
             ],
+            'course_id' => 'nullable|exists:courses,id',
+            'batch_id' => 'nullable|exists:batches,id',
             'fee_type' => 'required|string|in:tuition,sports,transport,exam,library,other',
             'duration' => 'nullable|string|in:monthly,quarterly,half_yearly,annual,one_time',
             'sport_level' => 'nullable|string|max:255',

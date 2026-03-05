@@ -116,10 +116,21 @@
                 <i class="bi bi-list fs-4"></i>
             </button>
             <h5 class="m-0 text-dark fw-bold">@yield('title')</h5>
-            <a href="{{ route('profile.edit') }}" class="btn btn-icon btn-light rounded-circle">
-                <i class="bi bi-person text-secondary"></i>
-            </a>
+            <div class="d-flex gap-2 align-items-center">
+                <a href="{{ route('profile.edit') }}" class="btn btn-icon btn-light rounded-circle shadow-sm">
+                    <i class="bi bi-person text-secondary"></i>
+                </a>
+                <a href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('global-logout-form').submit();"
+                    class="btn btn-icon btn-danger rounded-circle shadow-sm">
+                    <i class="bi bi-box-arrow-right text-white"></i>
+                </a>
+            </div>
         </div>
+
+        <form id="global-logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
 
         <!-- Desktop Header -->
         @unless(View::hasSection('hide_header'))
@@ -132,12 +143,11 @@
                     <a href="{{ route('profile.edit') }}" class="btn btn-light bg-white border shadow-sm">
                         <i class="bi bi-gear me-2"></i> Settings
                     </a>
-                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn btn-danger text-white shadow-sm">
-                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                        </button>
-                    </form>
+                    <a href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); if(confirm('Are you sure you want to logout?')) document.getElementById('global-logout-form').submit();"
+                        class="btn btn-danger text-white shadow-sm fw-bold">
+                        <i class="bi bi-box-arrow-right me-2"></i> Logout
+                    </a>
                 </div>
             </div>
         @endunless
@@ -164,6 +174,25 @@
         <!-- Content Injection -->
         @yield('content')
 
+        <!-- Minimalist Company Footer -->
+        <footer class="footer mt-5 pb-4 text-center animate-fade-in-up delay-200">
+            <div class="container-fluid">
+                <div class="row pt-4 border-top border-light">
+                    <div class="col-12">
+                        <p class="text-muted small mb-1 opacity-75">
+                            Developed & Maintained by
+                            <a href="https://webvibeinfotech.in" target="_blank"
+                                class="text-primary fw-bold text-decoration-none">
+                                Webvibe Infotech
+                            </a>
+                        </p>
+                        <div class="tiny text-muted opacity-50">
+                            &copy; {{ date('Y') }} All Rights Reserved. | v2.4.0
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- Scripts -->

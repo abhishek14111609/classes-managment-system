@@ -72,90 +72,38 @@
                         {{ auth()->user()->school->institute_type === 'sport' ? 'Registration Information' : 'Academic Information' }}
                     </h5>
 
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label
-                                class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Registration ID / Jersey Number' : 'Roll Number' }}</label>
-                            <input type="text" name="roll_number"
-                                class="form-control @error('roll_number') is-invalid @enderror"
-                                value="{{ old('roll_number') }}" placeholder="Auto-generated">
-                            @error('roll_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-6 text-primary">
+                            <h5 class="mb-0 fw-bold"><i class="bi bi-trophy-fill me-2"></i>Sport Enrollments & Fees</h5>
                         </div>
-
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label">Course / Program</label>
-                            <select name="course_id" id="course_id_select" class="form-select @error('course_id') is-invalid @enderror">
-                                <option value="">Select Course</option>
-                                @foreach($courses as $course)
-                                    <option value="{{ $course->id }}" {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                        {{ $course->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('course_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">{{ auth()->user()->school->institute_type === 'sport' ? 'Assigned Sessions (Sports)' : 'Batch' }}</label>
-                            @if(auth()->user()->school->institute_type === 'sport')
-                                <div class="card bg-light border-0 shadow-none rounded-3">
-                                    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
-                                        @foreach($batches as $batch)
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input batch-checkbox" type="checkbox" 
-                                                       name="batch_ids[]" value="{{ $batch->id }}" 
-                                                       id="batch_{{ $batch->id }}"
-                                                       data-course="{{ $batch->class->course_id ?? '' }}"
-                                                       {{ in_array($batch->id, (array)old('batch_ids', [])) ? 'checked' : '' }}>
-                                                <label class="form-check-label small" for="batch_{{ $batch->id }}">
-                                                    {{ $batch->name }} <span class="text-muted">({{ $batch->subject->name ?? 'N/A' }})</span>
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                                <div class="form-text small">Select one or more active training sessions for the athlete.</div>
-                            @else
-                                <select name="batch_id" id="batch_id" class="form-select @error('batch_id') is-invalid @enderror">
-                                    <option value="">Select Batch</option>
-                                    @foreach($batches as $batch)
-                                        <option value="{{ $batch->id }}" 
-                                            data-course="{{ $batch->class->course_id ?? '' }}"
-                                            {{ old('batch_id') == $batch->id ? 'selected' : '' }}>
-                                            {{ $batch->name }} ({{ $batch->subject->name ?? 'N/A' }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                            @endif
-                            @error('batch_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                            @error('batch_ids')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <label class="form-label text-primary fw-bold">Assign Fee Plan</label>
-                            <select name="fee_plan_id"
-                                class="form-select bg-primary bg-opacity-10 border-primary @error('fee_plan_id') is-invalid @enderror">
-                                <option value="">No Initial Fee</option>
-                                @foreach($feePlans as $plan)
-                                    <option value="{{ $plan->id }}" {{ old('fee_plan_id') == $plan->id ? 'selected' : '' }}>
-                                        {{ $plan->name }} (Rs. {{ number_format($plan->amount, 2) }})
-                                    </option>
-                                @endforeach
-                            </select>
-                            <div class="form-text small">Automatically generates an invoice.</div>
-                            @error('fee_plan_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <label
-                                class="form-label">{{ auth()->user()->school->institute_type === 'sport' ? 'Joining Date' : 'Admission Date' }}
-                                *</label>
-                            <input type="date" name="admission_date"
-                                class="form-control @error('admission_date') is-invalid @enderror"
-                                value="{{ old('admission_date', date('Y-m-d')) }}" required>
-                            @error('admission_date')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <div class="col-md-6 text-end">
+                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 shadow-sm fw-bold"
+                                onclick="addEnrollmentRow()">
+                                <i class="bi bi-plus-circle-fill me-1"></i> Enroll in Another Sport
+                            </button>
                         </div>
                     </div>
+
+                    <div id="enrollment_rows_container">
+                        <!-- Dynamic rows injected here -->
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-bold">Joining Date *</label>
+                            <input type="date" name="admission_date" class="form-control rounded-3"
+                                value="{{ old('admission_date', date('Y-m-d')) }}" required>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Registration ID / Jersey Number</label>
+                            <input type="text" name="roll_number" class="form-control rounded-3"
+                                value="{{ old('roll_number') }}" placeholder="Auto-generated">
+                        </div>
+                    </div>
+
+
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -223,31 +171,158 @@
         </div>
     </div>
 
-    @if(auth()->user()->school->institute_type === 'sport')
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const courseSelect = document.getElementById('course_id_select');
-        const checkboxes = document.querySelectorAll('.batch-checkbox');
+        const allCourses = @json($courses);
+        const allBatches = @json($batches);
+        const allFeePlans = @json($feePlans);
+        let rowCount = 0;
 
-        function filterBatches() {
-            const selectedCourseId = courseSelect.value;
-            
-            checkboxes.forEach(cb => {
-                const parent = cb.closest('.form-check');
-                if (selectedCourseId === "" || cb.getAttribute('data-course') === selectedCourseId) {
-                    parent.style.display = 'block';
-                } else {
-                    parent.style.display = 'none';
-                    cb.checked = false; // Uncheck if hidden
-                }
+        function addEnrollmentRow() {
+            const container = document.getElementById('enrollment_rows_container');
+            const rowId = `row_${rowCount++}`;
+
+            const rowHtml = `
+                <div class="card border-0 shadow-sm rounded-4 mb-3 p-3 enrollment-card animate-fade-in" id="${rowId}">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">1. Select Course</label>
+                            <select onchange="populateBatches('${rowId}', this.value)" class="form-select rounded-pill bg-light border-0 shadow-none px-3">
+                                <option value="">— Select Course —</option>
+                                ${allCourses.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label small fw-bold text-muted">2. Select Sport/Session</label>
+                            <select name="batch_ids[]" class="form-select rounded-pill bg-light border-0 shadow-none px-3 batch-select" data-row="${rowId}">
+                                <option value="">— Select Batch —</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label small fw-bold text-muted">3. Assign Fees (Collect one or more)</label>
+                            <div class="fee-checkboxes d-flex flex-wrap gap-2 border rounded-4 p-2 bg-white" style="min-height: 40px; max-height: 120px; overflow-y: auto;">
+                                <!-- Checkboxes injected here -->
+                                <small class="text-muted fst-italic w-100 text-center py-1">Select a sport first...</small>
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-end">
+                            <button type="button" class="btn btn-soft-danger rounded-circle p-2" onclick="removeRow('${rowId}')">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', rowHtml);
+        }
+
+        function populateBatches(rowId, courseId) {
+            const row = document.getElementById(rowId);
+            const batchSelect = row.querySelector('.batch-select');
+            const filteredBatches = allBatches.filter(b => b.class && b.class.course_id == courseId);
+
+            batchSelect.innerHTML = '<option value="">— Select Batch —</option>';
+            filteredBatches.forEach(b => {
+                batchSelect.innerHTML += `<option value="${b.id}">${b.name}</option>`;
             });
+
+            // Add listener for batch change to show fees
+            batchSelect.onchange = (e) => populateFees(rowId, e.target.value);
         }
 
-        if (courseSelect) {
-            courseSelect.addEventListener('change', filterBatches);
-            if (courseSelect.value) filterBatches();
+        function populateFees(rowId, batchId) {
+        const row = document.getElementById(rowId);
+        const feeContainer = row.querySelector('.fee-checkboxes');
+        
+        if (!batchId) {
+            feeContainer.innerHTML = '<small class="text-muted fst-italic w-100 text-center py-1">Select a sport first...</small>';
+            return;
         }
-    });
+
+        const selectedBatch = allBatches.find(b => b.id == batchId);
+        const courseId = selectedBatch ? selectedBatch.class.course_id : null;
+
+        // Filter Fee Plans that match either:
+        // 1. THIS specific batch
+        // 2. THIS course (but no specific batch)
+        // 3. Generic plans (no course/batch)
+        const relevantPlans = allFeePlans.filter(p => {
+            if (p.batch_id == batchId) return true;
+            if (p.course_id == courseId && !p.batch_id) return true;
+            if (!p.course_id && !p.batch_id) return true;
+            return false;
+        });
+
+        if (relevantPlans.length === 0) {
+            feeContainer.innerHTML = '<small class="text-danger small w-100 text-center py-1">No fee plans found for this sport.</small>';
+            return;
+        }
+
+        feeContainer.innerHTML = relevantPlans.map(p => `
+            <div class="form-check form-check-inline m-0">
+                <input class="form-check-input" type="checkbox" name="batch_fees[${batchId}][]" value="${p.id}" id="fee_${rowId}_${p.id}">
+                <label class="form-check-label small" for="fee_${rowId}_${p.id}">${p.name} (₹${p.amount})</label>
+            </div>
+        `).join('');
+    }
+
+        function removeRow(rowId) {
+            const row = document.getElementById(rowId);
+            row.classList.add('animate-fade-out');
+            setTimeout(() => row.remove(), 300);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            addEnrollmentRow(); // Add first row by default
+        });
     </script>
-    @endif
+
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .animate-fade-out {
+            animation: fadeOut 0.3s ease-out;
+        }
+
+        .btn-soft-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: none;
+        }
+
+        .btn-soft-danger:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .enrollment-card {
+            border-left: 4px solid #0d6efd !important;
+        }
+    </style>
 @endsection

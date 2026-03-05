@@ -35,6 +35,45 @@
             </div>
         @endif
 
+        <!-- Financial Summary Dashboard -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-primary bg-gradient text-white h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-receipt fs-3 opacity-50"></i>
+                            <span class="badge bg-white bg-opacity-20 rounded-pill tiny fw-bold">TOTAL EXPECTED</span>
+                        </div>
+                        <h2 class="fw-bold mb-1">₹{{ number_format($stats['total_expected'], 0) }}</h2>
+                        <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Projected Revenue Pool</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-success bg-gradient text-white h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-cash-coin fs-3 opacity-50"></i>
+                            <span class="badge bg-white bg-opacity-20 rounded-pill tiny fw-bold">TOTAL COLLECTED</span>
+                        </div>
+                        <h2 class="fw-bold mb-1">₹{{ number_format($stats['total_paid'], 0) }}</h2>
+                        <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Secured Institutional Asset</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-danger bg-gradient text-white h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <i class="bi bi-exclamation-octagon fs-3 opacity-50"></i>
+                            <span class="badge bg-white bg-opacity-20 rounded-pill tiny fw-bold">OUTSTANDING DUE</span>
+                        </div>
+                        <h2 class="fw-bold mb-1">₹{{ number_format($stats['total_outstanding'], 0) }}</h2>
+                        <p class="mb-0 opacity-75 small fw-semibold text-uppercase">Accounts Receivable Balance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Search & Filter Area -->
         <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
             <div class="card-body p-4 bg-light bg-opacity-50">

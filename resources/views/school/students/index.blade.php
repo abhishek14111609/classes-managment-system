@@ -161,6 +161,10 @@
                                     </td>
                                     <td class="pe-4 border-0 text-end">
                                         <div class="btn-group shadow-sm rounded-pill overflow-hidden">
+                                            <a href="{{ route('school.payments.collect', $student) }}"
+                                                class="btn btn-sm btn-white border-0" title="Collect Fees">
+                                                <i class="bi bi-cash-coin text-success"></i>
+                                            </a>
                                             <a href="{{ route('school.students.show', $student) }}"
                                                 class="btn btn-sm btn-white border-0" title="Full Portfolio">
                                                 <i class="bi bi-person-lines-fill text-info"></i>

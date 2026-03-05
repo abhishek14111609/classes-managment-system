@@ -12,12 +12,25 @@ use Illuminate\Support\Carbon;
 
 class AttendanceController extends Controller
 {
-    public function __construct(private AttendanceService $attendanceService) {}
+    public function __construct(private AttendanceService $attendanceService)
+    {
+    }
 
     public function index()
     {
         $teacher = auth()->user()->teacher;
-        $batches = $teacher->batches()->select('batches.*')->with('students.user')->get();
+        $batches = $teacher->batches()
+            ->select('batches.*')
+            ->with(['class'])
+            ->withCount('students')
+            ->get();
+
+        // Calculate actual health score for each batch
+        $batches->each(function ($batch) {
+            $totalAtt = \App\Models\Attendance::where('batch_id', $batch->id)->count();
+            $present = \App\Models\Attendance::where('batch_id', $batch->id)->where('status', 'present')->count();
+            $batch->health_score = $totalAtt > 0 ? round(($present / $totalAtt) * 100) : 0;
+        });
 
         return view('teacher.attendance.index', compact('batches'));
     }

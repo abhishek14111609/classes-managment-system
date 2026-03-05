@@ -24,6 +24,8 @@ class FeePlan extends Model
 
     protected $fillable = [
         'school_id',
+        'course_id',
+        'batch_id',
         'name',
         'fee_type',
         'duration',
@@ -33,6 +35,16 @@ class FeePlan extends Model
         'description',
         'is_active',
     ];
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
+    }
 
     protected $casts = [
         'amount' => 'decimal:2',

@@ -29,6 +29,7 @@ Route::get('/', function () {
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
@@ -87,6 +88,7 @@ Route::middleware(['auth', 'role:school_admin', 'check.subscription'])->prefix('
     // Student Management
     Route::get('students/export', [School\StudentController::class, 'export'])->name('students.export');
     Route::post('students/{id}/restore', [School\StudentController::class, 'restore'])->name('students.restore');
+    Route::get('students/{student}/statement', [School\StudentController::class, 'statement'])->name('students.statement');
     Route::resource('students', School\StudentController::class)->middleware('check.plan.limits:students')->only(['store']);
     Route::resource('students', School\StudentController::class)->except(['store']);
 
@@ -107,6 +109,8 @@ Route::middleware(['auth', 'role:school_admin', 'check.subscription'])->prefix('
     Route::resource('fee-plans', School\FeePlanController::class);
 
     // Fee Payment
+    Route::get('payments/collect/{student?}', [School\FeePaymentController::class, 'collect'])->name('payments.collect');
+    Route::post('payments/bulk-store', [School\FeePaymentController::class, 'bulkStore'])->name('payments.bulk-store');
     Route::get('payments/create/{fee}', [School\FeePaymentController::class, 'create'])->name('payments.create');
     Route::post('payments', [School\FeePaymentController::class, 'store'])->name('payments.store');
     Route::delete('payments/{payment}', [School\FeePaymentController::class, 'destroy'])->name('payments.destroy');

@@ -33,15 +33,49 @@
 
                         {{-- Plan Name --}}
                         <div class="mb-4">
-                            <label for="name" class="form-label fw-semibold">
-                                Plan Name <span class="text-danger">*</span>
+                            <label for="name" class="form-label fw-bold text-primary">
+                                <i class="bi bi-tag-fill me-1"></i> Plan Name <span class="text-danger">*</span>
                             </label>
                             <input type="text"
-                                   class="form-control form-control-lg @error('name') is-invalid @enderror"
-                                   id="name" name="name" value="{{ old('name') }}"
+                                   class="form-control form-control-lg border-2 shadow-none @error('name') is-invalid @enderror"
+                                   id="name" name="name" value="{{ old('name', $feePlan->name ?? '') }}"
                                    placeholder="e.g. Monthly Tuition, Annual Sports Fee…"
-                                   required>
+                                   required style="border-radius: 12px;">
                             @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        {{-- Scope Definition --}}
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <hr class="grow m-0">
+                            <span class="text-primary small fw-bold text-uppercase"><i class="bi bi-geo-alt-fill me-1"></i>Plan Scope (Target Program)</span>
+                            <hr class="grow m-0">
+                        </div>
+
+                        <div class="row g-3 mb-4 bg-primary bg-opacity-10 p-3 rounded-4">
+                            <div class="col-md-6">
+                                <label for="course_id" class="form-label fw-semibold small text-muted">A. Select Course (Optional)</label>
+                                <select class="form-select rounded-3 border-0 bg-white shadow-sm" id="course_id" name="course_id" onchange="filterBatches(this.value)">
+                                    <option value="">— All Courses —</option>
+                                    @foreach($courses as $course)
+                                        <option value="{{ $course->id }}" {{ old('course_id', $feePlan->course_id ?? '') == $course->id ? 'selected' : '' }}>
+                                            {{ $course->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="form-text x-tiny">Link this fee to a specific sport/course category.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="batch_id" class="form-label fw-semibold small text-muted">B. Select Batch (Optional)</label>
+                                <select class="form-select rounded-3 border-0 bg-white shadow-sm" id="batch_id" name="batch_id">
+                                    <option value="" data-course="">— All Batches —</option>
+                                    @foreach($batches as $batch)
+                                        <option value="{{ $batch->id }}" data-course="{{ $batch->class->course_id ?? '' }}" {{ old('batch_id', $feePlan->batch_id ?? '') == $batch->id ? 'selected' : '' }}>
+                                            {{ $batch->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="form-text x-tiny">Restrict this fee to a specific session/batch.</div>
+                            </div>
                         </div>
 
                         {{-- Divider --}}
@@ -149,14 +183,28 @@
 </div>
 
 <script>
-function toggleSportLevel(type) {
-    const wrap = document.getElementById('sportLevelWrap');
-    if (wrap) {
-        wrap.style.display = type === 'sports' ? 'block' : 'none';
-        if (type !== 'sports') document.getElementById('sport_level').value = '';
+    const batchSelect = document.getElementById('batch_id');
+    const batchOptions = Array.from(batchSelect.options);
+
+    function filterBatches(courseId) {
+        batchSelect.innerHTML = '';
+        batchOptions.forEach(opt => {
+            if (!courseId || opt.getAttribute('data-course') === courseId || opt.value === "") {
+                batchSelect.appendChild(opt);
+            }
+        });
+        if (courseId) batchSelect.value = ""; // Reset if filtered
     }
-}
-// Run on load in case of old() repopulation
-toggleSportLevel(document.getElementById('fee_type').value);
+
+    function toggleSportLevel(type) {
+        const wrap = document.getElementById('sportLevelWrap');
+        if (wrap) {
+            wrap.style.display = type === 'sports' ? 'block' : 'none';
+            if (type !== 'sports') document.getElementById('sport_level').value = '';
+        }
+    }
+    // Init
+    toggleSportLevel(document.getElementById('fee_type').value);
+    if (document.getElementById('course_id').value) filterBatches(document.getElementById('course_id').value);
 </script>
 @endsection

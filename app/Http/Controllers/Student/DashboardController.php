@@ -19,8 +19,8 @@ class DashboardController extends Controller
     {
         $student = auth()->user()->student;
         $student->load([
-            'batch' => function ($q) {
-                $q->with(['class', 'teachers.user'])->withCount('students');
+            'batches' => function ($q) {
+                $q->wherePivot('is_active', true)->with(['class', 'teachers.user'])->withCount('students');
             },
             'course'
         ]);
@@ -35,12 +35,8 @@ class DashboardController extends Controller
 
         $ledger = $this->studentService->getStudentLedger($student);
 
-        // Fetch Upcoming Sessions (Today's batch schedule)
-        $batch = $student->batch;
-        $upcomingSessions = [];
-        if ($batch) {
-            $upcomingSessions[] = $batch;
-        }
+        // Fetch Upcoming Sessions (All active batches)
+        $upcomingSessions = $student->batches;
 
         // Fetch Upcoming Events
         $upcomingEvents = \App\Models\SportsEvent::where('event_date', '>=', now())

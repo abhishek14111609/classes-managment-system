@@ -86,6 +86,16 @@
                                         <i class="bi bi-award me-1"></i> {{ ucfirst($plan->sport_level) }} Tier
                                     </span>
                                 @endif
+                                @if($plan->course)
+                                    <span class="badge bg-info-subtle text-info rounded-pill px-3 py-1 tiny fw-bold shadow-none">
+                                        <i class="bi bi-book-half me-1"></i> {{ $plan->course->name }}
+                                    </span>
+                                @endif
+                                @if($plan->batch)
+                                    <span class="badge bg-warning-subtle text-dark rounded-pill px-3 py-1 tiny fw-bold shadow-none">
+                                        <i class="bi bi-collection-fill me-1"></i> {{ $plan->batch->name }}
+                                    </span>
+                                @endif
                             </div>
 
                             <div class="mb-4">

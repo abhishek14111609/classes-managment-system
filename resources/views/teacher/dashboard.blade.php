@@ -113,7 +113,9 @@
                             <h5 class="fw-bold mb-0">Today's Sessions</h5>
                             <p class="text-muted small">Your batches scheduled for today</p>
                         </div>
-                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-bold">Live Updates</span>
+                        <div class="d-flex align-items-center bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-bold shadow-sm">
+                            <span class="pulse-emerald me-2"></span> Live Updates
+                        </div>
                     </div>
                     <div class="card-body p-4">
                         <div class="timeline position-relative ps-4">
@@ -249,7 +251,7 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
 <style>
     .timeline-item:last-child {
         padding-bottom: 0 !important;
@@ -257,5 +259,20 @@
     .last-child-mb-0:last-child {
         margin-bottom: 0 !important;
     }
+    .pulse-emerald {
+        width: 8px;
+        height: 8px;
+        background-color: #10b981;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        animation: pulse-emerald 2s infinite;
+    }
+
+    @keyframes pulse-emerald {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
 </style>
-@endsection
+@endpush

@@ -35,7 +35,17 @@ class FeeController extends Controller
         $fees = $query->latest()->paginate(15);
         $students = Student::with('user')->active()->get();
 
-        return view('school.fees.index', compact('fees', 'students'));
+        // Calculate Stats for the Dashboard (Based on current filters except pagination)
+        $statsQuery = clone $query;
+        $statsQuery->offset(0)->limit(PHP_INT_MAX); // Unlimit for stats
+
+        $stats = [
+            'total_expected' => $statsQuery->sum('total_amount') + $statsQuery->sum('late_fee') - $statsQuery->sum('discount'),
+            'total_paid' => $statsQuery->sum('paid_amount'),
+        ];
+        $stats['total_outstanding'] = $stats['total_expected'] - $stats['total_paid'];
+
+        return view('school.fees.index', compact('fees', 'students', 'stats'));
     }
 
     public function create(Request $request)

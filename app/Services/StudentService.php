@@ -62,28 +62,36 @@ class StudentService
                 'is_active' => true,
             ]);
 
-            // Sync batches (Handling both singular and plural input)
+            // Sync batches
             $batchIds = $data['batch_ids'] ?? (isset($data['batch_id']) ? [$data['batch_id']] : []);
             if (!empty($batchIds)) {
                 $student->batches()->sync($batchIds);
-            }
 
-            // Generate initial fee if plan selected
-            if (!empty($data['fee_plan_id'])) {
-                $feePlan = \App\Models\FeePlan::find($data['fee_plan_id']);
-                if ($feePlan) {
-                    \App\Models\Fee::create([
-                        'school_id' => auth()->user()->school_id,
-                        'student_id' => $student->id,
-                        'batch_id' => $data['batch_id'] ?? null,
-                        'fee_plan_id' => $feePlan->id,
-                        'fee_type' => $feePlan->fee_type ?? 'one_time',
-                        'total_amount' => $feePlan->amount,
-                        'paid_amount' => 0,
-                        'due_date' => now()->addDays(7), // Give them a week to pay
-                        'status' => 'pending',
-                        'remarks' => 'Auto-generated from admission enrollment.',
-                    ]);
+                // Handle Batch-Specific Fees (Supports multiple fees per sport)
+                if (isset($data['batch_fees']) && is_array($data['batch_fees'])) {
+                    foreach ($data['batch_fees'] as $batchId => $plans) {
+                        if (empty($plans) || !in_array($batchId, $batchIds))
+                            continue;
+
+                        $planIds = is_array($plans) ? $plans : [$plans];
+                        foreach ($planIds as $planId) {
+                            $feePlan = \App\Models\FeePlan::find($planId);
+                            if ($feePlan) {
+                                \App\Models\Fee::create([
+                                    'school_id' => auth()->user()->school_id,
+                                    'student_id' => $student->id,
+                                    'batch_id' => $batchId,
+                                    'fee_plan_id' => $feePlan->id,
+                                    'fee_type' => $feePlan->fee_type ?? 'monthly',
+                                    'total_amount' => $feePlan->amount,
+                                    'paid_amount' => 0,
+                                    'due_date' => now()->addDays(7),
+                                    'status' => 'pending',
+                                    'remarks' => "Session fee for " . (\App\Models\Batch::find($batchId)->name ?? 'selected sport'),
+                                ]);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -141,6 +149,41 @@ class StudentService
             $batchIds = $data['batch_ids'] ?? (isset($data['batch_id']) ? [$data['batch_id']] : []);
             if (!empty($batchIds)) {
                 $student->batches()->sync($batchIds);
+
+                // Handle Batch-Specific Fees (Supports multiple fees per sport)
+                if (isset($data['batch_fees']) && is_array($data['batch_fees'])) {
+                    foreach ($data['batch_fees'] as $batchId => $plans) {
+                        if (empty($plans) || !in_array($batchId, $batchIds))
+                            continue;
+
+                        $planIds = is_array($plans) ? $plans : [$plans];
+                        foreach ($planIds as $planId) {
+                            $feePlan = \App\Models\FeePlan::find($planId);
+                            if ($feePlan) {
+                                // Prevent duplication on edit
+                                $exists = \App\Models\Fee::where('student_id', $student->id)
+                                    ->where('batch_id', $batchId)
+                                    ->where('fee_plan_id', $planId)
+                                    ->exists();
+
+                                if (!$exists) {
+                                    \App\Models\Fee::create([
+                                        'school_id' => auth()->user()->school_id,
+                                        'student_id' => $student->id,
+                                        'batch_id' => $batchId,
+                                        'fee_plan_id' => $feePlan->id,
+                                        'fee_type' => $feePlan->fee_type ?? 'monthly',
+                                        'total_amount' => $feePlan->amount,
+                                        'paid_amount' => 0,
+                                        'due_date' => now()->addDays(7),
+                                        'status' => 'pending',
+                                        'remarks' => "Added via update for " . (\App\Models\Batch::find($batchId)->name ?? 'selected sport'),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             ActivityLog::logActivity('updated', 'student', "Updated student: {$student->user->name}");

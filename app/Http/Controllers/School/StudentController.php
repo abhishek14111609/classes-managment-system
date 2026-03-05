@@ -8,10 +8,27 @@ use App\Models\Batch;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Services\StudentService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
+    public function statement(Student $student)
+    {
+        $student->load(['user', 'school', 'batch']);
+        $ledger = $this->studentService->getStudentLedger($student);
+        $school = auth()->user()->school;
+
+        $pdf = Pdf::loadView('school.students.statement_pdf', compact('student', 'ledger', 'school'));
+
+        $fontPath = public_path('fonts/FreeSans');
+        $pdf->getDomPDF()
+            ->getFontMetrics()
+            ->setFontFamily('FreeSans', ['normal' => $fontPath]);
+
+        return $pdf->stream("Statement-{$student->roll_number}.pdf");
+    }
+
     public function __construct(private StudentService $studentService)
     {
     }
@@ -79,8 +96,9 @@ class StudentController extends Controller
     {
         $batches = Batch::with(['class', 'subject.level'])->active()->get();
         $courses = \App\Models\Course::active()->get();
+        $feePlans = \App\Models\FeePlan::where('is_active', true)->get();
 
-        return view('school.students.edit', compact('student', 'batches', 'courses'));
+        return view('school.students.edit', compact('student', 'batches', 'courses', 'feePlans'));
     }
 
     public function update(UpdateStudentRequest $request, Student $student)

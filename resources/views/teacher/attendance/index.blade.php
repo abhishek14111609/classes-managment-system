@@ -59,8 +59,7 @@
                                     <small class="text-muted tiny fw-bold text-uppercase">Total Squad</small>
                                 </div>
                                 <div class="col-6">
-                                    @php $health = rand(88, 98); @endphp
-                                    <div class="fw-bold text-success h5 mb-0">{{ $health }}%</div>
+                                    <div class="fw-bold text-success h5 mb-0">{{ $batch->health_score }}%</div>
                                     <small class="text-muted tiny fw-bold text-uppercase">Yield Rate</small>
                                 </div>
                             </div>

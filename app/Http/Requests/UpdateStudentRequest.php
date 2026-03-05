@@ -42,6 +42,9 @@ class UpdateStudentRequest extends FormRequest
             'parent_phone' => ['nullable', 'string', 'max:20'],
             'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             'is_active' => ['boolean'],
+            'batch_fees' => ['nullable', 'array'],
+            'batch_fees.*' => ['nullable', 'array'],
+            'batch_fees.*.*' => ['exists:fee_plans,id'],
         ];
     }
 }
