@@ -56,8 +56,8 @@
                     <table class="table table-hover align-middle mb-0 text-nowrap">
                         <thead class="bg-light">
                             <tr class="small text-muted text-uppercase fw-bold">
-                                <th class="ps-4 py-3 border-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Session Reference' : 'Batch Reference' }}</th>
-                                <th class="py-3 border-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Team Level' : 'Class Level' }}</th>
+                                <th class="ps-4 py-3 border-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Sport & Session' : 'Batch Reference' }}</th>
+                                <th class="py-3 border-0">{{ auth()->user()->school->institute_type === 'sport' ? 'Activity & Level' : 'Class Level' }}</th>
                                 <th class="py-3 border-0">Operational Window</th>
                                 <th class="py-3 border-0 text-center">{{ auth()->user()->school->institute_type === 'sport' ? 'Allocation Status' : 'Enrollment Status' }}</th>
                                 <th class="py-3 border-0 text-center">{{ auth()->user()->school->institute_type === 'sport' ? 'Coaches' : 'Faculties' }}</th>
@@ -73,16 +73,29 @@
                                                 <i class="bi bi-collection-fill"></i>
                                             </div>
                                             <div>
-                                                <div class="fw-bold text-dark">{{ $batch->name }}</div>
-                                                <small class="text-muted tiny">Code: {{ auth()->user()->school->institute_type === 'sport' ? '#SES-' : '#BTC-' }}{{ $batch->id }}</small>
+                                                @if(auth()->user()->school->institute_type === 'sport')
+                                                    <div class="fw-bold text-dark">{{ $batch->class->course->name ?? 'N/A' }}</div>
+                                                    <small class="text-muted tiny">{{ $batch->name }}</small>
+                                                @else
+                                                    <div class="fw-bold text-dark">{{ $batch->name }}</div>
+                                                    <small class="text-muted tiny">Code: #BTC-{{ $batch->id }}</small>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
                                     <td class="border-0">
-                                        <span
-                                            class="badge bg-{{ $batch->class->type === 'academic' ? 'soft-info' : 'soft-success' }} px-3 py-2 rounded-pill small">
-                                            {{ $batch->class->name }}
-                                        </span>
+                                        @if(auth()->user()->school->institute_type === 'sport')
+                                            <div>
+                                                <span class="badge bg-soft-success px-3 py-2 rounded-pill small">
+                                                    {{ $batch->subject->name ?? 'N/A' }}
+                                                </span>
+                                            </div>
+                                            <small class="text-muted mt-1 d-block">{{ $batch->subject->level->name ?? 'Any Level' }}</small>
+                                        @else
+                                            <span class="badge bg-soft-info px-3 py-2 rounded-pill small">
+                                                {{ $batch->class->name }}
+                                            </span>
+                                        @endif
                                     </td>
                                     <td class="border-0">
                                         <div class="small fw-bold text-dark">

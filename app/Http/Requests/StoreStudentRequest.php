@@ -29,6 +29,8 @@ class StoreStudentRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:20'],
             'course_id' => ['nullable', 'exists:courses,id'],
             'batch_id' => ['nullable', 'exists:batches,id'],
+            'batch_ids' => ['nullable', 'array'],
+            'batch_ids.*' => ['exists:batches,id'],
             'fee_plan_id' => ['nullable', 'exists:fee_plans,id'],
             'roll_number' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['nullable', 'date', 'before:today'],

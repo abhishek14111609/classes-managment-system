@@ -40,13 +40,15 @@
                 </a>
         </li>
 
-        <li class="nav-item">
-                <a href="{{ route('school.classes.index') }}"
-                        class="nav-link {{ request()->routeIs('school.classes.*') ? 'active' : '' }}">
-                        <i class="bi bi-journal-bookmark-fill"></i>
-                        <span>{{ $label['classes'] }}</span>
-                </a>
-        </li>
+        @if(!$isSport)
+                <li class="nav-item">
+                        <a href="{{ route('school.classes.index') }}"
+                                class="nav-link {{ request()->routeIs('school.classes.*') ? 'active' : '' }}">
+                                <i class="bi bi-journal-bookmark-fill"></i>
+                                <span>{{ $label['classes'] }}</span>
+                        </a>
+                </li>
+        @endif
 
         <li class="nav-item">
                 <a href="{{ route('school.subjects.index') }}"

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\School;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -57,10 +58,20 @@ class CourseController extends Controller
             $validated['code'] = $prefix . strtoupper(\Illuminate\Support\Str::random(5));
         }
 
-        Course::create($validated);
+        $course = Course::create($validated);
+
+        // For sports academies, auto-create a hidden "Default Team" for this program
+        if (auth()->user()->school->institute_type === 'sport') {
+            Classes::create([
+                'school_id' => $schoolId,
+                'course_id' => $course->id,
+                'name' => $course->name . ' - Default Team',
+                'is_active' => true
+            ]);
+        }
 
         return redirect()->route('school.courses.index')
-            ->with('success', 'Course created successfully.');
+            ->with('success', 'Program created successfully.');
     }
 
     /**
@@ -94,8 +105,13 @@ class CourseController extends Controller
 
         $course->update($validated);
 
+        // Sync shadow-class name if it exists for sports akademies
+        if (auth()->user()->school->institute_type === 'sport') {
+            $course->classes()->update(['name' => $course->name . ' - Default Team']);
+        }
+
         return redirect()->route('school.courses.index')
-            ->with('success', 'Course updated successfully.');
+            ->with('success', 'Program updated successfully.');
     }
 
     /**

@@ -16,7 +16,8 @@
                 </h3>
                 <p class="text-muted small mb-0">Total of {{ number_format($students->total()) }}
                     {{ auth()->user()->school->institute_type === 'sport' ? 'athletes' : 'students' }} registered in the
-                    institution.</p>
+                    institution.
+                </p>
             </div>
             <div class="d-flex gap-3">
                 <a href="{{ route('school.students.export') }}"
@@ -124,14 +125,27 @@
                                             Access</small>
                                     </td>
                                     <td class="border-0">
-                                        @if($student->batch)
-                                            <span class="badge bg-soft-info px-3 py-2 rounded-pill small">
-                                                {{ $student->batch->name }}
-                                            </span>
+                                        @if(auth()->user()->school->institute_type === 'sport')
+                                            @if($student->batches->isNotEmpty())
+                                                <div class="d-flex flex-wrap gap-1">
+                                                    @foreach($student->batches as $batch)
+                                                        <span class="badge bg-soft-success rounded-pill tiny" style="font-size: 0.65rem;">
+                                                            {{ $batch->subject->name ?? 'Activity' }}
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                                <small class="text-muted tiny mt-1 d-block">Enrolled in {{ $student->batches->count() }} sessions</small>
+                                            @else
+                                                <span class="badge bg-light text-muted border px-2 py-1 rounded-pill tiny">NO SESSION</span>
+                                            @endif
                                         @else
-                                            <span
-                                                class="badge bg-light text-muted border px-3 py-2 rounded-pill tiny fw-bold">WAITING
-                                                ASSIGNMENT</span>
+                                            @if($student->batch)
+                                                <span class="badge bg-soft-info px-3 py-2 rounded-pill small">
+                                                    {{ $student->batch->name }} ({{ $student->batch->class->name }})
+                                                </span>
+                                            @else
+                                                <span class="badge bg-light text-muted border px-3 py-2 rounded-pill tiny fw-bold">WAITING ASSIGNMENT</span>
+                                            @endif
                                         @endif
                                     </td>
                                     <td class="border-0">
@@ -176,7 +190,8 @@
                                         </div>
                                         <h5 class="text-muted">No
                                             {{ auth()->user()->school->institute_type === 'sport' ? 'athlete' : 'student' }}
-                                            matching records found.</h5>
+                                            matching records found.
+                                        </h5>
                                         <a href="{{ route('school.students.create') }}"
                                             class="btn btn-sm btn-primary rounded-pill px-4 mt-2">Add Initial Batch</a>
                                     </td>

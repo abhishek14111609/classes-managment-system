@@ -124,11 +124,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-8">
                                 <div class="p-3 rounded-4 bg-light border border-white">
-                                    <small class="text-muted tiny fw-bold text-uppercase d-block mb-1">Batch
-                                        Placement</small>
-                                    <div class="fw-bold text-dark small">{{ $student->batch->name }}</div>
+                                    <small class="text-muted tiny fw-bold text-uppercase d-block mb-1">
+                                        @if($isSport) Active Session Enrollments @else Batch Placement @endif
+                                    </small>
+                                    @if($isSport)
+                                        @if($student->batches->isNotEmpty())
+                                            <div class="d-flex flex-wrap gap-2 mt-1">
+                                                @foreach($student->batches as $batch)
+                                                    <span class="badge bg-primary rounded-pill px-3 py-2 small fw-bold">
+                                                        <i class="bi bi-tag-fill me-1"></i> {{ $batch->name }}
+                                                    </span>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="fw-bold text-muted small italic">No active sessions assigned.</div>
+                                        @endif
+                                    @else
+                                        <div class="fw-bold text-dark small">{{ $student->batch->name ?? 'N/A' }}</div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -246,8 +261,12 @@
                                                         <td class="small fw-bold">
                                                             <div class="small fw-bold text-dark">
                                                                 {{ $fee->due_date->format('d M, Y') }}</div>
-                                                            <small
-                                                                class="text-muted tiny text-uppercase">{{ $fee->fee_type }}</small>
+                                                            <div class="d-flex gap-2">
+                                                                <small class="text-muted tiny text-uppercase">{{ $fee->fee_type }}</small>
+                                                                @if($fee->batch)
+                                                                    <small class="text-primary tiny fw-bold text-uppercase"><i class="bi bi-tag-fill"></i> {{ $fee->batch->name }}</small>
+                                                                @endif
+                                                            </div>
                                                         </td>
                                                         <td class="small fw-bold">₹{{ number_format($fee->total_amount, 0) }}</td>
                                                         <td class="small fw-bold text-danger">

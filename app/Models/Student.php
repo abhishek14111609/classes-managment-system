@@ -73,9 +73,22 @@ class Student extends Model
     /**
      * Get the batch
      */
+    /**
+     * Get the primary batch (Backward compatibility)
+     */
     public function batch()
     {
         return $this->belongsTo(Batch::class);
+    }
+
+    /**
+     * Get all batches the student is enrolled in
+     */
+    public function batches()
+    {
+        return $this->belongsToMany(Batch::class, 'batch_student')
+            ->withPivot('enrollment_date', 'is_active')
+            ->withTimestamps();
     }
 
     /**

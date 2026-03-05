@@ -40,7 +40,7 @@ class FeeController extends Controller
 
     public function create(Request $request)
     {
-        $students = Student::with('user')->active()->get();
+        $students = Student::with(['user', 'batches'])->active()->get();
         $feePlans = FeePlan::active()->get();
         $selectedPlan = $request->input('plan') ? FeePlan::find($request->input('plan')) : null;
 
@@ -68,7 +68,7 @@ class FeeController extends Controller
 
     public function edit(Fee $fee)
     {
-        $students = Student::with('user')->active()->get();
+        $students = Student::with(['user', 'batches'])->active()->get();
 
         $levels = \App\Models\Level::where('is_active', true)->get();
         return view('school.fees.edit', compact('fee', 'students', 'levels'));
@@ -80,6 +80,7 @@ class FeeController extends Controller
             'total_amount' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0|lte:total_amount',
             'late_fee' => 'nullable|numeric|min:0',
+            'batch_id' => 'nullable|exists:batches,id',
             'sport_level' => 'nullable|string|max:255',
             'due_date' => 'required|date',
             'remarks' => 'nullable|string',

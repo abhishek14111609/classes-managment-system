@@ -78,10 +78,17 @@
                         </div>
                         <div class="d-flex flex-column gap-3">
                             <div class="p-2 rounded-3 bg-light border border-white">
-                                <small class="text-muted tiny d-block">Time Batch</small>
+                                <small class="text-muted tiny d-block">Primary Batch</small>
                                 <span
-                                    class="small fw-bold text-dark">{{ optional($fee->student->batch)->name ?? 'No Batch Assigned' }}</span>
+                                    class="small fw-bold text-dark">{{ optional($fee->student->batch)->name ?? 'No Primary Batch' }}</span>
                             </div>
+                            @if($fee->batch)
+                                <div class="p-2 rounded-3 bg-primary bg-opacity-10 border border-primary border-opacity-10">
+                                    <small class="text-primary tiny d-block">Linked Session (Fee Item)</small>
+                                    <span class="small fw-bold text-primary"><i class="bi bi-tag-fill me-1"></i>
+                                        {{ $fee->batch->name }}</span>
+                                </div>
+                            @endif
                             <div class="p-2 rounded-3 bg-light border border-white">
                                 <small class="text-muted tiny d-block">Communication Channel</small>
                                 <span class="small fw-bold text-dark">{{ $fee->student->user->email }}</span>

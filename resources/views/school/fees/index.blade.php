@@ -119,6 +119,10 @@
                                         <div class="d-flex flex-column gap-1">
                                             <span
                                                 class="badge bg-{{ $style['color'] }} px-2 py-1 tiny fw-bold w-fit rounded-pill">{{ $style['label'] }}</span>
+                                            @if($fee->batch)
+                                                <small class="text-primary tiny fw-bold"><i class="bi bi-tag-fill me-1"></i>
+                                                    {{ $fee->batch->name }}</small>
+                                            @endif
                                             @if($fee->duration)
                                                 <small class="text-muted tiny fw-bold"><i class="bi bi-calendar2-range me-1"></i>
                                                     {{ $durationMap[$fee->duration] ?? 'Standard' }}</small>

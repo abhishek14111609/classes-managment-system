@@ -16,8 +16,11 @@ class FeeService
     public function createFee(array $data)
     {
         return DB::transaction(function () use ($data) {
-            // Check for potential duplication (same student, same plan, same month of due date)
+            // Check for potential duplication (same student, same batch, same plan, same month of due date)
             $existing = Fee::where('student_id', $data['student_id'])
+                ->when(isset($data['batch_id']), function ($q) use ($data) {
+                    return $q->where('batch_id', $data['batch_id']);
+                })
                 ->where('fee_plan_id', $data['fee_plan_id'] ?? null)
                 ->where('fee_type', $data['fee_type'])
                 ->whereMonth('due_date', date('m', strtotime($data['due_date'])))
@@ -26,13 +29,15 @@ class FeeService
                 ->first();
 
             if ($existing) {
-                throw new \Exception("A similar active fee is already assigned to this student for this period (Due Date Month: " . date('F Y', strtotime($data['due_date'])) . ").");
+                $batchName = $existing->batch ? $existing->batch->name : 'this period';
+                throw new \Exception("A similar active fee is already assigned to this student for {$batchName} (Period: " . date('F Y', strtotime($data['due_date'])) . ").");
             }
 
             $fee = Fee::create([
                 'school_id' => auth()->user()->school_id,
                 'fee_plan_id' => $data['fee_plan_id'] ?? null,
                 'student_id' => $data['student_id'],
+                'batch_id' => $data['batch_id'] ?? null,
                 'fee_type' => $data['fee_type'],
                 'duration' => $data['duration'] ?? null,
                 'sport_level' => $data['sport_level'] ?? null,

@@ -33,6 +33,7 @@ class Fee extends Model
         'school_id',
         'fee_plan_id',
         'student_id',
+        'batch_id',
         'fee_type',
         'duration',
         'sport_level',
@@ -72,6 +73,14 @@ class Fee extends Model
     public function student()
     {
         return $this->belongsTo(Student::class);
+    }
+
+    /**
+     * Get the specific batch this fee is for
+     */
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
     }
 
     /**

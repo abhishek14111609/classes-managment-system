@@ -37,11 +37,11 @@
                         </small>
                     </div>
                     <span class="ms-auto badge
-                            @if($fee->status === 'paid') bg-success
-                            @elseif($fee->status === 'partial') bg-warning text-dark
-                            @elseif($fee->status === 'overdue') bg-danger
-                            @else bg-secondary @endif
-                            fs-6">{{ ucfirst($fee->status) }}</span>
+                                @if($fee->status === 'paid') bg-success
+                                @elseif($fee->status === 'partial') bg-warning text-dark
+                                @elseif($fee->status === 'overdue') bg-danger
+                                @else bg-secondary @endif
+                                fs-6">{{ ucfirst($fee->status) }}</span>
                 </div>
             </div>
         </div>
@@ -59,6 +59,22 @@
                             <input type="text" class="form-control bg-light"
                                 value="{{ ucfirst(str_replace('_', '-', $fee->fee_type)) }}" readonly>
                             <div class="form-text text-muted">Fee type cannot be changed after creation.</div>
+                        </div>
+
+                        {{-- Session / Batch selection --}}
+                        <div class="col-md-4 mb-3">
+                            <label for="batch_id" class="form-label fw-semibold">Link to Session</label>
+                            <select class="form-select @error('batch_id') is-invalid @enderror" id="batch_id"
+                                name="batch_id">
+                                <option value="">— General / No Specific Session —</option>
+                                @foreach($fee->student->batches as $batch)
+                                    <option value="{{ $batch->id }}" {{ old('batch_id', $fee->batch_id) == $batch->id ? 'selected' : '' }}>
+                                        {{ $batch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="form-text small">Session this fee is associated with.</div>
+                            @error('batch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
                         {{-- Sport Level --}}

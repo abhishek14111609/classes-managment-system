@@ -28,28 +28,65 @@
                 @method('PUT')
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="name" class="form-label fw-semibold">{{ auth()->user()->school->institute_type === 'sport' ? 'Activity Name' : 'Subject Name' }} <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror"
-                               id="name" name="name"
-                               value="{{ old('name', $subject->name) }}" required>
-                        @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+                    @if($isSport)
+                        <div class="col-md-4 mb-3">
+                            <label for="course_id" class="form-label fw-semibold">Sport (Program) <span class="text-danger">*</span></label>
+                            <select class="form-select @error('course_id') is-invalid @enderror" id="course_id" name="course_id" required>
+                                <option value="">— Select Sport —</option>
+                                @foreach($courses as $course)
+                                    <option value="{{ $course->id }}" 
+                                        {{ old('course_id', $subject->schoolClass->course_id ?? '') == $course->id ? 'selected' : '' }}>
+                                        {{ $course->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('course_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label for="class_id" class="form-label fw-semibold">{{ auth()->user()->school->institute_type === 'sport' ? 'Team / Level' : 'Class / Level' }} <span class="text-danger">*</span></label>
-                        <select class="form-select @error('class_id') is-invalid @enderror"
-                                id="class_id" name="class_id" required>
-                            <option value="">— {{ auth()->user()->school->institute_type === 'sport' ? 'Select Team / Level' : 'Select Class' }} —</option>
-                            @foreach($classes as $class)
-                                <option value="{{ $class->id }}"
-                                    {{ old('class_id', $subject->class_id) == $class->id ? 'selected' : '' }}>
-                                    {{ $class->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('class_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="level_id" class="form-label fw-semibold">Sports Level <span class="text-danger">*</span></label>
+                            <select class="form-select @error('level_id') is-invalid @enderror" id="level_id" name="level_id" required>
+                                <option value="">— Select Level —</option>
+                                @foreach($levels as $level)
+                                    <option value="{{ $level->id }}" 
+                                        {{ old('level_id', $subject->level_id) == $level->id ? 'selected' : '' }}>
+                                        {{ $level->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('level_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="name" class="form-label fw-semibold">Activity Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                                name="name" value="{{ old('name', $subject->name) }}" required>
+                            @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    @else
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label fw-semibold">Subject Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                   id="name" name="name"
+                                   value="{{ old('name', $subject->name) }}" required>
+                            @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="class_id" class="form-label fw-semibold">Class / Level <span class="text-danger">*</span></label>
+                            <select class="form-select @error('class_id') is-invalid @enderror"
+                                    id="class_id" name="class_id" required>
+                                <option value="">— Select Class —</option>
+                                @foreach($classes as $class)
+                                    <option value="{{ $class->id }}"
+                                        {{ old('class_id', $subject->class_id) == $class->id ? 'selected' : '' }}>
+                                        {{ $class->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('class_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                    @endif
                 </div>
 
                 <input type="hidden" name="type" value="{{ auth()->user()->school->institute_type === 'sport' ? 'sports' : 'academic' }}">

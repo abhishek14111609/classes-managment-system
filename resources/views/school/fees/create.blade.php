@@ -97,7 +97,8 @@
                                                 {{ $typeInfo['label'] }}
                                             </span>
                                             @if($plan->duration)
-                                                <span class="badge bg-secondary-subtle text-secondary border border-secondary small">
+                                                <span
+                                                    class="badge bg-secondary-subtle text-secondary border border-secondary small">
                                                     {{ ucwords(str_replace('_', ' ', $plan->duration)) }}
                                                 </span>
                                             @endif
@@ -131,7 +132,8 @@
                                     <h5 class="fw-bold mb-1" id="previewName">—</h5>
                                     <div class="d-flex flex-wrap gap-1">
                                         <span class="badge bg-secondary" id="previewType"></span>
-                                        <span class="badge bg-info-subtle text-info border border-info" id="previewDuration"></span>
+                                        <span class="badge bg-info-subtle text-info border border-info"
+                                            id="previewDuration"></span>
                                         <span class="badge ms-1" id="previewSport"
                                             style="background:#7c3aed; display:none;"></span>
                                     </div>
@@ -166,19 +168,34 @@
                                     @if($isSport) Athlete @else Student @endif <span class="text-danger">*</span>
                                 </label>
                                 <select class="form-select @error('student_id') is-invalid @enderror" id="student_id"
-                                    name="student_id" required>
+                                    name="student_id" required onchange="updateStudentBatches(this)">
                                     <option value="">
                                         @if($isSport) — Select Athlete — @else — Select Student — @endif
                                     </option>
                                     @foreach($students as $student)
-                                        <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
+                                        <option value="{{ $student->id }}"
+                                            data-batches="{{ json_encode($student->batches->map(fn($b) => ['id' => $b->id, 'name' => $b->name])) }}"
+                                            {{ old('student_id') == $student->id ? 'selected' : '' }}>
                                             {{ $student->user->name }}
                                             @if($student->roll_number) (Roll: {{ $student->roll_number }})@endif
-                                            @if($student->batch) — {{ $student->batch->name }}@endif
+                                            @if($student->batches->isNotEmpty()) — Enrolled in {{ $student->batches->count() }}
+                                            Sessions @endif
                                         </option>
                                     @endforeach
                                 </select>
                                 @error('student_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+
+                            <div class="mb-3" id="batch_selection_container" style="display:none;">
+                                <label for="batch_id" class="form-label fw-semibold">
+                                    Link to Session <small class="text-muted">(Optional)</small>
+                                </label>
+                                <select class="form-select @error('batch_id') is-invalid @enderror" id="batch_id"
+                                    name="batch_id">
+                                    <option value="">— Select Relevant Session —</option>
+                                </select>
+                                <div class="form-text">Choose the specific sport/training session this fee is for.</div>
+                                @error('batch_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
                             <div class="row g-3 mb-3">
@@ -239,24 +256,28 @@
                                         <input class="form-check-input" type="checkbox" id="record_payment_toggle"
                                             onchange="togglePaymentSection(this.checked)">
                                         <label class="form-check-label fw-bold text-success" for="record_payment_toggle">
-                                            <i class="bi bi-cash-stack me-1"></i> Record Initial Payment & Generate Invoice Now?
+                                            <i class="bi bi-cash-stack me-1"></i> Record Initial Payment & Generate Invoice
+                                            Now?
                                         </label>
                                     </div>
 
                                     <div id="payment_fields" style="display:none;">
                                         <div class="row g-3">
                                             <div class="col-md-6">
-                                                <label for="initial_paid_amount" class="form-label fw-semibold">Amount Being Paid (₹)</label>
+                                                <label for="initial_paid_amount" class="form-label fw-semibold">Amount Being
+                                                    Paid (₹)</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text">₹</span>
                                                     <input type="number" class="form-control" name="initial_paid_amount"
                                                         id="initial_paid_amount" step="0.01" min="0" placeholder="0.00"
                                                         oninput="updateNetPayable()">
                                                 </div>
-                                                <div class="form-text">Enter portion being paid now (e.g. half or full).</div>
+                                                <div class="form-text">Enter portion being paid now (e.g. half or full).
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="payment_method" class="form-label fw-semibold">Payment Method</label>
+                                                <label for="payment_method" class="form-label fw-semibold">Payment
+                                                    Method</label>
                                                 <select class="form-select" name="payment_method" id="payment_method">
                                                     <option value="cash">Cash</option>
                                                     <option value="bank_transfer">Bank Transfer</option>
@@ -266,8 +287,10 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-12">
-                                                <label for="transaction_id" class="form-label fw-semibold">Transaction ID / Reference (Optional)</label>
-                                                <input type="text" class="form-control" name="transaction_id" id="transaction_id" placeholder="e.g. UTR Number, Receipt ID">
+                                                <label for="transaction_id" class="form-label fw-semibold">Transaction ID /
+                                                    Reference (Optional)</label>
+                                                <input type="text" class="form-control" name="transaction_id"
+                                                    id="transaction_id" placeholder="e.g. UTR Number, Receipt ID">
                                             </div>
                                         </div>
                                     </div>
@@ -299,7 +322,8 @@
                                         @if($isSport) Assign Fee to Athlete @else Assign Fee to Student @endif
                                     </button>
                                     <p class="text-center text-muted small mt-3 mb-0">
-                                        <i class="bi bi-shield-lock me-1"></i> Securely processed by School Management System
+                                        <i class="bi bi-shield-lock me-1"></i> Securely processed by School Management
+                                        System
                                     </p>
                                 </div>
                             </div>
@@ -327,7 +351,7 @@
             const today = new Date();
             let dueDate = new Date();
 
-            switch(data.duration) {
+            switch (data.duration) {
                 case 'monthly':
                     dueDate.setMonth(today.getMonth() + 1);
                     break;
@@ -401,7 +425,7 @@
         function togglePaymentSection(show) {
             const fields = document.getElementById('payment_fields');
             fields.style.display = show ? 'block' : 'none';
-            
+
             const initialInput = document.getElementById('initial_paid_amount');
             if (show) {
                 initialInput.setAttribute('required', 'required');
@@ -421,12 +445,39 @@
             document.getElementById(id).addEventListener('input', updateNetPayable)
         );
 
+        function updateStudentBatches(select) {
+            const container = document.getElementById('batch_selection_container');
+            const batchSelect = document.getElementById('batch_id');
+            const option = select.options[select.selectedIndex];
+
+            if (!option || !option.value || !option.dataset.batches) {
+                container.style.display = 'none';
+                batchSelect.innerHTML = '<option value="">— Select Relevant Session —</option>';
+                return;
+            }
+
+            const batches = JSON.parse(option.dataset.batches);
+            if (batches.length > 0) {
+                container.style.display = 'block';
+                let html = '<option value="">— Select Relevant Session —</option>';
+                batches.forEach(b => {
+                    html += `<option value="${b.id}">${b.name}</option>`;
+                });
+                batchSelect.innerHTML = html;
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
         // Alias for the existing call in applyPlan
         function calcNet() { updateNetPayable(); }
 
         // Auto-apply on load (URL ?plan=X or old() repopulation)
         const checkedRadio = document.querySelector('.plan-radio:checked');
         if (checkedRadio) applyPlan(checkedRadio);
+
+        const studentSelect = document.getElementById('student_id');
+        if (studentSelect.value) updateStudentBatches(studentSelect);
 
         calcNet();
     </script>

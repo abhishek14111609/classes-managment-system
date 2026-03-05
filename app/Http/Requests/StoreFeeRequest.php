@@ -24,7 +24,8 @@ class StoreFeeRequest extends FormRequest
         return [
             'fee_plan_id' => ['nullable', 'exists:fee_plans,id'],
             'student_id' => ['required', 'exists:students,id'],
-            'fee_type' => ['required', 'string', 'in:tuition,sports,transport,exam,library,other'],
+            'batch_id' => ['nullable', 'exists:batches,id'],
+            'fee_type' => ['required', 'string'],
             'duration' => ['nullable', 'string', 'in:monthly,quarterly,half_yearly,annual,one_time'],
             'sport_level' => ['nullable', 'string', 'max:255'],
             'total_amount' => ['required', 'numeric', 'min:0'],

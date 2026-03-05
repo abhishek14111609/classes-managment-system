@@ -14,7 +14,9 @@ class Subject extends Model
     protected $fillable = [
         'school_id',
         'class_id',
+        'level_id',
         'name',
+        'activity_name',
         'type',
         'description',
         'is_active',
@@ -38,6 +40,14 @@ class Subject extends Model
     public function schoolClass()
     {
         return $this->belongsTo(Classes::class, 'class_id');
+    }
+
+    /**
+     * Get the sports level
+     */
+    public function level()
+    {
+        return $this->belongsTo(Level::class);
     }
 
     /**

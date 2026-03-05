@@ -107,8 +107,8 @@
 
                     <div class="col-md-3">
                         <div class="mb-3">
-                            <label for="course_id" class="form-label">Course / Program</label>
-                            <select class="form-select @error('course_id') is-invalid @enderror" id="course_id" name="course_id">
+                            <label for="course_id_select" class="form-label">Course / Program</label>
+                            <select class="form-select @error('course_id') is-invalid @enderror" id="course_id_select" name="course_id">
                                 <option value="">Select Course</option>
                                 @foreach($courses as $course)
                                     <option value="{{ $course->id }}" {{ old('course_id', $student->course_id) == $course->id ? 'selected' : '' }}>
@@ -122,20 +122,41 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="batch_id" class="form-label">Batch <span class="text-danger">*</span></label>
-                            <select class="form-select @error('batch_id') is-invalid @enderror" id="batch_id" name="batch_id" required>
-                                <option value="">Select Batch</option>
-                                @foreach($batches as $batch)
-                                    <option value="{{ $batch->id }}" {{ old('batch_id', $student->batch_id) == $batch->id ? 'selected' : '' }}>
-                                        {{ $batch->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('batch_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <label for="batch_ids" class="form-label fw-bold">{{ $isSport ? 'Assigned Sessions (Sports)' : 'Batch' }}</label>
+                            @if($isSport)
+                                <div class="card bg-light border-0 shadow-none rounded-3">
+                                    <div class="card-body p-2" style="max-height: 200px; overflow-y: auto;">
+                                        @php $enrolledBatchIds = $student->batches->pluck('id')->toArray(); @endphp
+                                        @foreach($batches as $batch)
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input batch-checkbox" type="checkbox" 
+                                                       name="batch_ids[]" value="{{ $batch->id }}" 
+                                                       id="batch_{{ $batch->id }}"
+                                                       data-course="{{ $batch->class->course_id ?? '' }}"
+                                                       {{ in_array($batch->id, old('batch_ids', $enrolledBatchIds)) ? 'checked' : '' }}>
+                                                <label class="form-check-label small" for="batch_{{ $batch->id }}">
+                                                    {{ $batch->name }} <span class="text-muted">({{ $batch->subject->name ?? 'N/A' }})</span>
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @else
+                                <select class="form-select @error('batch_id') is-invalid @enderror" id="batch_id" name="batch_id" required>
+                                    <option value="">Select Batch</option>
+                                    @foreach($batches as $batch)
+                                        <option value="{{ $batch->id }}" 
+                                            data-course="{{ $batch->class->course_id ?? '' }}"
+                                            {{ old('batch_id', $student->batch_id) == $batch->id ? 'selected' : '' }}>
+                                            {{ $batch->name }} ({{ $batch->subject->name ?? 'N/A' }})
+                                        </option>
+                                    @endforeach
+                                </select>
+                            @endif
+                            @error('batch_id')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                            @error('batch_ids')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                         </div>
                     </div>
 
@@ -233,5 +254,34 @@
             </form>
         </div>
     </div>
+
+    @if($isSport)
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const courseSelect = document.getElementById('course_id_select');
+        const checkboxes = document.querySelectorAll('.batch-checkbox');
+
+        function filterBatches() {
+            const selectedCourseId = courseSelect.value;
+            
+            checkboxes.forEach(cb => {
+                const parent = cb.closest('.form-check');
+                if (selectedCourseId === "" || cb.getAttribute('data-course') === selectedCourseId) {
+                    parent.style.display = 'block';
+                } else {
+                    parent.style.display = 'none';
+                    // We don't necessarily want to uncheck on edit if they were already enrolled, 
+                    // but usually, course-batch relationship is strict.
+                }
+            });
+        }
+
+        if (courseSelect) {
+            courseSelect.addEventListener('change', filterBatches);
+            if (courseSelect.value) filterBatches();
+        }
+    });
+    </script>
+    @endif
 </div>
 @endsection

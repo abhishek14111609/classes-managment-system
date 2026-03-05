@@ -18,7 +18,7 @@ class StudentController extends Controller
 
     public function index(Request $request)
     {
-        $query = Student::with(['user', 'batch']);
+        $query = Student::with(['user', 'batch', 'batches']);
 
         /** @var string|null $search */
         $search = $request->input('search');
@@ -32,18 +32,23 @@ class StudentController extends Controller
         /** @var int|null $batchId */
         $batchId = $request->input('batch_id');
         if ($batchId) {
-            $query->where('batch_id', $batchId);
+            $query->where(function ($q) use ($batchId) {
+                $q->where('batch_id', $batchId)
+                    ->orWhereHas('batches', function ($sq) use ($batchId) {
+                        $sq->where('batches.id', $batchId);
+                    });
+            });
         }
 
         $students = $query->latest()->paginate(15);
-        $batches = Batch::active()->get();
+        $batches = Batch::with(['class', 'subject'])->active()->get();
 
         return view('school.students.index', compact('students', 'batches'));
     }
 
     public function create()
     {
-        $batches = Batch::active()->get();
+        $batches = Batch::with(['class', 'subject.level'])->active()->get();
         $courses = \App\Models\Course::active()->get();
         $feePlans = \App\Models\FeePlan::where('is_active', true)->get();
 
@@ -56,15 +61,15 @@ class StudentController extends Controller
             $this->studentService->createStudent($request->validated());
 
             return redirect()->route('school.students.index')
-                ->with('success', 'Student created successfully.');
+                ->with('success', auth()->user()->school->institute_type === 'sport' ? 'Athlete registered successfully.' : 'Student created successfully.');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error creating student: ' . $e->getMessage());
+            return back()->with('error', 'Error creating: ' . $e->getMessage());
         }
     }
 
     public function show(Student $student)
     {
-        $student->load(['user', 'batch', 'fees', 'attendances']);
+        $student->load(['user', 'batch', 'batches', 'fees', 'attendances']);
         $stats = $this->studentService->getStudentStats($student);
 
         return view('school.students.show', compact('student', 'stats'));
@@ -72,7 +77,7 @@ class StudentController extends Controller
 
     public function edit(Student $student)
     {
-        $batches = Batch::active()->get();
+        $batches = Batch::with(['class', 'subject.level'])->active()->get();
         $courses = \App\Models\Course::active()->get();
 
         return view('school.students.edit', compact('student', 'batches', 'courses'));

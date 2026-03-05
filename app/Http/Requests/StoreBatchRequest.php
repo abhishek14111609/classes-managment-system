@@ -21,10 +21,13 @@ class StoreBatchRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isSport = auth()->user()->school->institute_type === 'sport';
+
         return [
-            'class_id' => ['required', 'exists:classes,id'],
-            'subject_id' => ['nullable', 'exists:subjects,id'],
-            'name' => ['required', 'string', 'max:255'],
+            'class_id' => [$isSport ? 'nullable' : 'required', 'exists:classes,id'],
+            'course_id' => [$isSport ? 'required' : 'nullable', 'exists:courses,id'],
+            'subject_id' => ['required', 'exists:subjects,id'],
+            'name' => [$isSport ? 'nullable' : 'required', 'string', 'max:255'],
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'capacity' => ['required', 'integer', 'min:1'],

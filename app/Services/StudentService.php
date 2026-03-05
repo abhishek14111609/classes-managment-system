@@ -62,6 +62,12 @@ class StudentService
                 'is_active' => true,
             ]);
 
+            // Sync batches (Handling both singular and plural input)
+            $batchIds = $data['batch_ids'] ?? (isset($data['batch_id']) ? [$data['batch_id']] : []);
+            if (!empty($batchIds)) {
+                $student->batches()->sync($batchIds);
+            }
+
             // Generate initial fee if plan selected
             if (!empty($data['fee_plan_id'])) {
                 $feePlan = \App\Models\FeePlan::find($data['fee_plan_id']);
@@ -69,6 +75,7 @@ class StudentService
                     \App\Models\Fee::create([
                         'school_id' => auth()->user()->school_id,
                         'student_id' => $student->id,
+                        'batch_id' => $data['batch_id'] ?? null,
                         'fee_plan_id' => $feePlan->id,
                         'fee_type' => $feePlan->fee_type ?? 'one_time',
                         'total_amount' => $feePlan->amount,
@@ -129,6 +136,12 @@ class StudentService
             }
 
             $student->update($studentData);
+
+            // Sync batches
+            $batchIds = $data['batch_ids'] ?? (isset($data['batch_id']) ? [$data['batch_id']] : []);
+            if (!empty($batchIds)) {
+                $student->batches()->sync($batchIds);
+            }
 
             ActivityLog::logActivity('updated', 'student', "Updated student: {$student->user->name}");
 

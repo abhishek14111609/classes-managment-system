@@ -11,13 +11,18 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-5 pb-2">
             <div>
-                <h3 class="fw-bold mb-1 text-gradient">{{ auth()->user()->school->institute_type === 'sport' ? 'Activities & Exercises' : 'Syllabus & Subjects' }}</h3>
+                <h3 class="fw-bold mb-1 text-gradient">
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'Activities & Exercises' : 'Syllabus & Subjects' }}
+                </h3>
                 <p class="text-muted small mb-0">Total of {{ number_format($subjects->total()) }} modules currently active
-                    in the {{ auth()->user()->school->institute_type === 'sport' ? 'training framework.' : 'academic framework.' }}</p>
+                    in the
+                    {{ auth()->user()->school->institute_type === 'sport' ? 'training framework.' : 'academic framework.' }}
+                </p>
             </div>
             <a href="{{ route('school.subjects.create') }}"
                 class="btn btn-primary rounded-pill px-4 shadow-sm border-0 d-flex align-items-center">
-                <i class="bi bi-journal-plus me-2"></i> {{ auth()->user()->school->institute_type === 'sport' ? 'Add New Activity' : 'Construct New Module' }}
+                <i class="bi bi-journal-plus me-2"></i>
+                {{ auth()->user()->school->institute_type === 'sport' ? 'Add New Activity' : 'Construct New Module' }}
             </a>
         </div>
 
@@ -35,8 +40,12 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr class="small text-muted text-uppercase fw-bold">
-                                <th class="ps-4 py-3 border-0">Module & Nomenclature</th>
-                                <th class="py-3 border-0">Institutional Level</th>
+                                <th class="ps-4 py-3 border-0">
+                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Sport & Activity' : 'Module & Nomenclature' }}
+                                </th>
+                                <th class="py-3 border-0">
+                                    {{ auth()->user()->school->institute_type === 'sport' ? 'Sports Level' : 'Institutional Level' }}
+                                </th>
                                 <th class="py-3 border-0">Classification</th>
                                 <th class="py-3 border-0 text-center">Description</th>
                                 <th class="py-3 border-0 text-center">Lifecycle</th>
@@ -53,13 +62,24 @@
                                             </div>
                                             <div>
                                                 <div class="fw-bold text-dark">{{ $subject->name }}</div>
-                                                <small
-                                                    class="text-muted tiny">MOD-{{ str_pad($subject->id, 4, '0', STR_PAD_LEFT) }}</small>
+                                                <small class="text-muted tiny">
+                                                    @if(auth()->user()->school->institute_type === 'sport' && $subject->schoolClass && $subject->schoolClass->course)
+                                                        {{ $subject->schoolClass->course->name }}
+                                                    @else
+                                                        MOD-{{ str_pad($subject->id, 4, '0', STR_PAD_LEFT) }}
+                                                    @endif
+                                                </small>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="border-0">
-                                        <div class="small fw-bold text-muted">{{ $subject->schoolClass->name }}</div>
+                                        <div class="small fw-bold text-muted">
+                                            @if(auth()->user()->school->institute_type === 'sport')
+                                                {{ $subject->level->name ?? 'N/A' }}
+                                            @else
+                                                {{ $subject->schoolClass->name }}
+                                            @endif
+                                        </div>
                                         <small class="text-muted tiny">Level Category</small>
                                     </td>
                                     <td class="border-0">
@@ -104,7 +124,9 @@
                                     <td colspan="6" class="text-center py-5">
                                         <div class="opacity-25 mb-3"><i class="bi bi-journal-medical"
                                                 style="font-size: 5rem;"></i></div>
-                                        <h5 class="text-muted">No {{ auth()->user()->school->institute_type === 'sport' ? 'training activities' : 'academic modules' }} configured yet.</h5>
+                                        <h5 class="text-muted">No
+                                            {{ auth()->user()->school->institute_type === 'sport' ? 'training activities' : 'academic modules' }}
+                                            configured yet.</h5>
                                         <a href="{{ route('school.subjects.create') }}"
                                             class="btn btn-sm btn-primary rounded-pill px-4 mt-2">{{ auth()->user()->school->institute_type === 'sport' ? 'Add First Activity' : 'Create First Subject' }}</a>
                                     </td>
