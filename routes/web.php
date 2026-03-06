@@ -135,6 +135,13 @@ Route::middleware(['auth', 'role:school_admin', 'check.subscription'])->prefix('
     Route::get('reports/income', [School\ReportController::class, 'income'])->name('reports.income');
     Route::get('reports/expenses', [School\ReportController::class, 'expenses'])->name('reports.expenses');
     Route::get('reports/attendance', [School\ReportController::class, 'attendance'])->name('reports.attendance');
+
+    // Inventory & Stock Management
+    Route::prefix('inventory')->name('inventory.')->group(function () {
+        Route::resource('items', School\InventoryItemController::class);
+        Route::resource('sales', School\InventorySaleController::class);
+        Route::get('sales/{sale}/invoice', [School\InventorySaleController::class, 'downloadInvoice'])->name('sales.invoice');
+    });
 });
 
 // Teacher Routes
@@ -218,6 +225,10 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
     Route::get('settings', function () {
         return view('student.settings');
     })->name('settings');
+
+    // Kit Purchases & Equipment
+    Route::get('inventory', [Student\InventoryController::class, 'index'])->name('inventory.index');
+    Route::get('inventory/{sale}/invoice', [Student\InventoryController::class, 'downloadInvoice'])->name('inventory.invoice');
 });
 
 Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');

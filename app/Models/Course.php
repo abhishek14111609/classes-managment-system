@@ -47,4 +47,12 @@ class Course extends Model
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * Get all inventory items for this course
+     */
+    public function inventoryItems()
+    {
+        return $this->hasMany(InventoryItem::class);
+    }
 }

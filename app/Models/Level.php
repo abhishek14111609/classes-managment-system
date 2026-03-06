@@ -24,4 +24,12 @@ class Level extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    /**
+     * Get all inventory items for this level
+     */
+    public function inventoryItems()
+    {
+        return $this->hasMany(InventoryItem::class);
+    }
 }

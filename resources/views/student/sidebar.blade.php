@@ -28,7 +28,8 @@
     </li>
 
     <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">
-        {{ $isSport ? 'Training & Games' : 'Academic' }}</li>
+        {{ $isSport ? 'Training & Games' : 'Academic' }}
+    </li>
     <li>
         <a href="{{ route('student.profile') }}" class="{{ request()->routeIs('student.profile') ? 'active' : '' }}">
             <i class="bi bi-person-badge"></i> <span>My Portfolio</span>
@@ -63,6 +64,12 @@
     <li>
         <a href="{{ route('student.fees.index') }}" class="{{ request()->routeIs('student.fees.*') ? 'active' : '' }}">
             <i class="bi bi-cash-stack"></i> <span>{{ $label['fees'] }}</span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('student.inventory.index') }}"
+            class="{{ request()->routeIs('student.inventory.*') ? 'active' : '' }}">
+            <i class="bi bi-bag-check"></i> <span>My Gear & Kits</span>
         </a>
     </li>
 

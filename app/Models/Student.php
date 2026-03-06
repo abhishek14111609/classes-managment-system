@@ -172,4 +172,12 @@ class Student extends Model
     {
         return $query->where('is_active', true);
     }
+
+    /**
+     * Get all inventory purchases
+     */
+    public function inventorySales()
+    {
+        return $this->hasMany(InventorySale::class);
+    }
 }

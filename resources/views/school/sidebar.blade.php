@@ -135,6 +135,22 @@
                 </a>
         </li>
 
+        <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">Inventory</li>
+
+        <li class="nav-item">
+                <a href="{{ route('school.inventory.items.index') }}"
+                        class="nav-link {{ request()->routeIs('school.inventory.items.*') ? 'active' : '' }}">
+                        <i class="bi bi-box-seam-fill"></i> <span>Stock Management</span>
+                </a>
+        </li>
+
+        <li class="nav-item">
+                <a href="{{ route('school.inventory.sales.index') }}"
+                        class="nav-link {{ request()->routeIs('school.inventory.sales.*') ? 'active' : '' }}">
+                        <i class="bi bi-cart-check-fill"></i> <span>Kit Sales & Invoices</span>
+                </a>
+        </li>
+
         <li class="nav-label tiny text-white opacity-75 mt-4 mb-2" style="padding-left: 15px;">More</li>
 
         <li class="nav-item">

@@ -151,4 +151,20 @@ class School extends Model
     {
         return $this->hasMany(ActivityLog::class);
     }
+
+    /**
+     * Get all inventory items
+     */
+    public function inventoryItems()
+    {
+        return $this->hasMany(InventoryItem::class);
+    }
+
+    /**
+     * Get all inventory sales
+     */
+    public function inventorySales()
+    {
+        return $this->hasMany(InventorySale::class);
+    }
 }
