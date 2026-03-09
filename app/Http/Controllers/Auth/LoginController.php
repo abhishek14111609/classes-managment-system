@@ -75,7 +75,12 @@ class LoginController extends Controller
                     $roleName = 'super_admin';
                 }
 
-                if ($roleName && Role::where('name', $roleName)->exists()) {
+                if ($roleName) {
+                    Role::firstOrCreate([
+                        'name' => $roleName,
+                        'guard_name' => 'web',
+                    ]);
+
                     $user->assignRole($roleName);
                 }
             }
@@ -83,10 +88,11 @@ class LoginController extends Controller
             $route = $user->dashboardRoute();
 
             if ($route && $route !== 'login') {
-                return redirect()->route($route);
+                return redirect()->intended(route($route));
             }
 
-            return redirect()->route('home')->with('success', 'Logged in successfully.');
+            return redirect()->intended(route('home'))
+                ->with('success', 'Logged in successfully.');
         }
 
         throw ValidationException::withMessages([

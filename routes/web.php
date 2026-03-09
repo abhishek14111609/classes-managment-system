@@ -21,8 +21,9 @@ Route::get('/', function () {
         if ($route) {
             return redirect()->route($route);
         }
+        return view('welcome');
     }
-    return view('welcome');
+    return redirect()->route('login');
 })->name('home');
 
 // Auth Routes
