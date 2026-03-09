@@ -9,14 +9,22 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
+    /**
+     * Show the login form. Redirect already-authenticated users to their dashboard.
+     */
     public function showLoginForm()
     {
         if (Auth::check()) {
             $route = auth()->user()->dashboardRoute();
-            if ($route) {
+            if ($route && $route !== 'login') {
                 return redirect()->route($route);
             }
+            // User is authenticated but has no valid role — log them out
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
         }
+
         return view('auth.login');
     }
 
@@ -30,7 +38,7 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        // Check if the input is an email or a username
+        // Determine if the input is an email or a username
         $loginType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         $credentials = [
@@ -44,19 +52,35 @@ class LoginController extends Controller
             // Check if user account is active
             if (!$user->is_active) {
                 Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
                 throw ValidationException::withMessages([
-                    'username' => 'Your account has been deactivated.',
+                    'username' => 'Your account has been deactivated. Please contact your administrator.',
                 ]);
             }
 
+            // Regenerate the session to prevent session fixation
             $request->session()->regenerate();
 
             $route = $user->dashboardRoute();
-            return $route ? redirect()->route($route) : redirect()->route('home');
+
+            // If no valid role is assigned, log the user out and show an error
+            if (!$route || $route === 'login') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                throw ValidationException::withMessages([
+                    'username' => 'Your account has no role assigned. Please contact your administrator.',
+                ]);
+            }
+
+            return redirect()->route($route);
         }
 
         throw ValidationException::withMessages([
-            'username' => 'Invalid credentials.',
+            'username' => 'The credentials you entered are incorrect.',
         ]);
     }
 
@@ -68,6 +92,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login');
+
+        return redirect()->route('login')->with('success', 'You have been logged out successfully.');
     }
 }

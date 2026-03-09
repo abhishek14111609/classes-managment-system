@@ -128,18 +128,23 @@ class User extends Authenticatable
 
     /**
      * Get the dashboard route name for the user.
+     * Returns null if the user has no recognized role assigned.
      */
-    public function dashboardRoute(): string
+    public function dashboardRoute(): ?string
     {
-        if ($this->hasRole('super_admin'))
+        if ($this->hasRole('super_admin')) {
             return 'admin.dashboard';
-        if ($this->hasRole('school_admin'))
+        }
+        if ($this->hasRole('school_admin')) {
             return 'school.dashboard';
-        if ($this->hasRole('teacher'))
+        }
+        if ($this->hasRole('teacher')) {
             return 'teacher.dashboard';
-        if ($this->hasRole('student'))
+        }
+        if ($this->hasRole('student')) {
             return 'student.dashboard';
+        }
 
-        return 'login'; // Fallback: redirect unknown roles to login
+        return null; // No role assigned — caller must handle this gracefully
     }
 }
