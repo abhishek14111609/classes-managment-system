@@ -145,6 +145,16 @@ class User extends Authenticatable
             return 'student.dashboard';
         }
 
+        if ($this->relationLoaded('student') ? $this->student : $this->student()->exists()) {
+            return 'student.dashboard';
+        }
+        if ($this->relationLoaded('teacher') ? $this->teacher : $this->teacher()->exists()) {
+            return 'teacher.dashboard';
+        }
+        if ($this->school_id) {
+            return 'school.dashboard';
+        }
+
         return null; // No role assigned — caller must handle this gracefully
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Spatie\Permission\Models\Role;
 
 class LoginController extends Controller
 {
@@ -45,6 +46,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $user = auth()->user();
+            $user->loadMissing(['roles', 'teacher', 'student']);
 
             // Check if user account is active
             if (!$user->is_active) {
@@ -59,6 +61,24 @@ class LoginController extends Controller
 
             // Regenerate the session to prevent session fixation
             $request->session()->regenerate();
+
+            if ($user->roles->isEmpty()) {
+                $roleName = null;
+
+                if ($user->student) {
+                    $roleName = 'student';
+                } elseif ($user->teacher) {
+                    $roleName = 'teacher';
+                } elseif ($user->school_id) {
+                    $roleName = 'school_admin';
+                } else {
+                    $roleName = 'super_admin';
+                }
+
+                if ($roleName && Role::where('name', $roleName)->exists()) {
+                    $user->assignRole($roleName);
+                }
+            }
 
             $route = $user->dashboardRoute();
 
