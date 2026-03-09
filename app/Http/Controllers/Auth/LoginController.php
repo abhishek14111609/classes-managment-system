@@ -19,10 +19,7 @@ class LoginController extends Controller
             if ($route && $route !== 'login') {
                 return redirect()->route($route);
             }
-            // User is authenticated but has no valid role — log them out
-            Auth::logout();
-            request()->session()->invalidate();
-            request()->session()->regenerateToken();
+            return redirect()->route('home');
         }
 
         return view('auth.login');
@@ -65,18 +62,11 @@ class LoginController extends Controller
 
             $route = $user->dashboardRoute();
 
-            // If no valid role is assigned, log the user out and show an error
-            if (!$route || $route === 'login') {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                throw ValidationException::withMessages([
-                    'username' => 'Your account has no role assigned. Please contact your administrator.',
-                ]);
+            if ($route && $route !== 'login') {
+                return redirect()->route($route);
             }
 
-            return redirect()->route($route);
+            return redirect()->route('home')->with('success', 'Logged in successfully.');
         }
 
         throw ValidationException::withMessages([

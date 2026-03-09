@@ -21,11 +21,6 @@ Route::get('/', function () {
         if ($route) {
             return redirect()->route($route);
         }
-        // User authenticated but has no valid role — send to login
-        Auth::logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
-        return redirect()->route('login')->with('error', 'Your account has no role assigned. Please contact your administrator.');
     }
     return view('welcome');
 })->name('home');
