@@ -12,7 +12,7 @@ trait MultiTenant
      */
     protected static function bootMultiTenant(): void
     {
-        if (!app()->runningInConsole() || app()->runningUnitTests()) {
+        if (!app()->runningUnitTests()) {
             static::addGlobalScope('school_id', function (Builder $builder) {
                 $user = auth()->user();
 

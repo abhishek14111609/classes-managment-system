@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @property string $name
@@ -47,7 +48,7 @@ class UpdateTeacherRequest extends FormRequest
             'salary' => ['nullable', 'numeric', 'min:0'],
             'is_active' => ['boolean'],
             'batches' => ['nullable', 'array'],
-            'batches.*' => ['exists:batches,id'],
+            'batches.*' => [Rule::exists('batches', 'id')->where('school_id', $this->user()->school_id)],
             'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ];
     }

@@ -29,6 +29,7 @@ class Invoice extends Model
         'school_id',
         'student_id',
         'fee_id',
+        'fee_payment_id',
         'invoice_number',
         'invoice_date',
         'amount',

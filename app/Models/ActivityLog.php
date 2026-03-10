@@ -56,8 +56,9 @@ class ActivityLog extends Model
      */
     public static function logActivity($action, $module, $description = null, $oldValues = null, $newValues = null)
     {
+        $user = auth()->user();
         return self::create([
-            'school_id' => auth()->user()->school_id ?? null,
+            'school_id' => $user?->school_id,
             'user_id' => auth()->id(),
             'action' => $action,
             'module' => $module,

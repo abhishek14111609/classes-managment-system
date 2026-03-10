@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreFeeRequest extends FormRequest
 {
@@ -22,9 +23,9 @@ class StoreFeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fee_plan_id' => ['nullable', 'exists:fee_plans,id'],
-            'student_id' => ['required', 'exists:students,id'],
-            'batch_id' => ['nullable', 'exists:batches,id'],
+            'fee_plan_id' => ['nullable', Rule::exists('fee_plans', 'id')->where('school_id', $this->user()->school_id)],
+            'student_id' => ['required', Rule::exists('students', 'id')->where('school_id', $this->user()->school_id)],
+            'batch_id' => ['nullable', Rule::exists('batches', 'id')->where('school_id', $this->user()->school_id)],
             'fee_type' => ['required', 'string'],
             'duration' => ['nullable', 'string', 'in:monthly,quarterly,half_yearly,annual,one_time'],
             'sport_level' => ['nullable', 'string', 'max:255'],

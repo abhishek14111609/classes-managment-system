@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateStudentRequest extends FormRequest
 {
@@ -30,10 +31,10 @@ class UpdateStudentRequest extends FormRequest
             'username' => ['required', 'string', 'max:100', 'unique:users,username,' . $userId],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'course_id' => ['nullable', 'exists:courses,id'],
-            'batch_id' => ['nullable', 'exists:batches,id'],
+            'course_id' => ['nullable', Rule::exists('courses', 'id')->where('school_id', $this->user()->school_id)],
+            'batch_id' => ['nullable', Rule::exists('batches', 'id')->where('school_id', $this->user()->school_id)],
             'batch_ids' => ['nullable', 'array'],
-            'batch_ids.*' => ['exists:batches,id'],
+            'batch_ids.*' => [Rule::exists('batches', 'id')->where('school_id', $this->user()->school_id)],
             'roll_number' => ['nullable', 'string', 'max:50'],
             'birth_date' => ['nullable', 'date', 'before:today'],
             'previous_school' => ['nullable', 'string', 'max:255'],
@@ -44,7 +45,7 @@ class UpdateStudentRequest extends FormRequest
             'is_active' => ['boolean'],
             'batch_fees' => ['nullable', 'array'],
             'batch_fees.*' => ['nullable', 'array'],
-            'batch_fees.*.*' => ['exists:fee_plans,id'],
+            'batch_fees.*.*' => [Rule::exists('fee_plans', 'id')->where('school_id', $this->user()->school_id)],
         ];
     }
 }

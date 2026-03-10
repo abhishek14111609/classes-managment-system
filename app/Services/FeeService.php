@@ -21,7 +21,15 @@ class FeeService
                 ->when(isset($data['batch_id']), function ($q) use ($data) {
                     return $q->where('batch_id', $data['batch_id']);
                 })
-                ->where('fee_plan_id', $data['fee_plan_id'] ?? null)
+                ->when(
+                    array_key_exists('fee_plan_id', $data) && $data['fee_plan_id'] !== null,
+                    function ($q) use ($data) {
+                        return $q->where('fee_plan_id', $data['fee_plan_id']);
+                    },
+                    function ($q) {
+                        return $q->whereNull('fee_plan_id');
+                    }
+                )
                 ->where('fee_type', $data['fee_type'])
                 ->whereMonth('due_date', date('m', strtotime($data['due_date'])))
                 ->whereYear('due_date', date('Y', strtotime($data['due_date'])))
@@ -74,7 +82,7 @@ class FeeService
     {
         return DB::transaction(function () use ($data) {
             /** @var Fee $fee */
-            $fee = Fee::findOrFail($data['fee_id']);
+            $fee = Fee::whereKey($data['fee_id'])->lockForUpdate()->firstOrFail();
 
             // Overpayment Guard
             $remaining = $fee->getRemainingAmount();

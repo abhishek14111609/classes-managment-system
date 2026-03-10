@@ -118,7 +118,9 @@ class StudentService
                 'email' => $data['email'],
                 'username' => $data['username'] ?? $student->user->username,
                 'phone' => $data['phone'] ?? null,
-                'is_active' => $data['is_active'] ?? true,
+                'is_active' => array_key_exists('is_active', $data)
+                    ? $data['is_active']
+                    : $student->user->is_active,
             ];
 
             if (isset($data['password']) && !empty($data['password'])) {
@@ -128,7 +130,7 @@ class StudentService
             $student->user->update($userData);
 
             // Update student record
-            $studentData = array_filter([
+            $studentData = [
                 'batch_id' => $data['batch_id'] ?? $student->batch_id,
                 'roll_number' => $data['roll_number'] ?? $student->roll_number,
                 'birth_date' => $data['birth_date'] ?? $student->birth_date,
@@ -136,8 +138,10 @@ class StudentService
                 'address' => $data['address'] ?? $student->address,
                 'parent_name' => $data['parent_name'] ?? $student->parent_name,
                 'parent_phone' => $data['parent_phone'] ?? $student->parent_phone,
-                'is_active' => $data['is_active'] ?? $student->is_active,
-            ]);
+                'is_active' => array_key_exists('is_active', $data)
+                    ? $data['is_active']
+                    : $student->is_active,
+            ];
 
             if (isset($data['photo'])) {
                 $studentData['photo'] = $data['photo'];

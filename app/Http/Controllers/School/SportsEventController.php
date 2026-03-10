@@ -37,6 +37,7 @@ class SportsEventController extends Controller
             if ($request->has('participants')) {
                 foreach ($request->participants as $studentId) {
                     $event->participants()->create([
+                        'school_id' => auth()->user()->school_id,
                         'student_id' => $studentId,
                         'participation_status' => 'registered',
                     ]);
@@ -79,6 +80,7 @@ class SportsEventController extends Controller
             if ($request->filled('participants')) {
                 foreach ($request->participants as $studentId) {
                     $event->participants()->create([
+                        'school_id' => auth()->user()->school_id,
                         'student_id' => $studentId,
                         'participation_status' => 'registered',
                     ]);

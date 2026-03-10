@@ -7,6 +7,7 @@ use App\Models\Batch;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class MaterialController extends Controller
 {
@@ -38,7 +39,10 @@ class MaterialController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,png,jpg,jpeg,zip,mp4|max:51200',
-            'batch_id' => 'nullable|exists:batches,id',
+            'batch_id' => [
+                'nullable',
+                Rule::exists('batches', 'id')->where('school_id', $request->user()->school_id),
+            ],
         ]);
 
         $school = auth()->user()->school;
@@ -69,7 +73,9 @@ class MaterialController extends Controller
             abort(403);
         }
 
-        return \Illuminate\Support\Facades\Storage::disk('public')->download($material->file_path, $material->title . '.' . $material->file_type);
+        $path = Storage::disk('public')->path($material->file_path);
+
+        return response()->download($path, $material->title . '.' . $material->file_type);
     }
 
     /**

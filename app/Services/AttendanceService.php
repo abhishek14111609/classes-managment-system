@@ -51,6 +51,7 @@ class AttendanceService
                     [
                         'student_id' => $attendanceData['student_id'],
                         'attendance_date' => $attendanceDate,
+                        'batch_id' => $batch->id,
                     ],
                     $updateData
                 );

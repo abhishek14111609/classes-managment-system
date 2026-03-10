@@ -65,7 +65,7 @@ class SchoolService
                 'name' => $data['admin_name'] ?? $data['name'] . ' Admin',
                 'email' => $data['admin_email'] ?? $data['email'],
                 'username' => $data['admin_username'] ?? $data['admin_email'] ?? $data['email'],
-                'password' => Hash::make($data['admin_password'] ?? 'password123'),
+                'password' => Hash::make($data['admin_password']),
                 'is_active' => true,
             ]);
 
@@ -114,7 +114,11 @@ class SchoolService
             $endDate = $startDate->copy()->addDays((int) $days);
 
             // Use existing plan if not provided
-            $plan = $plan ?? $currentSubscription->plan;
+            $plan = $plan ?? $currentSubscription?->plan;
+
+            if (!$plan) {
+                throw new \Exception('Unable to extend subscription without a valid plan.');
+            }
 
             // Create new subscription
             $subscription = SchoolSubscription::create([

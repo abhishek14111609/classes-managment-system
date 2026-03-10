@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * @property string $title
@@ -36,10 +37,10 @@ class StoreSportsEventRequest extends FormRequest
             'event_date' => ['required', 'date', 'after:now'],
             'location' => ['nullable', 'string', 'max:255'],
             'sport_level' => ['nullable', 'string', 'max:255'],
-            'coach_id' => ['nullable', 'exists:teachers,id'],
+            'coach_id' => ['nullable', Rule::exists('teachers', 'id')->where('school_id', $this->user()->school_id)],
             'status' => ['required', 'in:upcoming,ongoing,completed,cancelled'],
             'participants' => ['nullable', 'array'],
-            'participants.*' => ['exists:students,id'],
+            'participants.*' => [Rule::exists('students', 'id')->where('school_id', $this->user()->school_id)],
         ];
     }
 }

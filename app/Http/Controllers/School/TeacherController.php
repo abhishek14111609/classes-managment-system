@@ -72,6 +72,8 @@ class TeacherController extends Controller
 
                 if ($request->has('batches')) {
                     $teacher->batches()->sync($request->batches);
+                } else {
+                    $teacher->batches()->sync([]);
                 }
             });
 
@@ -122,6 +124,8 @@ class TeacherController extends Controller
 
                 if ($request->has('batches')) {
                     $teacher->batches()->sync($request->batches);
+                } else {
+                    $teacher->batches()->sync([]);
                 }
             });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreAttendanceRequest extends FormRequest
 {
@@ -22,10 +23,10 @@ class StoreAttendanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'batch_id' => ['required', 'exists:batches,id'],
+            'batch_id' => ['required', Rule::exists('batches', 'id')->where('school_id', $this->user()->school_id)],
             'attendance_date' => ['required', 'date'],
             'attendances' => ['required', 'array'],
-            'attendances.*.student_id' => ['required', 'exists:students,id'],
+            'attendances.*.student_id' => ['required', Rule::exists('students', 'id')->where('school_id', $this->user()->school_id)],
             'attendances.*.status' => ['required', 'in:present,absent,late,excused'],
             'attendances.*.remarks' => ['nullable', 'string'],
         ];

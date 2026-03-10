@@ -34,7 +34,7 @@ class StoreSchoolRequest extends FormRequest
             'admin_name' => ['nullable', 'string', 'max:255'],
             'admin_email' => ['nullable', 'email', 'unique:users,email'],
             'admin_username' => ['nullable', 'string', 'unique:users,username'],
-            'admin_password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'admin_password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 }

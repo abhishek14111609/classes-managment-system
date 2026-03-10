@@ -16,18 +16,21 @@ use App\Models\Material;
 */
 
 Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+// Auth Routes
+Route::get('/login', function () {
     if (Auth::check()) {
         $route = auth()->user()->dashboardRoute();
         if ($route) {
             return redirect()->route($route);
         }
-        return view('welcome');
+        return redirect()->route('home');
     }
-    return redirect()->route('login');
-})->name('home');
 
-// Auth Routes
-Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
+    return app(App\Http\Controllers\Auth\LoginController::class)->showLoginForm();
+})->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout')->middleware('auth');
 

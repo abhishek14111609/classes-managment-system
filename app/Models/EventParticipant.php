@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\MultiTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,9 +20,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class EventParticipant extends Model
 {
-    use HasFactory;
+    use HasFactory, MultiTenant;
 
     protected $fillable = [
+        'school_id',
         'sports_event_id',
         'student_id',
         'participation_status',
