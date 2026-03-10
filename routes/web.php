@@ -21,15 +21,15 @@ Route::get('/', function () {
         if ($route) {
             return redirect()->route($route);
         }
+        return view('welcome');
     }
-    return view('welcome');
+    return redirect()->route('login');
 })->name('home');
 
 // Auth Routes
 Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->middleware('throttle:5,1');
-Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-Route::get('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
+Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
@@ -231,5 +231,7 @@ Route::middleware(['auth', 'role:student', 'check.subscription'])->prefix('stude
     Route::get('inventory/{sale}/invoice', [Student\InventoryController::class, 'downloadInvoice'])->name('inventory.invoice');
 });
 
-Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
-
+// Settings (requires auth + super_admin)
+Route::middleware(['auth', 'role:super_admin'])->group(function () {
+    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
+});

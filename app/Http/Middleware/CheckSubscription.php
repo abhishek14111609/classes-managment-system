@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckSubscription
@@ -22,12 +23,26 @@ class CheckSubscription
             return $next($request);
         }
 
-        // Check if user has school
         if ($user && $user->school_id) {
             $school = $user->school;
 
-            // Check if school is active — redirect without logout so the user can contact support
+            if (!$school) {
+                // School record missing — log out and show error
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                return redirect()->route('login')
+                    ->with('error', 'Your school account could not be found. Please contact support.');
+            }
+
+            // Check if school is active
             if ($school->status !== 'active') {
+                // Log out the user so they don't get stuck in a redirect loop
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
                 return redirect()->route('login')
                     ->with('error', 'Your school account has been deactivated. Please contact your administrator.');
             }
